@@ -1,18 +1,17 @@
 package com.slandshow.controllers;
 
+import com.slandshow.utils.JspFormNames;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class HomeController {
 
-    // JSP views
-    private static final String MAIN_PAGE = "main-menu";
-
     // Handle root request
-    @RequestMapping("/")
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String showHomePage() {
-        return MAIN_PAGE;
+        return JspFormNames.MAIN_PAGE;
     }
 
 }
