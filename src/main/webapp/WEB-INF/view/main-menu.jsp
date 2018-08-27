@@ -5,5 +5,7 @@
 </head>
 <body>
     <h2>Java School</h2>
+
+    <a href="showForm">Registration form</a>
 </body>
 </html>
