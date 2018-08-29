@@ -11,13 +11,15 @@ Stack (current):
 
 `TODO List:`
 
-1. Create use case Diagram [`x`]
-2. Create SIMPLE databases: Station, Train, Passenger, Ticket [`x`]
-3. Create POJO Entity [`x`]
-4. Create Controller [`x`]
-5. Create HTML based JSP, witch views all POJO's [`x`]
+1. Create use case Diagram [`done`]
+2. Create SIMPLE databases: Station, Train, Passenger, Ticket [`done`]
+3. Create POJO Entity [`done`]
+4. Make correct relations between tables [`x`]
+5. Create Controller [`x`]
+6. Create HTML based JSP, witch views all POJO's [`x`]
 
 My developer dairy:
 
 1. (26.08.18) Set up project, add all dependencies, config `web.xml`, app context (`dispatcherServlet`), create simple controller and write HTML bassed JSP.
 2. (27.08.18) Update project name, fix some things.   
+3. (28.08.18) Create use-case diagram, start to develop POJO's
