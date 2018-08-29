@@ -30,7 +30,61 @@ public class Schedule {
     public Schedule() {
     }
 
+    public Schedule(Date dateDeparture, Date dateArrival, Station stationDeparture, Station stationArrival, Train train) {
+        this.dateDeparture = dateDeparture;
+        this.dateArrival = dateArrival;
+        this.stationDeparture = stationDeparture;
+        this.stationArrival = stationArrival;
+        this.train = train;
+    }
 
+    // Setters
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    public void setDateDeparture(Date dateDeparture) {
+        this.dateDeparture = dateDeparture;
+    }
 
+    public void setDateArrival(Date dateArrival) {
+        this.dateArrival = dateArrival;
+    }
+
+    public void setStationDeparture(Station stationDeparture) {
+        this.stationDeparture = stationDeparture;
+    }
+
+    public void setStationArrival(Station stationArrival) {
+        this.stationArrival = stationArrival;
+    }
+
+    public void setTrain(Train train) {
+        this.train = train;
+    }
+
+    // Getters
+    public Long getId() {
+        return id;
+    }
+
+    public Date getDateDeparture() {
+        return dateDeparture;
+    }
+
+    public Date getDateArrival() {
+        return dateArrival;
+    }
+
+    public Station getStationDeparture() {
+        return stationDeparture;
+    }
+
+    public Station getStationArrival() {
+        return stationArrival;
+    }
+
+    public Train getTrain() {
+        return train;
+    }
 }
