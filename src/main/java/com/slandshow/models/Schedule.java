@@ -13,19 +13,25 @@ public class Schedule {
     private Long id;
 
     @Column(name = "date_departure")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dateDeparture;
 
     @Column(name = "date_arrival")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dateArrival;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "station_departure_id", referencedColumnName = "id")
     private Station stationDeparture;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "station_arrival_id", referencedColumnName = "id")
     private Station stationArrival;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "train_id", referencedColumnName = "id")
     private Train train;
+
 
     public Schedule() {
     }
