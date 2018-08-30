@@ -52,4 +52,9 @@ public class Train {
     public Integer getSeats() {
         return seats;
     }
+
+    @Override
+    public String toString() {
+        return "Train ( id: " + id + ", name: " + name + ", seats: " + seats + " )";
+    }
 }

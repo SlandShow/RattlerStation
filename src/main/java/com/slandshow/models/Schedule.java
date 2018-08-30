@@ -93,4 +93,14 @@ public class Schedule {
     public Train getTrain() {
         return train;
     }
+
+    @Override
+    public String toString() {
+        return "Schedule ( id: " + id + ", dateDeparture: " +
+                dateDeparture.toString() + ", dateArrival: " +
+                dateArrival.toString() + ", stationDeparture: " +
+                stationDeparture.getName() + ", stationArrival: " +
+                stationArrival.getName() + ", train: " +
+                train.getName() + " )";
+    }
 }
