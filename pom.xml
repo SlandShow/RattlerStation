@@ -28,7 +28,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.0.5.Final</version>
+            <version>5.3.1.Final</version>
         </dependency>
 
         <!-- MySQL Connector -->
@@ -38,6 +38,7 @@
             <version>8.0.12</version>
         </dependency>
 
+        <!-- Transaction JTA -->
         <dependency>
             <groupId>javax.transaction</groupId>
             <artifactId>jta</artifactId>
