@@ -22,6 +22,13 @@
             <version>5.0.8.RELEASE</version>
         </dependency>
 
+        <!-- Spring ORM -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>5.0.8.RELEASE</version>
+        </dependency>
+
         <!-- ====DataBase==== -->
 
         <!-- Hibernate 5 -->
@@ -44,6 +51,14 @@
             <artifactId>jta</artifactId>
             <version>1.1</version>
         </dependency>
+
+        <!-- Apache common DBCP -->
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>1.4</version>
+        </dependency>
+
 
         <!-- ====View==== -->
 
