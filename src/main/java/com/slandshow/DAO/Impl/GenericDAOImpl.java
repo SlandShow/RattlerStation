@@ -17,9 +17,12 @@ public abstract class GenericDAOImpl<E> implements GenericDAO<E> {
         this.entityClass = (Class<E>) GenericTypeResolver.resolveTypeArgument(getClass(), GenericDAO.class);
     }
 
-    // TODO: Add @Autowired and set-up sessionFactory via Spring MVC
-    //@Autowired
+    @Autowired
     private SessionFactory sessionFactory;
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     public void add(E entity) {
         sessionFactory.getCurrentSession()
