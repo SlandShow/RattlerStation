@@ -10,4 +10,6 @@ import java.util.List;
 public interface StationService {
 
    List<Station> getAllStations();
+
+   Station getStationByName(String name);
 }

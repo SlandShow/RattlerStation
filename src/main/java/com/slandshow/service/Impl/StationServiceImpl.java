@@ -23,4 +23,9 @@ public class StationServiceImpl implements StationService {
     public List<Station> getAllStations() {
         return stationDAO.getAll();
     }
+
+    @Transactional
+    public Station getStationByName(String name) {
+        return stationDAO.getByName(name);
+    }
 }
