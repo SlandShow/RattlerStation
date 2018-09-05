@@ -1,10 +1,12 @@
 package com.slandshow.controllers;
 
+import com.slandshow.DTO.ScheduleDTO;
 import com.slandshow.models.Schedule;
 import com.slandshow.models.Station;
 import com.slandshow.service.ScheduleService;
 import com.slandshow.service.StationService;
 import com.slandshow.utils.JspFormNames;
+import com.slandshow.utils.UtilsManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -43,35 +46,40 @@ public class ScheduleController {
     @GetMapping("/scheduleByStationsAndDate")
     public String getScheduleByStationsAndDate(Model model) {
 
-        model.addAttribute("schedule", new Schedule());
+        model.addAttribute("schedule", new ScheduleDTO());
 
         return JspFormNames.SCHEDULE_INPUT_FOR_STATIONS_AND_DATE;
     }
 
     // TODO: ADD JOTA TIME LATER, MAYBE DTO FOR CURRENT MAPPING
     @RequestMapping(value = "/scheduleByStationsAndDate", method = RequestMethod.POST)
-    public String scheduleByStationsAndDatePersist(@ModelAttribute Schedule schedule, BindingResult result, Model model) {
-        Date today = new Date();
+    public String scheduleByStationsAndDatePersist(@ModelAttribute ScheduleDTO schedule, BindingResult result, Model model) {
+        Schedule reloadedSchedule = new Schedule();
 
+        try {
+            // Set <date time> and convert it to Data object
+            reloadedSchedule.setDateDeparture(
+                    UtilsManager.parseToDateTime(schedule.getDateDeparture())
+            );
 
-        if (schedule.getDateDeparture() == null)
-            schedule.setDateDeparture(today);
+        } catch (ParseException e) {
+            LOGGER.debug("Problem with parsing");
+        }
 
+        /* Set stations object relation */
 
-
-        schedule.setStationDeparture(
-                stationService.getStationByName(
-                        schedule.getStationDeparture().getName()
-                )
+        reloadedSchedule.setStationDeparture(
+                stationService.getStationByName(schedule.getStationDepartureName())
         );
-        schedule.setStationArrival(
-                stationService.getStationByName(
-                        schedule.getStationArrival().getName())
+
+        reloadedSchedule.setStationArrival(
+                stationService.getStationByName(schedule.getStationArrivalName())
         );
 
-        LOGGER.debug(schedule.getStationDeparture() + " " + schedule.getStationArrival());
 
-        List<Schedule> schedules = scheduleService.getByStationsAndDate(schedule);
+        LOGGER.debug(reloadedSchedule.getStationDeparture() + " " + reloadedSchedule.getStationArrival());
+
+        List<Schedule> schedules = scheduleService.getByStationsAndDate(reloadedSchedule);
 
         model.addAttribute("schedules", schedules);
 
