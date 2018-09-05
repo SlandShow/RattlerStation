@@ -73,6 +73,7 @@ public class ScheduleDAOImpl<E extends Schedule> extends GenericDAOImpl<E> imple
                 .getResultList();
     }
 
+
     /*
      * Return list of schedule according on stations and date (departure & arrival)
      *
@@ -80,15 +81,13 @@ public class ScheduleDAOImpl<E extends Schedule> extends GenericDAOImpl<E> imple
      * @return all schedule by arrival and departure stations and date departure & arrival
      */
     public List<Schedule> getByStationsAndDates(Schedule schedule) {
+        // TODO: ADD TIME LATER
+        String QUERY = "from Schedule s where s.stationDeparture = :stationDeparture and s.stationArrival = :stationArrival";
+
         return sessionFactory.getCurrentSession()
-                .createQuery("from Schedule where " +
-                        "stationArrival = :stationArrival and " +
-                        "stationDeparture = :stationDeparture and " +
-                        "dateDeparture between :dateDeparture and :dateArrival " +
-                        "order by dateDeparture desc ")
+                .createQuery(QUERY)
                 .setParameter("stationArrival", schedule.getStationArrival())
                 .setParameter("stationDeparture", schedule.getStationDeparture())
-                .setParameter("dateDeparture", schedule.getDateDeparture())
                 .getResultList();
     }
 
