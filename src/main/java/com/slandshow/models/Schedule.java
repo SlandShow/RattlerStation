@@ -1,5 +1,7 @@
 package com.slandshow.models;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -13,10 +15,12 @@ public class Schedule {
     private Long id;
 
     @Column(name = "date_departure")
+    @DateTimeFormat(pattern="yyyy-dd-MM")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateDeparture;
 
     @Column(name = "date_arrival")
+    @DateTimeFormat(pattern="yyyy-dd-MM")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateArrival;
 
