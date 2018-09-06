@@ -1,10 +1,19 @@
 package com.slandshow.utils;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.ResourceUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class UtilsManager {
+
+    /* ====For date & time==== */
 
     public static Date getNextDay(String dateForNextDay) throws ParseException {
         Date date = parseToDate(dateForNextDay);
@@ -29,4 +38,19 @@ public class UtilsManager {
         return format.parse(date);
     }
 
+    /* ====For password encrypt==== */
+
+    public static String encodePassword(String password) {
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.encode(password);
+    }
+
+    /* ====For registration & tickets==== */
+
+    // TODO: FIX
+    public static String getHelloContext() throws IOException {
+        //File file = ResourceUtils.getFile("classpath:messages/templateForEmailWelcomeMessage.html");
+        //return new String(Files.readAllBytes(file.toPath()));
+        return null;
+    }
 }
