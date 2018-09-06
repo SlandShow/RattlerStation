@@ -9,16 +9,17 @@
 </head>
 <body>
 
+<div>
+    <form:form action="scheduleByStationsAndDate" method="POST" modelAttribute="schedule">
+        <form:input type="hidden" path="id" id="id"/>
 
-<form:form action="scheduleByStationsAndDate" method="POST" modelAttribute="schedule">
-    <form:input type="hidden" path="id" id="id"/>
+        <<form:input type="text" path="stationDepartureName" id="stationDeparture"/>
+        <<form:input type="text" path="stationArrivalName" id="stationArrival"/>
+        <<form:input type="text" path="dateDeparture" id="dateDeparture"/>
 
-    <<form:input path="stationDeparture" id="stationDeparture"/>
-    <<form:input path="stationArrival" id="stationArrival"/>
-    <<form:input path="dateDeparture" id="dateDeparture"/>
-
-    <input type="submit" value="Register"/>
-</form:form>
+        <input type="submit" value="Search"/>
+    </form:form>
+</div>
 
 </body>
 </html>
