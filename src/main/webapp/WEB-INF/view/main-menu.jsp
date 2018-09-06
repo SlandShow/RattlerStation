@@ -20,6 +20,7 @@
             <li><a href="#">Buy ticket</a></li>
             <li><a href="/stations/list">Show all stations</a></li>
             <li><a href="#">Contact us</a></li>
+            <li><a href="/login">Log in</a></li>
         </ul>
 
     </div>
