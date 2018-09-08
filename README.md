@@ -21,9 +21,11 @@ Stack (current):
 8. Create DTO and mapping [`x`]
 9. Create Controller [`done`]
 10. Create HTML based JSP, witch views all POJO's [`done`]
-11. Add Spring security [`x`]
+11. Add Spring security [`done`]
 12. User registration [`x`]
 13. Fix form data selection in DAO and controller [`x`]
+14. Clean up code in Spring Security config & service classes [`x`]
+15. Add `buy ticket` case [`x`]
 
 My developer dairy:
 
@@ -37,3 +39,4 @@ My developer dairy:
 8. (3.09.18) Add bootstrap (but not local), create JSP form for `Actual train traffic` case, create JSP for `Rattler Schedule` case.
 9. (4.09.18) Set up Schedule controller, realize 3 mapping methods: for JSP form, for schedule list.
 10. (5.09.18) Fix uncorrect HQL query, add alias.
+11. (6.09.19) Add Spring security to project, make users autohrization (log in) and admin access.
