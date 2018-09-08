@@ -79,3 +79,36 @@ CREATE INDEX schedule_station_id_fk_2
 CREATE INDEX schedule_train_id_fk
   ON schedule (train_id)
 ;
+
+/* Seat table */
+CREATE TABLE IF NOT EXISTS seat (
+  id INT AUTO_INCREMENT PRIMARY KEY ,
+  carriage INT NULL,
+  seat INT NULL,
+  train_id INT NULL,
+  CONSTRAINT seat_id_uindex UNIQUE (id),
+  CONSTRAINT seat_train_id_fk FOREIGN KEY (train_id) REFERENCES train (id)
+)
+  ENGINE=InnoDB;
+
+CREATE INDEX seat_train_id_fk ON seat (train_id);
+
+/* Ticket table */
+CREATE TABLE IF NOT EXISTS ticket (
+  id INT AUTO_INCREMENT PRIMARY KEY ,
+  schedule_id INT NOT NULL,
+  user_id INT NOT NULL ,
+  seat_id INT NOT NULL ,
+  price INT NULL ,
+  CONSTRAINT ticket_id_uindex UNIQUE (id),
+  CONSTRAINT ticket_schedule_id_fk FOREIGN KEY (schedule_id) REFERENCES schedule (id),
+  CONSTRAINT ticket_user_id_fk FOREIGN KEY (user_id) REFERENCES user (id),
+  CONSTRAINT ticket_seat_id_fk FOREIGN KEY (seat_id) REFERENCES seat (id)
+)
+  ENGINE=InnoDB;
+
+CREATE INDEX ticket_schedule_id_fk ON ticket (schedule_id);
+
+CREATE INDEX ticket_seat_id_fk ON ticket (seat_id);
+
+CREATE INDEX ticket_user_id_fk ON ticket (user_id);
