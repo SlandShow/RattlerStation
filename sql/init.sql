@@ -42,8 +42,7 @@ CREATE INDEX user_role_user_id_fk ON user_role (user_id);
 /* Train table */
 CREATE TABLE IF NOT EXISTS train (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR (100) NULL,
-  seats INT NOT NULL
+  name VARCHAR (100) NULL
 )
   ENGINE=InnoDB;
 
