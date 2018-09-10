@@ -1,6 +1,7 @@
 package com.slandshow.models;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "train")
@@ -14,17 +15,16 @@ public class Train {
     @Column(name = "name")
     private String name;
 
-    // TODO: CHANGE RELATION TO ONE-TO-MANY (private private Set<Seat> seats)
-    @Column(name = "seats")
-    private Integer seats;
+    //@OneToMany(mappedBy = "train", cascade = CascadeType.ALL)
+    //private Set<Seat> seats;
 
     public Train() {
     }
 
-    public Train(String name, Integer seats) {
-        this.name = name;
-        this.seats = seats;
-    }
+   // public Train(String name, Set<Seat> seats) {
+     //   this.name = name;
+       // this.seats = seats;
+    //}
 
     // Setters
     public void setId(Long id) {
@@ -35,10 +35,9 @@ public class Train {
         this.name = name;
     }
 
-    // TODO: CHANGE SETTER
-    public void setSeats(Integer seats) {
-        this.seats = seats;
-    }
+   // public void setSeats(Set<Seat> seats) {
+     //   this.seats = seats;
+    //}
 
     // Getters
     public Long getId() {
@@ -49,12 +48,12 @@ public class Train {
         return name;
     }
 
-    public Integer getSeats() {
-        return seats;
-    }
+    //public Set<Seat> getSeats() {
+      //  return seats;
+    //}
 
     @Override
     public String toString() {
-        return "Train ( id: " + id + ", name: " + name + ", seats: " + seats + " )";
+        return "Train ( id: " + id + ", name: " + name + ", seats: " + "" + " )";
     }
 }
