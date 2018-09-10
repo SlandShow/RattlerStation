@@ -18,14 +18,14 @@ Stack (current):
 5. Create Menu JSP [`done`]
 6. make sense with REST [`x`]
 7. Add a model (graph) of the train map in order to check in the future the validity of creating new schedules [`x`]
-8. Create DTO and mapping [`x`]
+8. Create DTO and mapping [`done?`]
 9. Create Controller [`done`]
 10. Create HTML based JSP, witch views all POJO's [`done`]
 11. Add Spring security [`done`]
 12. User registration [`x`]
 13. Fix form data selection in DAO and controller [`x`]
 14. Clean up code in Spring Security config & service classes [`x`]
-15. Add `buy ticket` case [`x`]
+15. Add `buy ticket` case [`done`]
 
 My developer dairy:
 
@@ -39,4 +39,6 @@ My developer dairy:
 8. (3.09.18) Add bootstrap (but not local), create JSP form for `Actual train traffic` case, create JSP for `Rattler Schedule` case.
 9. (4.09.18) Set up Schedule controller, realize 3 mapping methods: for JSP form, for schedule list.
 10. (5.09.18) Fix uncorrect HQL query, add alias.
-11. (6.09.19) Add Spring security to project, make users autohrization (log in) and admin access.
+11. (6.09.18) Add Spring security to project, make users autohrization (log in) and admin access.
+12. (7.09.18 - 8.09.18) Take a pause. 
+13. (9.09.18 - 10.09.18) Create bookig ticket case. Add service, DAO, Entites (Seat and Ticket). Fix DDL, update UserController. Create more JSP pages for booking ticket case.
