@@ -24,15 +24,15 @@ public class Schedule {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateArrival;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "station_departure_id", referencedColumnName = "id")
     private Station stationDeparture;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "station_arrival_id", referencedColumnName = "id")
     private Station stationArrival;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "train_id", referencedColumnName = "id")
     private Train train;
 
