@@ -162,6 +162,13 @@
             <version>5.0.6.RELEASE</version>
         </dependency>
 
+        <!-- ModelMapper for REST and DTO -->
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+
     </dependencies>
 
 </project>
