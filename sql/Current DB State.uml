@@ -3,14 +3,14 @@
   <ID>DATABASE</ID>
   <OriginalElement>2e9ddf6f-f95b-4003-825b-cd8e321efeef</OriginalElement>
   <nodes>
-    <node x="424.0" y="155.0">2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.schedule</node>
-    <node x="414.25" y="12.0">2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.station</node>
-    <node x="84.046875" y="418.5">2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.user_role</node>
-    <node x="642.25" y="0.0">2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.train</node>
-    <node x="457.0" y="382.0">2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.ticket</node>
-    <node x="189.0" y="167.0">2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.user</node>
-    <node x="0.0" y="203.0">2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.role</node>
-    <node x="699.0" y="179.0">2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.seat</node>
+    <node x="424.0" y="131.0">2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.schedule</node>
+    <node x="415.28286384976525" y="-15.492957746478872">2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.station</node>
+    <node x="60.29100645539907" y="394.5">2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.user_role</node>
+    <node x="731.0762910798121" y="-14.46009389671362">2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.train</node>
+    <node x="458.03286384976525" y="409.6431924882629">2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.ticket</node>
+    <node x="181.7699530516432" y="150.23004694835683">2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.user</node>
+    <node x="-15.492957746478865" y="181.06572769953053">2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.role</node>
+    <node x="732.0516431924882" y="157.06572769953053">2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.seat</node>
   </nodes>
   <notes />
   <edges>
@@ -20,21 +20,21 @@
     </edge>
     <edge source="2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.ticket" target="2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.seat">
       <point x="63.0" y="-76.5" />
-      <point x="614.5" y="357.0" />
-      <point x="779.5" y="357.0" />
+      <point x="614.5" y="333.0" />
+      <point x="779.5" y="333.0" />
       <point x="0.0" y="64.5" />
     </edge>
     <edge source="2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.user_role" target="2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.user">
       <point x="38.75" y="-40.0" />
-      <point x="200.296875" y="357.0" />
-      <point x="242.75" y="357.0" />
+      <point x="200.296875" y="333.0" />
+      <point x="242.75" y="333.0" />
       <point x="-53.75" y="76.5" />
     </edge>
     <edge source="2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.schedule" target="2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.train">
       <point x="85.0" y="-88.5" />
-      <point x="636.5" y="130.0" />
-      <point x="688.0" y="130.0" />
-      <point x="-45.75" y="52.5" />
+      <point x="636.5" y="106.0" />
+      <point x="688.0" y="106.0" />
+      <point x="-45.75" y="40.5" />
     </edge>
     <edge source="2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.schedule" target="2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.station">
       <point x="0.0" y="-88.5" />
@@ -42,23 +42,25 @@
     </edge>
     <edge source="2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.ticket" target="2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.user">
       <point x="-63.0" y="-76.5" />
-      <point x="488.5" y="357.0" />
-      <point x="350.25" y="357.0" />
+      <point x="488.5" y="333.0" />
+      <point x="350.25" y="333.0" />
       <point x="53.75" y="76.5" />
     </edge>
     <edge source="2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.user_role" target="2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.role">
       <point x="-38.75" y="-40.0" />
-      <point x="122.796875" y="357.0" />
-      <point x="84.5" y="357.0" />
+      <point x="122.796875" y="333.0" />
+      <point x="84.5" y="333.0" />
       <point x="0.0" y="40.5" />
     </edge>
     <edge source="2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.seat" target="2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.train">
       <point x="0.0" y="-64.5" />
-      <point x="45.75" y="52.5" />
+      <point x="45.75" y="40.5" />
     </edge>
   </edges>
-  <settings layout="Hierarchic Group" zoom="0.7681818181818182" x="562.5443786982248" y="268.0" />
-  <SelectedNodes />
+  <settings layout="Hierarchic Group" zoom="0.9681818181818181" x="638.4507042253522" y="267.5" />
+  <SelectedNodes>
+    <node>2e9ddf6f-f95b-4003-825b-cd8e321efeef.TABLE:JavaSchool.station</node>
+  </SelectedNodes>
   <Categories>
     <Category>Key columns</Category>
     <Category>Columns</Category>
