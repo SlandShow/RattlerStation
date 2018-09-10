@@ -3,6 +3,7 @@ package com.slandshow.DAO.Impl;
 import com.slandshow.DAO.ScheduleDAO;
 import com.slandshow.models.Schedule;
 import com.slandshow.models.Station;
+import com.slandshow.utils.UtilsManager;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -81,7 +82,7 @@ public class ScheduleDAOImpl<E extends Schedule> extends GenericDAOImpl<E> imple
      * @return all schedule by arrival and departure stations and date departure & arrival
      */
     public List<Schedule> getByStationsAndDates(Schedule schedule) {
-        String QUERY = "from Schedule s where s.stationDeparture = :stationDeparture and s.stationArrival = :stationArrival and date(dateDeparture) = :date order by dateDeparture desc";
+        String QUERY = "from Schedule s where s.stationDeparture = :stationDeparture and s.stationArrival = :stationArrival and date(dateDeparture) >= :date order by dateDeparture desc";
 
         return sessionFactory.getCurrentSession()
                 .createQuery(QUERY)
@@ -96,30 +97,79 @@ public class ScheduleDAOImpl<E extends Schedule> extends GenericDAOImpl<E> imple
     }
 
     public List<Schedule> getByTrainAndDate(Schedule schedule) {
-        return null;
+        return sessionFactory.getCurrentSession()
+                .createQuery("from Schedule where train = :train and " +
+                        "date(dateDeparture) = :date " +
+                        "order by dateDeparture desc ")
+                .setParameter("train", schedule.getTrain())
+                .setParameter("date", schedule.getDateDeparture())
+                .getResultList();
     }
 
     public List<Schedule> getByTrainAndDates(Schedule schedule) {
-        return null;
+        return sessionFactory.getCurrentSession()
+                .createQuery("from Schedule where train = :train and " +
+                        "dateDeparture between :dateDeparture and :dateArrival " +
+                        "order by dateDeparture desc ")
+                .setParameter("train", schedule.getTrain())
+                .setParameter("dateDeparture", schedule.getDateDeparture())
+                .setParameter("dateArrival", schedule.getDateArrival())
+                .getResultList();
     }
 
     public List<Schedule> getByStationArrivalAndDate(Schedule schedule) {
-        return null;
+        return sessionFactory.getCurrentSession()
+                .createQuery("from Schedule  where " +
+                        "stationDeparture = :stationDeparture " +
+                        "and date(dateDeparture) = :date " +
+                        "order by dateDeparture desc ")
+                .setParameter("stationDeparture", schedule.getStationDeparture())
+                .setParameter("date", schedule.getDateDeparture())
+                .getResultList();
     }
 
     public List<Schedule> getByStationsAndDatesAndTrains(Schedule schedule) {
-        return null;
+        return sessionFactory.getCurrentSession()
+                .createQuery("from Schedule where " +
+                        "stationDeparture = :stationDeparture and stationArrival = :stationArrival and " +
+                        "dateDeparture between :dateDeparture and :dateArrival and " +
+                        "dateArrival between :dateDeparture and :dateArrival order by " +
+                        "dateDeparture desc ")
+                .setParameter("stationDeparture", schedule.getStationDeparture())
+                .setParameter("stationArrival", schedule.getStationArrival())
+                .setParameter("dateDeparture", schedule.getDateDeparture())
+                .setParameter("dateArrival", schedule.getDateArrival())
+                .getResultList();
     }
 
     public List<Schedule> getByStationArrivalAndDates(Station station, Date dateFrom, Date dateTo) {
-        return null;
+        return sessionFactory.getCurrentSession()
+                .createQuery("from Schedule " +
+                        "where stationArrival = :station and " +
+                        "dateArrival between :dateFrom and :dateTo")
+                .setParameter("station", station)
+                .setParameter("dateFrom", dateFrom)
+                .setParameter("dateTo", dateTo)
+                .getResultList();
     }
 
     public List<Schedule> getRealTimeSchedules() throws ParseException {
-        return null;
+        Date date = UtilsManager.getTodayDateTime();
+        return sessionFactory.getCurrentSession()
+                .createQuery("from Schedule " +
+                        "where :date between dateDeparture and dateArrival " +
+                        "order by dateDeparture desc ")
+                .setParameter("date", date)
+                .getResultList();
     }
 
     public List<Schedule> getForToday() throws ParseException {
-        return null;
+        Date date = UtilsManager.getTodayDateTime();
+        return sessionFactory.getCurrentSession()
+                .createQuery("from Schedule " +
+                        "where date(dateDeparture) = date(:date) " +
+                        "order by dateDeparture asc ")
+                .setParameter("date", date)
+                .getResultList();
     }
 }
