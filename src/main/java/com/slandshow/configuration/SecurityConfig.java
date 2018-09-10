@@ -75,7 +75,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/login",
                         "/",
                         "/home",
-                        "/stations-list")
+                        "/stations/list",
+                        "/schedule/scheduleList",
+                        "/schedule/scheduleByStationsAndDate")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
