@@ -8,4 +8,6 @@ public interface RoleDAO {
 
     Role getRole();
 
+    void addRole(Role role);
+
 }

@@ -19,4 +19,8 @@ public class RoleDAOImpl implements RoleDAO {
                 .setParameter("ROLE", "ROLE_USER")
                 .uniqueResult();
     }
+
+    public void addRole(Role role) {
+        sessionFactory.getCurrentSession().save(role);
+    }
 }
