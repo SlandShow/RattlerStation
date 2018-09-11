@@ -26,6 +26,10 @@ Stack (current):
 13. Fix form data selection in DAO and controller [`x`]
 14. Clean up code in Spring Security config & service classes [`x`]
 15. Add `buy ticket` case [`done`]
+16. Develop real schedules [`x`]
+17. Add many station and develop train map in DB [`x`]
+18. Updgrade all cases: log in, ticket traffic, buy tickets [`x`]
+19. Add manager functionality [`x`]
 
 My developer dairy:
 
@@ -42,3 +46,4 @@ My developer dairy:
 11. (6.09.18) Add Spring security to project, make users autohrization (log in) and admin access.
 12. (7.09.18 - 8.09.18) Take a pause. 
 13. (9.09.18 - 10.09.18) Create bookig ticket case. Add service, DAO, Entites (Seat and Ticket). Fix DDL, update UserController. Create more JSP pages for booking ticket case.
+14. (11.09.18) Create admin functionality for creating new users and select roles (admin, manager or user). Start to develop normal schedules.
