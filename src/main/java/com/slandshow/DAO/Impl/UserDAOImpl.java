@@ -12,6 +12,10 @@ public class UserDAOImpl<E extends User> extends GenericDAOImpl<E> implements Us
     @Autowired
     private SessionFactory sessionFactory;
 
+    public void save(User user) {
+        sessionFactory.getCurrentSession().save(user);
+    }
+
     public void updateProfile(User user) {
         sessionFactory.getCurrentSession().createQuery("UPDATE User SET " +
                 "firstName = :firstName, lastName = :lastName, login = :login where id =: id")
@@ -35,6 +39,17 @@ public class UserDAOImpl<E extends User> extends GenericDAOImpl<E> implements Us
                 .setParameter("firstName", firstName)
                 .setParameter("lastName", lastName)
                 .uniqueResult();
+    }
+
+    // Native SQL
+    public int addUserRole(Long userId, Long roleId) {
+        return sessionFactory.getCurrentSession().createNativeQuery(
+                "INSERT INTO user_role (user_id, role_id) " +
+                        "VALUES (?, ?)"
+        )
+                .setParameter(1, userId)
+                .setParameter(2, roleId)
+                .executeUpdate();
     }
 
 }
