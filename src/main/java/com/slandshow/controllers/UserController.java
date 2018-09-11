@@ -1,7 +1,9 @@
 package com.slandshow.controllers;
 
 import com.slandshow.DTO.*;
+import com.slandshow.models.Role;
 import com.slandshow.models.Schedule;
+import com.slandshow.models.User;
 import com.slandshow.service.*;
 import com.slandshow.utils.JspFormNames;
 import com.slandshow.utils.UtilsManager;
@@ -18,7 +20,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class UserController {
@@ -142,6 +146,40 @@ public class UserController {
         return "admin";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/adminService")
+    public String adminServiceMenu() {
+        return "admin-service-menu";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/addUser")
+    public String addUser(Model model) {
+        model.addAttribute("user", new UserDTO());
+        return "adding-user-form";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/addUser")
+    public String permitNewUser(@ModelAttribute UserDTO userDTO, @RequestParam("role") String role) {
+        User user = new User();
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setLogin(userDTO.getLogin());
+        user.setPassword(UtilsManager.encodePassword(userDTO.getPassword()));
+
+        long currentUserIndex = userService.getUsers().size() + 1;
+        long userRoleId = -1;
+
+        if (role.equals("USER_ROLE")) userRoleId = 1;
+        else if (role.equals("ADMIN_ROLE")) userRoleId = 2;
+        else if (role.equals("MANAGER_ROLE")) userRoleId = 3;
+
+        userService.add(user);
+        userService.addUserRole(currentUserIndex, userRoleId);
+
+        return "user-added";
+    }
 
 /*
     @PostMapping("/registration")
