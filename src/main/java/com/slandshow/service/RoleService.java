@@ -8,4 +8,6 @@ public interface RoleService {
 
     Role getRole();
 
+    void saveRole(Role role);
+
 }

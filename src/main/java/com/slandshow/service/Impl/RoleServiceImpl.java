@@ -19,4 +19,9 @@ public class RoleServiceImpl implements RoleService {
         return roleDAO.getRole();
     }
 
+    @Transactional
+    public void saveRole(Role role) {
+        roleDAO.addRole(role);
+    }
+
 }
