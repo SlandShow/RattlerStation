@@ -29,4 +29,6 @@ public interface UserService {
 
     void registration(UserDTO userDTO) throws IOException;
 
+    void addUserRole(Long userId, Long roleId);
+
 }

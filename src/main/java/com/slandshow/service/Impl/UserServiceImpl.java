@@ -117,4 +117,9 @@ public class UserServiceImpl implements UserService {
         //mailService.sendMimeMessage(message);
         add(user);
     }
+
+    @Transactional
+    public void addUserRole(Long userId, Long roleId) {
+        userDAO.addUserRole(userId, roleId);
+    }
 }
