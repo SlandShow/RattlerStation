@@ -122,4 +122,9 @@ public class UserServiceImpl implements UserService {
     public void addUserRole(Long userId, Long roleId) {
         userDAO.addUserRole(userId, roleId);
     }
+
+    @Transactional
+    public void deleteUserRole(Long userId) {
+        userDAO.deleteUserRole(userId);
+    }
 }

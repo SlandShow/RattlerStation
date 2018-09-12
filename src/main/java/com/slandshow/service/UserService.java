@@ -31,4 +31,6 @@ public interface UserService {
 
     void addUserRole(Long userId, Long roleId);
 
+    void deleteUserRole(Long userId);
+
 }
