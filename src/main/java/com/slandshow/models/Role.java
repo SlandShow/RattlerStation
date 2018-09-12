@@ -40,4 +40,21 @@ public class Role {
     public String getType() {
         return type;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj == null)
+            return false;
+
+        Role anotherRole = null;
+
+        if (obj instanceof Role)
+            anotherRole = (Role) obj;
+        else return false;
+
+        if (anotherRole.type.equals(type)) return true;
+
+        return false;
+    }
 }
