@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -76,7 +77,7 @@ public class UserController {
                 ticketInfoDTO.getSeatCarriage() < 0 ||
                 ticketInfoDTO.getSeatSeat() < 0
                 ) {
-            System.out.println("NOT VALID INPUT!");
+            LOGGER.info("NOT VALID INPUT!");
             return JspFormNames.BOOKING_TICKET_FORM;
         }
 
@@ -168,18 +169,40 @@ public class UserController {
         user.setLogin(userDTO.getLogin());
         user.setPassword(UtilsManager.encodePassword(userDTO.getPassword()));
 
-        long currentUserIndex = userService.getUsers().size() + 1;
-        long userRoleId = -1;
+        long roleId = -1;
 
-        if (role.equals("USER_ROLE")) userRoleId = 1;
-        else if (role.equals("ADMIN_ROLE")) userRoleId = 2;
-        else if (role.equals("MANAGER_ROLE")) userRoleId = 3;
+        if (role.equals("USER_ROLE")) roleId = 1;
+        else if (role.equals("ADMIN_ROLE")) roleId = 2;
+        else if (role.equals("MANAGER_ROLE")) roleId = 3;
 
         userService.add(user);
-        userService.addUserRole(currentUserIndex, userRoleId);
+
+        long correctUserId = userService.findUserByEmail(userDTO.getLogin()).getId();
+
+        userService.addUserRole(correctUserId, roleId);
 
         return "user-added";
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/deleteUser")
+    public String showUsers(Model model) {
+        model.addAttribute("users", userService.getUsers());
+
+        return "user-list";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = "/deleteUser", params = "id")
+    public String permitUserDeleting(@ModelAttribute User user, @RequestParam(value = "id") Long id) {
+        userService.deleteUserRole(id);
+        userService.remove(user);
+
+        LOGGER.info("USER READY TO BE DELETED: " + user);
+
+        return "admin-service-menu";
+    }
+
 
 /*
     @PostMapping("/registration")
