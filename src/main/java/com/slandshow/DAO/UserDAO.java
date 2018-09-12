@@ -16,4 +16,6 @@ public interface UserDAO<E extends User> extends GenericDAO<E> {
 
     int addUserRole(Long userId, Long roleId);
 
+    void deleteUserRole(Long userId);
+
 }

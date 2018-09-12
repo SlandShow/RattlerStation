@@ -52,4 +52,14 @@ public class UserDAOImpl<E extends User> extends GenericDAOImpl<E> implements Us
                 .executeUpdate();
     }
 
+    public void deleteUserRole(Long userId) {
+        sessionFactory.getCurrentSession()
+                .createNativeQuery(
+                        "DELETE FROM user_role " +
+                                "WHERE user_id = ? "
+                )
+                .setParameter(1, userId)
+                .executeUpdate();
+    }
+
 }
