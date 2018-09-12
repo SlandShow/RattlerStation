@@ -15,12 +15,14 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="container-fluid">
+    <h2>Admin manager</h2>
+    <div class="container-fluid">
 
-    <ul class="nav navbar-nav">
-        <li><a href="/addUser">Add user</a></li>
-    </ul>
+        <ul class="nav navbar-nav">
+            <li><a href="/addUser">Add user</a></li>
+            <li><a href="/deleteUser">Delete user</a></li>
+        </ul>
 
-</div>
+    </div>
 </body>
 </html>
