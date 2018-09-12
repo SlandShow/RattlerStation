@@ -12,6 +12,8 @@ public class UserDTO implements Serializable {
 
     private String password;
 
+    private String role;
+
     public UserDTO() {
     }
 
@@ -33,6 +35,10 @@ public class UserDTO implements Serializable {
         this.password = password;
     }
 
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     // Getters
 
 
@@ -50,5 +56,9 @@ public class UserDTO implements Serializable {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getRole() {
+        return role;
     }
 }
