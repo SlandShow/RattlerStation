@@ -15,16 +15,16 @@ public class Train {
     @Column(name = "name")
     private String name;
 
-    //@OneToMany(mappedBy = "train", cascade = CascadeType.ALL)
-    //private Set<Seat> seats;
+    @OneToMany(mappedBy = "train", cascade = CascadeType.ALL)
+    private Set<Seat> seats;
 
     public Train() {
     }
 
-   // public Train(String name, Set<Seat> seats) {
-     //   this.name = name;
-       // this.seats = seats;
-    //}
+    public Train(String name, Set<Seat> seats) {
+        this.name = name;
+        this.seats = seats;
+    }
 
     // Setters
     public void setId(Long id) {
@@ -35,9 +35,9 @@ public class Train {
         this.name = name;
     }
 
-   // public void setSeats(Set<Seat> seats) {
-     //   this.seats = seats;
-    //}
+   public void setSeats(Set<Seat> seats) {
+        this.seats = seats;
+    }
 
     // Getters
     public Long getId() {
@@ -48,9 +48,9 @@ public class Train {
         return name;
     }
 
-    //public Set<Seat> getSeats() {
-      //  return seats;
-    //}
+    public Set<Seat> getSeats() {
+        return seats;
+    }
 
     @Override
     public String toString() {
