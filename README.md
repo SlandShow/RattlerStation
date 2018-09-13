@@ -47,3 +47,5 @@ My developer dairy:
 12. (7.09.18 - 8.09.18) Take a pause. 
 13. (9.09.18 - 10.09.18) Create bookig ticket case. Add service, DAO, Entites (Seat and Ticket). Fix DDL, update UserController. Create more JSP pages for booking ticket case.
 14. (11.09.18) Create admin functionality for creating new users and select roles (admin, manager or user). Start to develop normal schedules.
+15. (12.09.18) Admin can delete users.
+16 (13.09.18) Fix bi-directional relation and start working with TrainController for manager case.
