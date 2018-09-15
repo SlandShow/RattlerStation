@@ -1,5 +1,7 @@
 package com.slandshow.models;
 
+import com.sun.istack.internal.NotNull;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,11 +16,24 @@ public class Station {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "latitude")
+    private Double latitude;
+
+    @Column(name = "longitude")
+    private Double longitude;
+
+    @OneToOne
+    @NotNull
+    private State state;
+
     public Station() {
     }
 
-    public Station(String name) {
+    public Station(String name, Double latitude, Double longitude, State state) {
         this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.state = state;
     }
 
     // Setters
@@ -30,6 +45,18 @@ public class Station {
         this.name = name;
     }
 
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
     // Getters
     public Long getId() {
         return id;
@@ -39,8 +66,20 @@ public class Station {
         return name;
     }
 
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public State getState() {
+        return state;
+    }
+
     @Override
     public String toString() {
-        return "Station ( id: " + id + ", name: " + name + " )";
+        return "Station ( id: " + id + ", name: " + name +  " latitude: " + latitude + " longitude: " + longitude + " )";
     }
 }

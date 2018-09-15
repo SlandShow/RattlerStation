@@ -18,12 +18,10 @@ public class Train {
     @OneToMany(mappedBy = "train", cascade = CascadeType.ALL)
     private Set<Seat> seats;
 
-    public Train() {
-    }
+    @OneToOne
+    private State state;
 
-    public Train(String name, Set<Seat> seats) {
-        this.name = name;
-        this.seats = seats;
+    public Train() {
     }
 
     // Setters
@@ -35,8 +33,12 @@ public class Train {
         this.name = name;
     }
 
-   public void setSeats(Set<Seat> seats) {
+    public void setSeats(Set<Seat> seats) {
         this.seats = seats;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 
     // Getters
@@ -49,11 +51,15 @@ public class Train {
     }
 
     public Set<Seat> getSeats() {
-        return seats;
+       return seats;
+    }
+
+    public State getState() {
+        return state;
     }
 
     @Override
     public String toString() {
-        return "Train ( id: " + id + ", name: " + name + ", seats: " + "" + " )";
+        return "Train ( id: " + id + ", name: " + name + ", seats: " + seats + " state: " + state + " )";
     }
 }

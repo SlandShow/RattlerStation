@@ -69,6 +69,6 @@ public class Seat {
 
     @Override
     public String toString() {
-        return "Train ( id: " + id + " carriage: " + carriage + " seats: " + seat + " train: < " + train + " >)";
+        return "Seat ( id: " + id + " carriage: " + carriage + " seats: " + seat + " train: < " + train + " >)";
     }
 }
