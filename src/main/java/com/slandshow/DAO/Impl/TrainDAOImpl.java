@@ -4,6 +4,7 @@ import com.slandshow.DAO.TrainDAO;
 import com.slandshow.models.Schedule;
 import com.slandshow.models.Train;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.List;
 @Repository
 public class TrainDAOImpl<E extends Train> extends GenericDAOImpl<E> implements TrainDAO<E> {
 
+    @Autowired
     private SessionFactory sessionFactory;
 
     public void setSessionFactory(SessionFactory sessionFactory) {

@@ -62,12 +62,10 @@ public class ScheduleDAOImpl<E extends Schedule> extends GenericDAOImpl<E> imple
      * @return all schedule by arrival and departure stations and date
      */
     public List<Schedule> getByStationsAndDate(Schedule schedule) {
+        String QUERY = "from Schedule s where s.stationDeparture = :stationDeparture and s.stationArrival = :stationArrival and date(dateDeparture) >= :date order by dateDeparture desc";
+
         return sessionFactory.getCurrentSession()
-                .createQuery("from Schedule where " +
-                        "stationArrival = :stationArrival and " +
-                        "stationDeparture = :stationDeparture and " +
-                        "date(dateDeparture) = :date " +
-                        "order by dateDeparture desc ")
+                .createQuery(QUERY)
                 .setParameter("stationArrival", schedule.getStationArrival())
                 .setParameter("stationDeparture", schedule.getStationDeparture())
                 .setParameter("date", schedule.getDateDeparture())
