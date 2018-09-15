@@ -1,4 +1,10 @@
-/* DDL all tables */
+/*
+ *
+ * DDL all tables
+ * 1) Role, User, User Role
+ * 2) State, Train, Station, Schedule, Seat and Ticket
+ *
+ */
 
 
 /* ====Spring Security tables==== */
@@ -22,7 +28,7 @@ CREATE TABLE IF NOT EXISTS role (
 )
   engine=InnoDB;
 
-/*  User role table*/
+/*  User role table */
 CREATE TABLE IF NOT EXISTS user_role (
   user_id INT NULL ,
   role_id INT NULL ,
@@ -37,19 +43,35 @@ CREATE INDEX user_role_role_id_fk ON user_role (role_id);
 
 CREATE INDEX user_role_user_id_fk ON user_role (user_id);
 
-/* ====Core tables====
+/* ====Core tables==== */
+
+/* State table */
+CREATE TABLE IF NOT EXISTS state (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  type VARCHAR(100) NULL,
+  CONSTRAINT state_id_uindex UNIQUE (id)
+)
+  ENGINE=InnoDB;
 
 /* Train table */
 CREATE TABLE IF NOT EXISTS train (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR (100) NULL
+  name VARCHAR (100) NULL,
+  state_id INT NULL,
+  CONSTRAINT train_id_uindex UNIQUE (id),
+  CONSTRAINT train_state_id_fk FOREIGN KEY (state_id) REFERENCES state (id)
 )
   ENGINE=InnoDB;
 
 /* Station table */
 CREATE TABLE IF NOT EXISTS station (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR (100) NULL
+  name VARCHAR (100) NULL,
+  latitude DOUBLE NULL,
+  longitude DOUBLE NULL,
+  state_id INT NULL,
+  CONSTRAINT station_id_uindex UNIQUE (id),
+  CONSTRAINT station_state_id_fk FOREIGN KEY (state_id) REFERENCES state (id)
 )
   ENGINE=InnoDB;
 
