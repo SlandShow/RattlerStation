@@ -79,6 +79,22 @@ public class Station {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (!(obj instanceof Station)) return false;
+        if (this == obj) return true;
+
+        Station anotherStation = (Station) obj;
+
+        if (this.longitude.equals(anotherStation.longitude)
+                && this.latitude.equals(anotherStation.latitude)
+                && this.name.equals(anotherStation.name))
+                    return true;
+
+        return false;
+    }
+
+    @Override
     public String toString() {
         return "Station ( id: " + id + ", name: " + name +  " latitude: " + latitude + " longitude: " + longitude + " )";
     }
