@@ -77,4 +77,7 @@ public class ScheduleDTO implements Serializable {
         return price;
     }
 
+    public String getTrainName() {
+        return trainName;
+    }
 }
