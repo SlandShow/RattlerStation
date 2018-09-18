@@ -1,5 +1,6 @@
 package com.slandshow.utils;
 
+import org.joda.time.DateTime;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.ResourceUtils;
@@ -7,11 +8,18 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class UtilsManager {
+
+    /* ====For correct buy tickets process==== */
+
+    private static final int MIN_DELTA_TRANSFER = 15;
+    private static final int MAX_DELTA_TRANSFER = 360;
 
     /* ====For date & time==== */
 
@@ -36,6 +44,23 @@ public class UtilsManager {
     public static Date parseToDateTime(String date) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return format.parse(date);
+    }
+
+    public static Date getTodayDateTime() throws ParseException {
+        Date date = new Date();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        df.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
+        return parseToDateTime(df.format(date));
+    }
+
+    public static boolean checkCurrentDay(Date date) {
+        DateTime dateTime = new DateTime(date.getTime());
+        return dateTime.isBeforeNow();
+    }
+
+    public static boolean checkForCurrentDayForBookingTicket(Date date) {
+        Date currentDay = new Date();
+        return (!checkCurrentDay(date) && (date.getTime() - currentDay.getTime()) / (1000 * 60) > 10);
     }
 
     /* ====For password encrypt==== */
