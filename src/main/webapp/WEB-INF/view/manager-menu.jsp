@@ -14,6 +14,8 @@
     <ul class="nav navbar-nav">
         <li><a href="/createTrain">Create train</a></li>
         <li><a href="/deleteTrain">Delete train</a></li>
+        <li><a href="/stations/createStation">Create station</a></li>
+        <li><a href="/schedule/createSchedule">Create schedule</a></li>
     </ul>
 
 </div>
