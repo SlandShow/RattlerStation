@@ -8,20 +8,20 @@ import com.slandshow.service.StationService;
 import com.slandshow.utils.JspFormNames;
 import com.slandshow.utils.UtilsManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.apache.log4j.Logger;
-import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 @Controller()
 @RequestMapping("/schedule")
@@ -77,13 +77,42 @@ public class ScheduleController {
         );
 
 
-        LOGGER.debug(reloadedSchedule.getStationDeparture() + " " + reloadedSchedule.getStationArrival());
+        LOGGER.info(reloadedSchedule.getStationDeparture() + " " + reloadedSchedule.getStationArrival());
 
         List<Schedule> schedules = scheduleService.getByStationsAndDate(reloadedSchedule);
 
         model.addAttribute("schedules", schedules);
 
         return JspFormNames.SCHEDULE_INPUT_FOR_STATIONS_AND_DATE_RESULT;
+    }
+
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
+    @GetMapping("/createSchedule")
+    public String createSchedule(Model model) {
+        model.addAttribute("schedule", new ScheduleDTO());
+        return "schedule-creation-form";
+    }
+
+    /**
+     * add schedule
+     * conditionals:
+     * 1. can't add same stations in schedule
+     * 2. can't add wrong times in schedule (arrival < departure)
+     * 3. can't add intersection of schedules
+     * 4. can't add schedule for train which placed on another station! //TODO
+     * 5. can't add duplicate schedule
+     * 6. can't add schedule for current day or earlier day
+     *
+     * @param scheduleDTO with id, date arrival/departure, stations arrival/departure, train
+     * @throws
+     * @throws ParseException
+     */
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
+    @PostMapping("/createSchedule")
+    public String createSchedule(@ModelAttribute ScheduleDTO scheduleDTO) throws ParseException, IOException, TimeoutException {
+        scheduleService.add(scheduleDTO);
+        return "manager-menu";
     }
 
 }
