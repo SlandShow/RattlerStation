@@ -1,6 +1,7 @@
 package com.slandshow.service;
 
 import com.slandshow.DTO.ScheduleDTO;
+import com.slandshow.DTO.SeatsDTO;
 import com.slandshow.models.Schedule;
 import com.slandshow.models.Station;
 import org.springframework.stereotype.Service;
@@ -49,7 +50,7 @@ public interface ScheduleService {
 
     List<ScheduleDTO> getDirectSchedulesFromDTOByDates(ScheduleDTO scheduleDTO) throws ParseException;
 
-    //SeatsDTO getSeats(Long id);
+    SeatsDTO getSeats(Long id);
 
     List<Schedule> getByStationArrivalAndDates(Station station, Date dateFrom, Date dateTo);
 
