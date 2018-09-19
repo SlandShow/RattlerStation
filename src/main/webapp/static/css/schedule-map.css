@@ -1,0 +1,81 @@
+/* белый #F4F6FC
+ темно-синий #212761*/ 
+
+body {
+  background-color: #2985c6;
+}
+
+#bottom {
+	position: absolute;
+	color: #F4F6FC;
+	font: 14px Helvetica;
+	right: 10px;
+	bottom: 5px;
+}
+
+
+#top {
+	position: absolute;
+	color: #F4F6FC;
+	font: 24px Helvetica;
+	left: 490px;
+}
+
+#content {
+	position: absolute;
+	top: 100px;
+}
+
+#input_box {
+	position: inherit;
+	left: 10px;
+}
+
+[type='text'] {
+	position: inherit;
+	background-color: #e3e4e8;
+	padding: 5px;
+	width: 260px;
+	border: 0;
+	font: 14px Helvetica;
+	color: #212761;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+}
+
+[type='submit'] {
+	position: inherit;
+	border: 0;
+	background-color: #F4F6FC;
+	font: bold 18px Helvetica;
+	color: #212761;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	cursor: pointer;
+	visibility: hidden;
+}
+
+#result {
+	visibility: hidden;
+	background-color: #F4F6FC;
+	padding: 5px;
+	padding-top: 1px;
+	color: #212761;
+	position: inherit;
+	border: 0;
+	font: 14px comic;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+}
+
+#map {
+	position: inherit;
+	background-color: #F4F6FC;
+	left: 350px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+}
