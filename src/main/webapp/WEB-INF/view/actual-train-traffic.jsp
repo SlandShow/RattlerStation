@@ -6,89 +6,270 @@
 <html>
 <head>
     <title>Actual train traffic</title>
-
+    <script type="text/javascript" src="/static/js/jquery-1.11.2.js"></script>
+    <script type="text/javascript" src="/static/js/jcanvas.js"></script>
+    <link type="text/css" rel="stylesheet" href="/static/css/schedule-map.css" />
 </head>
 <body>
+<div id='top'>
+    Rattler Station
+</div>
+<div id='content'>
+    <div id='input_box'>
+        <form:form method="POST" action="scheduleByStationsAndDate"  modelAttribute="schedule">
+            <form:input type="hidden" path="id" id="id"/>
+            <form:input type="text" path="stationDepartureName" placeholder="From" name='begin' autocomplete='off' list='stations_list' id='station1'/>
+            <br> <br>
+            <<form:input type="text" path="stationArrivalName" placeholder="To" name='end' autocomplete='off' list='stations_list' id='station2'/>
+            <br> <br>
+            <form:input type="text" path="dateDeparture" id="dateSeparture" placeholder="Date departure"/>
+            <br><br>
+            <datalist id='stations_list'>
 
+                <option> Finlyandskiy vokzal </option>
+
+                <option> Piskarevka </option>
+
+                <option> Ruchiy </option>
+
+                <option> Murino </option>
+
+                <option> Deviatkino </option>
+
+                <option> Lavriki </option>
+
+                <option> Kapitolovo </option>
+
+                <option> Kuzmolovo </option>
+
+                <option> Toksovo </option>
+
+                <option> Kavgolovo </option>
+
+                <option> Oselki </option>
+
+                <option> Peri </option>
+
+                <option> 39 KM </option>
+
+                <option> Gruzino </option>
+
+                <option> Udelnaya </option>
+
+                <option> Ozerki </option>
+
+                <option> Zvezdnaya </option>
+
+                <option> Shuvalovo </option>
+
+                <option> Pargalovo </option>
+
+                <option> Levashovo </option>
+
+                <option> Pesochnaya </option>
+
+                <option> Dibuni </option>
+
+                <option> Beloostrov </option>
+
+                <option> Solnechnoe </option>
+
+                <option> Novaya Derevniya </option>
+
+                <option> Staraya Derevnya </option>
+
+                <option> Yaztennaya </option>
+
+                <option> Laxta </option>
+
+                <option> Olgino </option>
+
+                <option> Lisiy Nos </option>
+
+                <option> Gorskaya </option>
+
+                <option> Alexandrovskaya </option>
+
+                <option> Tarxovka </option>
+
+                <option> Razliv </option>
+
+                <option> Sestroretsk </option>
+
+                <option> Kurort </option>
+
+                <option> Repino </option>
+
+                <option> Komarovo </option>
+
+                <option> Zelenogorsk </option>
+
+                <option> Ushkovo </option>
+
+                <option> Roshino </option>
+
+                <option> 63 KM </option>
+
+                <option> Gorkovskoe </option>
+
+                <option> Shevelevo </option>
+
+                <option> Kaneliarvi </option>
+
+                <option> Zahodskoye </option>
+
+                <option> Kirillovskoe </option>
+
+                <option> Leypsya </option>
+
+                <option> Lebedevka </option>
+
+                <option> 117 KM </option>
+
+                <option> Verxne-Cherkasovo </option>
+
+                <option> Lazoreva </option>
+
+                <option> Viborg </option>
+
+                <option> Sadovaya </option>
+
+                <option> Molodeshnaya </option>
+
+                <option> Privetenskoe </option>
+
+                <option> 70 KM </option>
+
+                <option> 72 KM </option>
+
+                <option> Masteryarvi </option>
+
+                <option> Yapilia </option>
+
+                <option> 86 KM </option>
+
+                <option> Tarasovskoe </option>
+
+                <option> Kyolemoyarvi </option>
+
+                <option> 106 KM </option>
+
+                <option> Ermilovo </option>
+
+                <option> Primorsk </option>
+
+                <option> Bor </option>
+
+
+            </datalist>
+            Search
+            <input type='submit' value='Enter' id='submit'>
+            <br> <br>
+            <div id='result'>
+
+
+            </div>
+        </form:form>
+    </div>
 
     <div id='map'>
-        <img src="/images/schedule-map.png"  id='image'/>
-        <div id='stat_1'>Финлядские вокзал</div>
-        <div id='stat_2'>Пискарёвка</div>
-        <div id='stat_3'>Ручьи</div>
-        <div id='stat_4'>Мурино</div>
-        <div id='stat_5'>Девяткино</div>
-        <div id='stat_6'>Лаврики</div>
-        <div id='stat_7'>Капитолово</div>
-        <div id='stat_8'>Кузьмолово</div>
-        <div id='stat_9'>Токсово</div>
-        <div id='stat_10'>Кавголово</div>
-        <div id='stat_11'>Осельки</div>
-        <div id='stat_12'>Пери</div>
-
-        <div id='stat_13'>39 км</div>
-        <div id='stat_14'>Грузино</div>
-        <div id='stat_15'>Удельная</div>
-        <div id='stat_16'>Озерки</div>
-        <div id='stat_17'>Звёздная</div>
-        <div id='stat_18'>Шувалово</div>
-        <div id='stat_19'>Парголово</div>
-        <div id='stat_20'>Левашово</div>
-        <div id='stat_21'>Песочная</div>
-        <div id='stat_22'>Дибуны</div>
-        <div id='stat_23'>Белоостров</div>
-        <div id='stat_24'>Солнечное</div>
-        <div id='stat_25'>Новая деревня</div>
-        <div id='stat_26'>Старая деревня</div>
-        <div id='stat_27'>Яхтенная</div>
-        <div id='stat_28'>Лахта</div>
-        <div id='stat_29'>Ольгино</div>
-        <div id='stat_30'>Лисий нос</div>
-
-        <div id='stat_31'>Горская</div>
-        <div id='stat_32'>Александровская</div>
-        <div id='stat_33'>Тарховка</div>
-        <div id='stat_34'>Разлив</div>
-        <div id='stat_35'>Сестрорецк</div>
-        <div id='stat_36'>Репино</div>
-        <div id='stat_37'>Комарово</div>
-        <div id='stat_38'>Зеленогорск</div>
-        <div id='stat_39'>Ушково</div>
-        <div id='stat_40'>Рощино</div>
-        <div id='stat_41'>63 км</div>
-        <div id='stat_42'>Горьковское</div>
-        <div id='stat_43'>Шевелево</div>
-        <div id='stat_44'>Каннельярви</div>
-        <div id='stat_45'>Ляйпясуо</div>
-        <div id='stat_46'>Лебедевка</div>
-        <div id='stat_47'>117 км</div>
-        <div id='stat_48'>Вехне-Черкасово</div>
-        <div id='stat_49'>Лазорева</div>
-
-        <div id='stat_50'>Выборг</div>
-        <div id='stat_51'>Садовая</div>
-        <div id='stat_52'>Молодёжная</div>
-        <div id='stat_53'>Приветненское</div>
-        <div id='stat_54'>70 км</div>
-        <div id='stat_55'>72 км</div>
-        <div id='stat_56'>Мастерьярви</div>
-        <div id='stat_57'>Яппиля</div>
-        <div id='stat_58'>86 км</div>
-        <div id='stat_59'>Тарасовское</div>
-
-
-        <div id='stat_60'>Куолемаярви</div>
-        <div id='stat_61'>106 км</div>
-        <div id='stat_62'>Ермилово</div>
-        <div id='stat_63'>Приморск</div>
-        <div id='stat_64'>Бор</div>
-        <div id='stat_65'>Курорт</div>
-        <div id='stat_66'>Проспект Большевиков</div>
-        <div id='stat_67'>Кирилловское</div>
+        <img src="/static/images/schedule-map.png" id='image'/>
+        <div id='stat_1'> Finlyandskiy vokzal </div>
+        <div id='stat_2'> Piskarevka </div>
+        <div id='stat_3'> Ruchiy </div>
+        <div id='stat_4'> Murino </div>
+        <div id='stat_5'> Deviatkino </div>
+        <div id='stat_6'> Lavriki </div>
+        <div id='stat_7'> Kapitolovo </div>
+        <div id='stat_8'> Kuzmolovo </div>
+        <div id='stat_9'> Toksovo </div>
+        <div id='stat_10'> Kavgolovo </div>
+        <div id='stat_11'> Oselki </div>
+        <div id='stat_12'> Peri </div>
+        <div id='stat_13'> 39 KM </div>
+        <div id='stat_14'> Gruzino </div>
+        <div id='stat_15'> Udelnaya </div>
+        <div id='stat_16'> Ozerki </div>
+        <div id='stat_17'> Zvezdnaya </div>
+        <div id='stat_18'> Shuvalovo </div>
+        <div id='stat_19'> Pargalovo </div>
+        <div id='stat_20'> Levashovo </div>
+        <div id='stat_21'> Pesochnaya </div>
+        <div id='stat_22'> Dibuni </div>
+        <div id='stat_23'> Beloostrov </div>
+        <div id='stat_24'> Solnechnoe </div>
+        <div id='stat_25'> Novaya Derevniya </div>
+        <div id='stat_26'> Staraya Derevnya </div>
+        <div id='stat_27'> Yaztennaya </div>
+        <div id='stat_28'> Laxta </div>
+        <div id='stat_29'> Olgino </div>
+        <div id='stat_30'> Lisiy Nos </div>
+        <div id='stat_31'> Gorskaya </div>
+        <div id='stat_32'> Alexandrovskaya </div>
+        <div id='stat_33'> Tarxovka </div>
+        <div id='stat_34'> Razliv </div>
+        <div id='stat_35'> Sestroretsk </div>
+        <div id='stat_36'> Kurort </div>
+        <div id='stat_37'> Repino </div>
+        <div id='stat_38'> Komarovo </div>
+        <div id='stat_39'> Zelenogorsk </div>
+        <div id='stat_40'> Ushkovo </div>
+        <div id='stat_41'> Roshino </div>
+        <div id='stat_42'> 63 KM </div>
+        <div id='stat_43'> Gorkovskoe </div>
+        <div id='stat_44'> Shevelevo </div>
+        <div id='stat_45'> Kaneliarvi </div>
+        <div id='stat_46'> Zahodskoye </div>
+        <div id='stat_47'> Kirillovskoe </div>
+        <div id='stat_48'> Leypsya </div>
+        <div id='stat_49'> Lebedevka </div>
+        <div id='stat_50'> 117 KM </div>
+        <div id='stat_51'> Verxne-Cherkasovo </div>
+        <div id='stat_52'> Lazoreva </div>
+        <div id='stat_53'> Viborg </div>
+        <div id='stat_54'> Sadovaya </div>
+        <div id='stat_55'> Molodeshnaya </div>
+        <div id='stat_56'> Privetenskoe </div>
+        <div id='stat_57'> 70 KM </div>
+        <div id='stat_58'> 72 KM </div>
+        <div id='stat_59'> Masteryarvi </div>
+        <div id='stat_60'> Yapilia </div>
+        <div id='stat_61'> 86 KM </div>
+        <div id='stat_62'> Tarasovskoe </div>
+        <div id='stat_63'> Kyolemoyarvi </div>
+        <div id='stat_64'> 106 KM </div>
+        <div id='stat_65'> Ermilovo </div>
+        <div id='stat_66'> Primorsk </div>
+        <div id='stat_67'> Bor </div>
     </div>
 </div>
 
+<script>
 
+    $("div[id^='stat_']").hover(
+        function() {
+            $(this).css('background-color', '#6fadd2');
+        },
+        function() {
+            $(this).css('background-color', 'white');
+        });
+
+    $("div[id^='stat_']").click(function() {
+        if ($('#station1').val()) {
+            if ($('#station2').val()) {
+                $('#station1').val($(this).text());
+                $('#station2').val('');
+            } else {
+                if ($('#station1').val() != $(this).text()) {
+                    $('#station2').val($(this).text());
+                    $('#submit').click();
+                }
+            }
+        } else {
+            $('#station1').val($(this).text());
+        }
+    });
+</script>
 
 </body>
 </html>
