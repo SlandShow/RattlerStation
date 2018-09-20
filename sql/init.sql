@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS train (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR (100) NULL,
   state_id INT NULL,
+  сarriages INT NULL,
   CONSTRAINT train_id_uindex UNIQUE (id),
   CONSTRAINT train_state_id_fk FOREIGN KEY (state_id) REFERENCES state (id)
 )
