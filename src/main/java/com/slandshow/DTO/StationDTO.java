@@ -15,6 +15,11 @@ public class StationDTO implements Serializable {
     public StationDTO() {
     }
 
+
+    public StationDTO(String name) {
+        this.name = name;
+    }
+
     // Setters
 
     public void setName(String name) {
