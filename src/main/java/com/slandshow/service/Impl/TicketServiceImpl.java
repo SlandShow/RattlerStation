@@ -33,7 +33,7 @@ public class TicketServiceImpl implements TicketService {
     private ScheduleService scheduleService;
 
     @Autowired
-    private DistanceUtilsRangeService distanceService;
+    private DistanceAndPriceUtilsService distanceService;
 
     @Autowired
     private SecureService secureService;

@@ -1,24 +1,25 @@
 package com.slandshow.service.Impl;
 
 import com.slandshow.DAO.ScheduleDAO;
+import com.slandshow.DAO.StateDAO;
 import com.slandshow.DTO.ScheduleDTO;
-import com.slandshow.models.Schedule;
-import com.slandshow.models.Station;
-import com.slandshow.models.Train;
-import com.slandshow.service.ScheduleService;
-import com.slandshow.service.StationService;
-import com.slandshow.service.TicketService;
-import com.slandshow.service.TrainService;
+import com.slandshow.DTO.SeatDTO;
+import com.slandshow.DTO.SeatsDTO;
+import com.slandshow.models.*;
+import com.slandshow.service.*;
 import com.slandshow.utils.UtilsManager;
 import org.apache.log4j.Logger;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
@@ -30,21 +31,24 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Autowired
     private ScheduleDAO scheduleDAO;
 
-    //@Autowired
-   // private StationService stationService;
+    @Autowired
+    private StationService stationService;
 
-    //@Autowired
-   // private TrainService trainService;
+    @Autowired
+    private TrainService trainService;
 
     @Autowired
     private TicketService ticketService;
 
-    //@Autowired
-   // private DistanceService distanceService;
+    @Autowired
+    private StateDAO stateDAO;
+
+    @Autowired
+    private DistanceAndPriceUtilsService distanceService;
 
 
     /**
-     * TODO: FIX
+     *
      * create schedule (check intersection of times and correctness of times)
      *
      * @param scheduleDTO
@@ -52,19 +56,19 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Transactional
     public void add(ScheduleDTO scheduleDTO) throws ParseException, IOException, TimeoutException {
-        /*Train train = trainService.getByName(scheduleDTO.getTrainName());
+        Train train = trainService.getByName(scheduleDTO.getTrainName());
         Station stationArrival = stationService.getByName(scheduleDTO.getStationArrivalName());
         Station stationDeparture = stationService.getByName(scheduleDTO.getStationDepartureName());
 
         if (stationArrival == null || stationDeparture == null || train == null)
-            throw new BusinessLogicException(ErrorCode.NULL_ELEMENTS.getMessage());
+            throw new RuntimeException();
 
-        Date dateDeparture = Utils.parseToDateTime(scheduleDTO.getDateDeparture());
+        Date dateDeparture = UtilsManager.parseToDateTime(scheduleDTO.getDateDeparture());
 
         Date dateArrival;
         if (scheduleDTO.getDateArrival().isEmpty())
             dateArrival = distanceService.calculateDateArrival(dateDeparture, stationDeparture, stationArrival);
-        else dateArrival = Utils.parseToDateTime(scheduleDTO.getDateArrival());
+        else dateArrival = UtilsManager.parseToDateTime(scheduleDTO.getDateArrival());
 
         Schedule schedule = new Schedule();
         schedule.setStationDeparture(stationDeparture);
@@ -75,26 +79,26 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 
         if (stationArrival.equals(stationDeparture))
-            throw new BusinessLogicException(ErrorCode.SAME_STATIONS.getMessage());
+            throw new RuntimeException();
 
         if (!dateDeparture.before(dateArrival))
-            throw new BusinessLogicException(ErrorCode.WRONG_DATES.getMessage());
+            throw new RuntimeException();
 
         if (!getByDateAndTrainToCheckIntersection(schedule).isEmpty())
-            throw new BusinessLogicException(ErrorCode.INTERSECTION_SCHEDULES.getMessage());
+            throw new RuntimeException();
 
-        if (Utils.checkCurrentDay(dateDeparture))
-            throw new BusinessLogicException(ErrorCode.SCHEDULE_FOR_CURRENT_DAY.getMessage());
+        if (UtilsManager.checkCurrentDay(dateDeparture))
+            throw new RuntimeException();
 
-        Status status = statusDAO.getByName("WORKED");
-        schedule.getStationDeparture().setStatus(status);
-        schedule.getStationArrival().setStatus(status);
-        schedule.getTrain().setStatus(status);
+        State state = stateDAO.getByType("VALID");
+        schedule.getStationDeparture().setState(state);
+        schedule.getStationArrival().setState(state);
+        schedule.getTrain().setState(state);
 
         scheduleDAO.add(schedule);
-        auditService.createScheduleAuditInfo(schedule);
-        messageQueueService.produceMsg("create id=" + schedule.getId());
-        log.info("SCHEDULE WAS CREATED!");*/
+        //auditService.createScheduleAuditInfo(schedule);
+        //messageQueueService.produceMsg("create id=" + schedule.getId());
+        LOGGER.info("SCHEDULE WAS CREATED!");
     }
 
     @Transactional
@@ -110,10 +114,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         scheduleDAO.delete(schedule);
     }
 
-    // TODO: FIX THIS FUNCTIONALITY LATER
     @Transactional
     public void update(ScheduleDTO scheduleDTO) throws ParseException, IOException, TimeoutException {
-        /*Schedule schedule = getById(scheduleDTO.getId());
+        Schedule schedule = getById(scheduleDTO.getId());
         Schedule scheduleOld = schedule;
         if (!ticketService.getBySchedules(schedule).isEmpty())
             throw new IOException();
@@ -122,11 +125,12 @@ public class ScheduleServiceImpl implements ScheduleService {
         Station stationDeparture = stationService.getByName(scheduleDTO.getStationDepartureName());
         Station stationArrival = stationService.getByName(scheduleDTO.getStationArrivalName());
 
+        // TODO: ADD CUSTOM EXCEPTIONS
         if (train == null || stationDeparture == null || stationArrival == null)
-            throw new BusinessLogicException(ErrorCode.NULL_ELEMENTS.getMessage());
+            throw new RuntimeException();
 
-        Date dateDeparture = Utils.parseToDateTime(scheduleDTO.getDateDeparture());
-        Date dateArrival = Utils.parseToDateTime(scheduleDTO.getDateArrival());
+        Date dateDeparture = UtilsManager.parseToDateTime(scheduleDTO.getDateDeparture());
+        Date dateArrival = UtilsManager.parseToDateTime(scheduleDTO.getDateArrival());
 
         train.setName(scheduleDTO.getTrainName());
         stationDeparture.setName(scheduleDTO.getStationDepartureName());
@@ -138,38 +142,41 @@ public class ScheduleServiceImpl implements ScheduleService {
         schedule.setDateArrival(dateArrival);
 
         if (stationDeparture.equals(stationArrival))
-            throw new BusinessLogicException(ErrorCode.SAME_STATIONS.getMessage());
+            throw new RuntimeException();
 
         if (!dateDeparture.before(dateArrival))
-            throw new BusinessLogicException(ErrorCode.WRONG_DATES.getMessage());
+            throw new RuntimeException();
 
         if (getByDateAndTrainToCheckIntersection(schedule).size() > 1)
-            throw new BusinessLogicException(ErrorCode.INTERSECTION_SCHEDULES.getMessage());
+            throw new RuntimeException();
 
-        if (Utils.checkCurrentDay(dateDeparture))
-            throw new BusinessLogicException(ErrorCode.SCHEDULE_FOR_CURRENT_DAY.getMessage());
+        if (UtilsManager.checkCurrentDay(dateDeparture))
+            throw new RuntimeException();
 
         scheduleDAO.update(schedule);
-        auditService.updateScheduleAuditInfo(scheduleOld, schedule);
-        messageQueueService.produceMsg("update id=" + schedule.getId());*/
+        //auditService.updateScheduleAuditInfo(scheduleOld, schedule);
+        //messageQueueService.produceMsg("update id=" + schedule.getId());
     }
 
-    // TODO: FIX LATER
     @Transactional
     public List<ScheduleDTO> getAll() {
-        /*
+        ModelMapper modelMapper = new ModelMapper();
+
         List<Schedule> schedules = scheduleDAO.getAll();
         return schedules.stream()
                 .map(x -> modelMapper.map(x, ScheduleDTO.class))
                 .collect(Collectors.toList());
-                */
-        return null;
     }
 
 
     @Override
     public List<ScheduleDTO> getAllForToday() throws ParseException {
-        return null;
+        ModelMapper modelMapper = new ModelMapper();
+
+        List<Schedule> schedules = scheduleDAO.getForToday();
+        return schedules.stream()
+                .map(x -> modelMapper.map(x, ScheduleDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -212,9 +219,142 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleDAO.getByStationArrivalAndDate(schedule);
     }
 
+    /**
+     * get all schedules for direct trip by all parameters
+     *
+     * @param scheduleDTO
+     * @return
+     * @throws ParseException
+     */
+    @Override
     @Transactional
-    public List<ScheduleDTO> getDirectSchedulesFromDTOByStationsAndDatesAndTrain(ScheduleDTO scheduleDTO) throws ParseException {
-        return null;
+    public List<ScheduleDTO> getDirectSchedulesFromDTOByStationsAndDatesAndTrain(ScheduleDTO scheduleDTO) throws
+            ParseException {
+        List<Schedule> schedules;
+        Schedule schedule = new Schedule();
+        Train train = trainService.getByName(scheduleDTO.getTrainName());
+        Station stationDeparture = stationService.getByName(scheduleDTO.getStationDepartureName());
+        Station stationArrival = stationService.getByName(scheduleDTO.getStationArrivalName());
+        Date dateDeparture = UtilsManager.parseToDate(scheduleDTO.getDateDeparture());
+        Date dateArrival = UtilsManager.parseToDate(scheduleDTO.getDateArrival());
+        if (train == null || stationArrival == null || stationDeparture == null)
+            throw new RuntimeException();
+
+        if (scheduleDTO.getDateArrival().equals(scheduleDTO.getDateDeparture()))
+            dateArrival = UtilsManager.getNextDay(scheduleDTO.getDateDeparture());
+
+        if (dateArrival.before(dateDeparture))
+            throw new RuntimeException();
+
+        schedule.setTrain(train);
+        schedule.setDateArrival(dateArrival);
+        schedule.setDateDeparture(dateDeparture);
+        schedule.setStationDeparture(stationDeparture);
+        schedule.setStationArrival(stationArrival);
+        schedules = scheduleDAO.getByStationsAndDatesAndTrains(schedule);
+
+        return mapping(schedules);
+    }
+
+    /**
+     * get schedules by stations and date/dates
+     *
+     * @param scheduleDTO
+     * @return
+     * @throws ParseException
+     */
+    @Override
+    @Transactional
+    public List<ScheduleDTO> getDirectSchedulesFromDTOByStations(ScheduleDTO scheduleDTO) throws ParseException {
+        Station stationDepartureForDirectSchedule = stationService.getByName(scheduleDTO.getStationDepartureName());
+        Station stationArrivalForDirectSchedule = stationService.getByName(scheduleDTO.getStationArrivalName());
+        List<Schedule> schedules;
+
+        if (stationArrivalForDirectSchedule == null || stationDepartureForDirectSchedule == null)
+            throw new RuntimeException();
+
+        Schedule schedule = new Schedule();
+        schedule.setStationDeparture(stationDepartureForDirectSchedule);
+        schedule.setStationArrival(stationArrivalForDirectSchedule);
+        Date dateDeparture = UtilsManager.parseToDate(scheduleDTO.getDateDeparture());
+        schedule.setDateDeparture(dateDeparture);
+        if (!scheduleDTO.getDateArrival().isEmpty()) {
+            Date dateArrival = UtilsManager.parseToDate(scheduleDTO.getDateArrival());
+
+            if (scheduleDTO.getDateArrival().equals(scheduleDTO.getDateDeparture()))
+                dateArrival = UtilsManager.getNextDay(scheduleDTO.getDateArrival());
+
+            if (dateArrival.before(dateDeparture))
+                throw new RuntimeException();
+
+            schedule.setDateArrival(dateArrival);
+            schedules = scheduleDAO.getByStationsAndDates(schedule);
+        } else schedules = scheduleDAO.getByStationsAndDate(schedule);
+        LOGGER.info("FOUND SCHEDULES BY STATIONS AND DATE");
+
+
+        return mapping(schedules);
+    }
+
+    /**
+     * get direct schedules by train and date/dates
+     *
+     * @param scheduleDTO
+     * @return
+     * @throws ParseException
+     */
+    @Override
+    @Transactional
+    public List<ScheduleDTO> getDirectSchedulesFromDTOByTrain(ScheduleDTO scheduleDTO) throws ParseException {
+        Train train = trainService.getByName(scheduleDTO.getTrainName());
+        List<Schedule> schedules;
+        if (train == null)
+            throw new RuntimeException();
+
+        Schedule schedule = new Schedule();
+        Date dateDeparture = UtilsManager.parseToDate(scheduleDTO.getDateDeparture());
+        schedule.setDateDeparture(dateDeparture);
+        schedule.setTrain(train);
+        if (!scheduleDTO.getDateArrival().isEmpty()) {
+            Date dateArrival = UtilsManager.parseToDate(scheduleDTO.getDateArrival());
+            if (scheduleDTO.getDateArrival().equals(scheduleDTO.getDateDeparture()))
+                dateArrival = UtilsManager.getNextDay(scheduleDTO.getDateArrival());
+
+            if (dateArrival.before(dateDeparture))
+                throw new RuntimeException();
+
+            schedule.setDateArrival(dateArrival);
+            schedules = scheduleDAO.getByTrainAndDates(schedule);
+        } else schedules = scheduleDAO.getByTrainAndDate(schedule);
+        LOGGER.info("FOUND SCHEDULES BY TRAIN AND DATE");
+
+        return mapping(schedules);
+    }
+
+    /**
+     * get direct schedules by date/dates
+     *
+     * @param scheduleDTO
+     * @return
+     * @throws ParseException
+     */
+    @Override
+    @Transactional
+    public List<ScheduleDTO> getDirectSchedulesFromDTOByDates(ScheduleDTO scheduleDTO) throws ParseException {
+        Date dateDeparture = UtilsManager.parseToDate(scheduleDTO.getDateDeparture());
+        List<Schedule> schedules;
+        if (!scheduleDTO.getDateArrival().isEmpty()) {
+            Date dateArrival = UtilsManager.parseToDate(scheduleDTO.getDateArrival());
+
+            if (scheduleDTO.getDateArrival().equals(scheduleDTO.getDateDeparture()))
+                dateArrival = UtilsManager.getNextDay(scheduleDTO.getDateArrival());
+
+            if (dateArrival.before(dateDeparture))
+                throw new RuntimeException();
+
+            schedules = scheduleDAO.getByDates(dateDeparture, dateArrival);
+        } else schedules = scheduleDAO.getByDate(dateDeparture);
+        return mapping(schedules);
     }
 
     @Transactional
@@ -222,22 +362,25 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleDAO.getAll();
     }
 
-    @Transactional
-    public List<ScheduleDTO> getDirectSchedulesFromDTOByStationsAndDates(ScheduleDTO scheduleDTO) throws ParseException {
-        return null;
-    }
 
     @Transactional
-    public List<ScheduleDTO> getDirectSchedulesFromDTOByStations(ScheduleDTO scheduleDTO) throws ParseException {
-        return null;
-    }
+    public SeatsDTO getSeats(Long id) {
+        ModelMapper modelMapper = new ModelMapper();
+        Schedule schedule = getById(id);
 
-    public List<ScheduleDTO> getDirectSchedulesFromDTOByTrain(ScheduleDTO scheduleDTO) throws ParseException {
-        return null;
-    }
+        // TODO: ADD CUSTOM EXCEPTIONS
+        if (schedule == null)
+            throw new RuntimeException();
 
-    public List<ScheduleDTO> getDirectSchedulesFromDTOByDates(ScheduleDTO scheduleDTO) throws ParseException {
-        return null;
+        Train train = schedule.getTrain();
+        Set<Seat> seats = train.getSeats();
+        List<Seat> bookingSeats = ticketService.getBookingSeatsBySchedule(schedule);
+        Integer cntCarriage = Collections.max(seats.stream().map(x -> x.getCarriage()).collect(Collectors.toList()));
+        List<SeatDTO> seatDTOList = bookingSeats.stream().map(x -> modelMapper.map(x, SeatDTO.class)).collect(Collectors.toList());
+        SeatsDTO seatsDTO = new SeatsDTO();
+        seatsDTO.setBookingSeats(seatDTOList);
+        seatsDTO.setCntCarriages(cntCarriage);
+        return seatsDTO;
     }
 
     @Transactional
@@ -248,5 +391,24 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ScheduleDTO getByIdScheduleDTO(Long id) {
         return null;
+    }
+
+    public List<ScheduleDTO> mapping(List<Schedule> schedules) {
+        ModelMapper modelMapper = new ModelMapper();
+
+        return schedules.stream()
+                .map(x -> modelMapper.map(x, ScheduleDTO.class))
+                .map(x -> {
+                    Integer price = 0;
+                    try {
+                        price = distanceService.calculateDirectTripPrice(x);
+                    } catch (ParseException e) {
+                        LOGGER.error(e.getMessage());
+                        e.printStackTrace();
+                    }
+                    x.setPrice(price);
+                    return x;
+                })
+                .collect(Collectors.toList());
     }
 }
