@@ -9,6 +9,15 @@
     <script type="text/javascript" src="/static/js/jquery-1.11.2.js"></script>
     <script type="text/javascript" src="/static/js/jcanvas.js"></script>
     <link type="text/css" rel="stylesheet" href="/static/css/schedule-map.css" />
+    <!-- Add bootstrap and datepicker -->
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+    <link rel="stylesheet"
+          href="https://rawgit.com/Eonasdan/bootstrap-datetimepicker/master/build/css/bootstrap-datetimepicker.min.css">
+    <script src="https://rawgit.com/Eonasdan/bootstrap-datetimepicker/master/build/js/bootstrap-datetimepicker.min.js"></script>
+
 </head>
 <body>
 <div id='top'>
@@ -16,13 +25,34 @@
 </div>
 <div id='content'>
     <div id='input_box'>
-        <form:form method="POST" action="scheduleByStationsAndDate"  modelAttribute="schedule">
+        <form:form method="POST" action="buyTicket"  modelAttribute="schedule">
             <form:input type="hidden" path="id" id="id"/>
             <form:input type="text" path="stationDepartureName" placeholder="From" name='begin' autocomplete='off' list='stations_list' id='station1'/>
             <br> <br>
-            <<form:input type="text" path="stationArrivalName" placeholder="To" name='end' autocomplete='off' list='stations_list' id='station2'/>
+            <form:input type="text" path="stationArrivalName" placeholder="To" name='end' autocomplete='off' list='stations_list' id='station2'/>
             <br> <br>
-            <form:input type="text" path="dateDeparture" id="dateSeparture" placeholder="Date departure"/>
+            <!-- Add bootstrap datepicker input field -->
+            <div class="container">
+                <div class="row">
+                    <div class='col-sm-3'>
+                        <div class="form-group">
+                            <div class='input-group date' id='datetimepicker1'>
+                                <form:input type="text" class="form-control" path="dateDeparture" id="dateDeparture" placeholder="Date departure"/>
+                                <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                            </div>
+                            <br><br>
+                            <div class='input-group date' id='datetimepicker2'>
+                                <form:input type="text" class="form-control" path="dateArrival" id="dateArrival" placeholder="Date arrival"/>
+                                <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <br><br>
             <datalist id='stations_list'>
 
@@ -162,7 +192,6 @@
 
 
             </datalist>
-            Search
             <input type='submit' value='Enter' id='submit'>
             <br> <br>
             <div id='result'>
@@ -173,7 +202,7 @@
     </div>
 
     <div id='map'>
-        <img src="/static/images/schedule-map.png" id='image'/>
+        <img src="/static/images/schedule-map.png" id='image' width="700" height="650"/>
         <div id='stat_1'> Finlyandskiy vokzal </div>
         <div id='stat_2'> Piskarevka </div>
         <div id='stat_3'> Ruchiy </div>
@@ -271,5 +300,19 @@
     });
 </script>
 
+<!-- Add script for bootstrap timepicker -->
+<script>
+    $('#datetimepicker1').datetimepicker({
+    defaultDate: new Date(),
+    format: 'YYYY-MM-DD hh:mm:ss',
+    sideBySide: true
+    });
+
+    $('#datetimepicker2').datetimepicker({
+        defaultDate: new Date(),
+        format: 'YYYY-MM-DD hh:mm:ss',
+        sideBySide: true
+    });
+</script>
 </body>
 </html>
