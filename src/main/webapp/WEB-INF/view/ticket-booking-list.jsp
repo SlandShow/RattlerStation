@@ -36,7 +36,7 @@
                 <td>${tmpSchedule.stationDeparture}</td>
                 <td>${tmpSchedule.stationArrival}</td>
                 <td>${tmpSchedule.dateDeparture}/></td>
-                <td><a href="/bookingTicket?id=${tmpSchedule.id}">Buy</a> </td>
+                <td><a href="/tickets/viewTicketsTrainInfo?id=${tmpSchedule.id}">Buy</a> </td>
             </tr>
         </c:forEach>
 
