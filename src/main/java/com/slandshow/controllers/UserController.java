@@ -203,6 +203,13 @@ public class UserController {
     }
 
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
+    @GetMapping("/managerTools")
+    public String managerMenu() {
+        return "manager-menu";
+    }
+
+
 /*
     @PostMapping("/registration")
     public void registration(@RequestBody UserDTO userDTO) throws IOException {

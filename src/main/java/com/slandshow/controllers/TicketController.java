@@ -62,9 +62,14 @@ public class TicketController {
 
         List<Schedule> schedules = null;
 
+
+        schedules = scheduleService.getByStationsAndDate(reloadedSchedule);
+
+        /*
         if (reloadedSchedule.getDateArrival() == null)
             schedules = scheduleService.getByStationsAndDate(reloadedSchedule);
-        else schedules = scheduleService.getByStationsAndDate(reloadedSchedule);
+        else schedules = scheduleService.getByStationsAndDates(reloadedSchedule);
+        */
 
         model.addAttribute("schedules", schedules);
 
@@ -72,6 +77,7 @@ public class TicketController {
     }
 
 
+    /*
     @Autowired
     private TrainService trainService;
     @GetMapping("/test")
@@ -96,16 +102,18 @@ public class TicketController {
 
         return "train-seats-booking-info";
     }
+*/
 
 
 
-/*
     @RequestMapping(value = "/viewTicketsTrainInfo", params = "id")
     public String confirmBooking(@RequestParam(value = "id") Long id, Model model) {
         Schedule selectedSchedule = scheduleService.getById(id);
         //TicketInfoDTO ticketInfoDTO = (TicketInfoDTO) request.getSession().getAttribute("ticketDTO");
         List<List<SeatDTO>> carriages = new ArrayList<List<SeatDTO>>();
 
+        // Create matrix of seats per carriage
+        // TODO: ADD THIS LEGACY CODE BESIDE CONTROLLER
         int seatsCount = 1;
         int row = selectedSchedule.getTrain().getCarriages();
         int col = selectedSchedule.getTrain().getSeats().size() / selectedSchedule.getTrain().getCarriages();
@@ -124,7 +132,6 @@ public class TicketController {
 
         return "train-seats-booking-info";
     }
-*/
 
     @Autowired
     private UserService userService;
