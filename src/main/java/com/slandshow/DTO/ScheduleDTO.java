@@ -1,6 +1,7 @@
 package com.slandshow.DTO;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class ScheduleDTO implements Serializable {
 
