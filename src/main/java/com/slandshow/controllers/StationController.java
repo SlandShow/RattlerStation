@@ -39,7 +39,7 @@ public class StationController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping("/createStation")
     public String createTrain(Model model) {
-        model.addAttribute("station", new StationDTO());
+        model.addAttribute("stationCreation", new StationDTO());
         LOGGER.info("LOAD FORM FOR STATION CREATING");
         return "station-creation-form";
     }
