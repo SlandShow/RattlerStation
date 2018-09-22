@@ -13,19 +13,24 @@
     <script src="/static/js/jquery-3.3.1.min.js"></script>
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <script src="/static/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+    <script src="/static/js/moment.min.js"></script>
     <link rel="stylesheet"
-          href="https://rawgit.com/Eonasdan/bootstrap-datetimepicker/master/build/css/bootstrap-datetimepicker.min.css">
-    <script src="https://rawgit.com/Eonasdan/bootstrap-datetimepicker/master/build/js/bootstrap-datetimepicker.min.js"></script>
-
+          href="/static/css/bootstrap-datetimepicker.min.css">
+    <script src="/static/js/bootstrap-datetimepicker.min.js"></script>
 </head>
 <body>
 <div id='top'>
     Rattler Station
 </div>
 <div id='content'>
+
+    <h2>Booking ticket</h2>
+
     <div id='input_box'>
         <form:form method="POST" action="buyTicket"  modelAttribute="schedule">
+
+            <legend>Actual train traffic</legend>
+
             <form:input type="hidden" path="id" id="id"/>
             <form:input type="text" path="stationDepartureName" placeholder="From" name='begin' autocomplete='off' list='stations_list' id='station1'/>
             <br> <br>
