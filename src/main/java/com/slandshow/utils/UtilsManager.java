@@ -3,14 +3,12 @@ package com.slandshow.utils;
 import org.joda.time.DateTime;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.util.ResourceUtils;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -44,6 +42,54 @@ public class UtilsManager {
     public static Date parseToDateTime(String date) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return format.parse(date);
+    }
+
+    public static String parseFormatDateToString(String token) throws ParseException {
+        DateFormat formatter = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
+        Date date = (Date)formatter.parse(token);
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        String formatedDate = cal.get(Calendar.YEAR) + "-"
+                + (cal.get(Calendar.MONTH) + 1) + "-"
+                + cal.get(Calendar.DATE) + " "
+                + cal.get(Calendar.HOUR) + ":"
+                + cal.get(Calendar.MINUTE) + ":"
+                +cal.get(Calendar.SECOND);
+
+        return formatedDate;
+    }
+
+    public static String parseInputeTokenToValid(String inputToken) throws ParseException {
+        String validToken = null;
+
+        String[] tokens = inputToken.split(" ");
+
+        if (tokens.length != 3)
+            throw new ParseException("Tokens invalid", -1);
+
+        String preToken = tokens[1].substring(0, 5);
+
+        String firstSubTokens = tokens[0];
+        String secondSubTokens = preToken + " " + tokens[2];
+
+        String[] base = null;
+
+        base = firstSubTokens.split("/");
+        if (base.length != 3)
+            throw new ParseException("Tokens invalid", -1);
+
+        String day = base[0];
+        String month = base[1];
+        String year = base[2];
+
+        SimpleDateFormat date12Format = new SimpleDateFormat("hh:mm a");
+
+        SimpleDateFormat date24Format = new SimpleDateFormat("HH:mm");
+
+        validToken = year + "-" + month + "-" + day + " " + date24Format.format(date12Format.parse(secondSubTokens)) + ":00";
+
+        return validToken;
     }
 
     public static Date getTodayDateTime() throws ParseException {
