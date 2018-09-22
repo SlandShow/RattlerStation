@@ -214,6 +214,11 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleDAO.getByTrainAndDate(schedule);
     }
 
+    @Override
+    public List<Schedule> getByStationsAndDates(Schedule schedule) {
+        return scheduleDAO.getByStationsAndDates(schedule);
+    }
+
     @Transactional
     public List<Schedule> getByStationArrivalAndDate(Schedule schedule) {
         return scheduleDAO.getByStationArrivalAndDate(schedule);
@@ -410,5 +415,31 @@ public class ScheduleServiceImpl implements ScheduleService {
                     return x;
                 })
                 .collect(Collectors.toList());
+    }
+
+    public Schedule mapping(ScheduleDTO scheduleDTO) throws ParseException {
+        Schedule mapped =  new Schedule();
+
+        mapped.setStationDeparture(
+                        stationService.getStationByName(
+                                scheduleDTO.getStationDepartureName()
+                        )
+        );
+
+        mapped.setStationArrival(
+                        stationService.getStationByName(
+                                scheduleDTO.getStationArrivalName()
+                        )
+        );
+
+        mapped.setDateDeparture(
+                UtilsManager.parseToDateTime(scheduleDTO.getDateDeparture())
+        );
+
+        mapped.setDateArrival(
+                UtilsManager.parseToDateTime(scheduleDTO.getDateArrival())
+        );
+
+        return mapped;
     }
 }

@@ -38,6 +38,8 @@ public interface ScheduleService {
 
     List<Schedule> getByTrainAndDate(Schedule schedule);
 
+    List<Schedule> getByStationsAndDates(Schedule schedule);
+
     List<Schedule> getByStationArrivalAndDate(Schedule schedule);
 
     //List<TransferScheduleDTO> getTransferSchedules(ScheduleDTO scheduleDTO) throws ParseException, BusinessLogicException;
@@ -57,4 +59,6 @@ public interface ScheduleService {
     //List<ScheduleMapDTO> getByRealTimeSchedules() throws ParseException;
 
     ScheduleDTO getByIdScheduleDTO(Long id);
+
+    Schedule mapping(ScheduleDTO scheduleDTO) throws ParseException;
 }

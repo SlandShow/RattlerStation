@@ -10,6 +10,7 @@ import com.slandshow.service.UserService;
 import com.slandshow.utils.MessageManager;
 import com.slandshow.utils.UtilsManager;
 import org.apache.log4j.spi.ErrorCode;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -54,11 +55,11 @@ public class UserServiceImpl implements UserService {
     // TODO: FIX
     @Transactional
     public UserDTO findAuthenticatedUserDTO() {
-       // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-       // String login = authentication.getName();
-       // User user = userDAO.findUserByLogin(login);
-       // return modelMapper.map(user, UserDTO.class);
-        return null;
+        ModelMapper modelMapper = new ModelMapper();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String login = authentication.getName();
+        User user = userDAO.findUserByLogin(login);
+        return modelMapper.map(user, UserDTO.class);
     }
 
     @Transactional

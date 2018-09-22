@@ -62,16 +62,24 @@ public class TicketServiceImpl implements TicketService {
         Schedule schedule = scheduleService.getById(ticketDTO.getScheduleId());
 
         // TODO: ADD NEW EXCEPTION CLASS AND FIX THIS
-        if (schedule == null || user == null)
+        if (schedule == null || user == null) {
+            LOGGER.info("USER OR SCHEDULE IS NULL");
             throw new IOException();
+        }
 
         // TODO: ADD NEW EXCEPTION CLASS AND FIX THIS
-        if (!checkUserUntilBooking(user, schedule))
+        if (!checkUserUntilBooking(user, schedule)) {
+            LOGGER.info("USER ON THIS SEAT, SORRY");
             throw new IOException();
+        }
 
         // TODO: ADD NEW EXCEPTION CLASS AND FIX THIS
-        if (!checkScheduleForAvailability(schedule))
+        if (!checkScheduleForAvailability(schedule)) {
+            LOGGER.info("PROBLEM WITH SCHEDULE AVAILIBILITY");
             throw new IOException();
+        }
+
+        LOGGER.info("HERE ->" + schedule.getTrain());
 
         Train train = schedule.getTrain();
         LOGGER.info("TICKET SERVICE: TRAIN IS " + train +
@@ -104,7 +112,7 @@ public class TicketServiceImpl implements TicketService {
 
         LOGGER.info("TICKED RESERVED!");
 
-        return null;
+        return ticket;
     }
 
     @Transactional

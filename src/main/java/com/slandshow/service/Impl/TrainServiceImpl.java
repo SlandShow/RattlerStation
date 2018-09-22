@@ -53,6 +53,8 @@ public class TrainServiceImpl implements TrainService {
         train.setName(trainDTO.getName());
         Set<Seat> seats = getSeats(trainDTO.getCarriageCount(), trainDTO.getSeatsCount(), train);
         train.setSeats(seats);
+        train.setCarriages(trainDTO.getCarriageCount());
+
         trainDAO.add(train);
         LOGGER.info("TRAIN WAS ADDED");
        // auditService.createTrainAuditInfo(train);
