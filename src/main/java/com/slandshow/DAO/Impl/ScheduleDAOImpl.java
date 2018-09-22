@@ -91,7 +91,16 @@ public class ScheduleDAOImpl<E extends Schedule> extends GenericDAOImpl<E> imple
     }
 
     public List<Schedule> getByDateAndTrainToCheckIntersection(Schedule schedule) {
-        return null;
+        return sessionFactory.getCurrentSession()
+                .createQuery("from Schedule where train = :train " +
+                        "and ((:dateD between dateDeparture  and dateArrival) or " +
+                        "(:dateA between dateDeparture and dateArrival))" +
+                        "order by dateDeparture desc ")
+                .setParameter("train", schedule.getTrain())
+                .setParameter("dateD", schedule.getDateDeparture())
+                .setParameter("dateA", schedule.getDateArrival())
+                .getResultList();
+
     }
 
     public List<Schedule> getByTrainAndDate(Schedule schedule) {
