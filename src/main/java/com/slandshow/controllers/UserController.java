@@ -58,7 +58,7 @@ public class UserController {
     }
 
 
-   // @PreAuthorize("hasRole('ROLE_USER')")
+    /*
     @GetMapping("/buyTicket")
     public String buyTicket(Model model) {
         model.addAttribute("ticket", new TicketInfoDTO());
@@ -108,7 +108,6 @@ public class UserController {
         return JspFormNames.BOOKING_TICKET_LIST;
     }
 
-//    @GetMapping("/bookingTicket/{id}")
     @RequestMapping(value = "/bookingTicket", params = "id")
     public String confirmBooking(@RequestParam(value = "id") Long id,  HttpServletRequest request) {
         TicketDTO ticketDTO = new TicketDTO();
@@ -137,7 +136,7 @@ public class UserController {
         }
 
         return JspFormNames.BOOKING_TICKET_FORM_RESULT;
-    }
+    } */
 
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

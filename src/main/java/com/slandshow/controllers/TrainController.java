@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping(value = "/trains")
 public class TrainController {
 
     private static final Logger LOGGER = Logger.getLogger(TrainController.class);

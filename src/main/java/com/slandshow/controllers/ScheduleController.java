@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
-@Controller()
+@Controller
 @RequestMapping("/schedule")
 public class ScheduleController {
 
@@ -42,7 +42,7 @@ public class ScheduleController {
 
         return JspFormNames.SCHEDULE_INPUT_FOR_STATIONS_AND_DATE_RESULT;
     }
-
+/*
     @GetMapping("/scheduleByStationsAndDate")
     public String getScheduleByStationsAndDate(Model model) {
 
@@ -56,18 +56,30 @@ public class ScheduleController {
     public String scheduleByStationsAndDatePersist(@ModelAttribute ScheduleDTO schedule, BindingResult result, Model model) {
         Schedule reloadedSchedule = new Schedule();
 
+        LOGGER.info("LOADED DATA: " + schedule.getStationDepartureName() + " ," + schedule.getStationArrivalName());
+
         try {
             // Set <date time> and convert it to Data object
             reloadedSchedule.setDateDeparture(
-                    UtilsManager.parseToDateTime(schedule.getDateDeparture())
+                    UtilsManager.parseToDateTime(
+                          schedule.getDateDeparture()
+                    )
             );
+
+            reloadedSchedule.setDateArrival(
+                    UtilsManager.parseToDateTime(
+                            schedule.getDateArrival()
+                    )
+            );
+
+            LOGGER.info("PARSED: " + reloadedSchedule.getDateDeparture() + ", " + reloadedSchedule.getDateArrival());
 
         } catch (ParseException e) {
             LOGGER.debug("Problem with parsing");
         }
 
         /* Set stations object relation */
-
+/*
         reloadedSchedule.setStationDeparture(
                 stationService.getStationByName(schedule.getStationDepartureName())
         );
@@ -77,7 +89,7 @@ public class ScheduleController {
         );
 
 
-        LOGGER.info(reloadedSchedule.getStationDeparture() + " " + reloadedSchedule.getStationArrival());
+        LOGGER.info("STATIONS: " + reloadedSchedule.getStationDeparture() + " " + reloadedSchedule.getStationArrival());
 
         List<Schedule> schedules = scheduleService.getByStationsAndDate(reloadedSchedule);
 
