@@ -21,6 +21,8 @@
 
     <h2>Schedules</h2>
 
+    <legend>Booking ticket</legend>
+
     <!-- Add HTML table -->
     <table class="table table-striped">
 
