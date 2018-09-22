@@ -106,6 +106,17 @@ public class ScheduleController {
         return "schedule-creation-form";
     }
 
+
+     */
+@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
+@GetMapping("/createSchedule")
+public String createSchedule(Model model) {
+    model.addAttribute("scheduleCreation", new ScheduleDTO());
+    return "schedule-creation-form";
+}
+
+
+
     /**
      * add schedule
      * conditionals:
@@ -123,7 +134,29 @@ public class ScheduleController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PostMapping("/createSchedule")
     public String createSchedule(@ModelAttribute ScheduleDTO scheduleDTO) throws ParseException, IOException, TimeoutException {
+
+        scheduleDTO.setDateDeparture(
+                UtilsManager.parseInputeTokenToValid(
+                        scheduleDTO.getDateDeparture()
+                )
+        );
+
+        scheduleDTO.setDateArrival(
+                UtilsManager.parseInputeTokenToValid(
+                        scheduleDTO.getDateArrival()
+                )
+        );
+
+        LOGGER.info("READY TO CREATE SCHEDULE: "
+                + scheduleDTO.getStationDepartureName() + " -> "
+                + scheduleDTO.getStationArrivalName() + " in time range "
+                + scheduleDTO.getDateDeparture() + " to "
+                + scheduleDTO.getDateArrival()
+        );
+
+
         scheduleService.add(scheduleDTO);
+
         return "manager-menu";
     }
 
