@@ -67,8 +67,5 @@ public class Seat {
         return train;
     }
 
-    @Override
-    public String toString() {
-        return "Seat ( id: " + id + " carriage: " + carriage + " seats: " + seat + " train: < " + train + " >)";
-    }
+
 }

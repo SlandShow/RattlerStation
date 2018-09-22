@@ -15,11 +15,14 @@ public class Train {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "train", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "train", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Seat> seats;
 
     @OneToOne
     private State state;
+
+    @Column(name = "carriages")
+    private Integer carriages;
 
     public Train() {
     }
@@ -41,6 +44,10 @@ public class Train {
         this.state = state;
     }
 
+    public void setCarriages(Integer carriages) {
+        this.carriages = carriages;
+    }
+
     // Getters
     public Long getId() {
         return id;
@@ -58,8 +65,8 @@ public class Train {
         return state;
     }
 
-    @Override
-    public String toString() {
-        return "Train ( id: " + id + ", name: " + name + ", seats: " + seats + " state: " + state + " )";
+    public Integer getCarriages() {
+        return carriages;
     }
+
 }
