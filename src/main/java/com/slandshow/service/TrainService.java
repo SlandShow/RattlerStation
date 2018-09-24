@@ -22,6 +22,8 @@ public interface TrainService {
 
     List<Train> getAllTrains();
 
+    List<Train> getAllValidTrains();
+
     Train getById(Long id);
 
     Train getByName(String name);

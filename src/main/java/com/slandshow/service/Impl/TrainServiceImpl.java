@@ -22,7 +22,6 @@ public class TrainServiceImpl implements TrainService {
 
     private static final Logger LOGGER = Logger.getLogger(TrainServiceImpl.class);
 
-
     @Autowired
     private TrainDAO trainDAO;
 
@@ -124,6 +123,20 @@ public class TrainServiceImpl implements TrainService {
     public List<Train> getAllTrains() {
         return trainDAO.getAll();
     }
+
+    @Transactional
+    public List<Train> getAllValidTrains() {
+        List<Train> validTrains = new ArrayList<Train>();
+        List<Train> allTrains = trainDAO.getAll();
+
+        for (int i = 0; i < allTrains.size(); i++) {
+            if (allTrains.get(i).getState() != null && allTrains.get(i).getState().getType().equals("VALID"))
+                validTrains.add(allTrains.get(i));
+        }
+
+        return validTrains;
+    }
+
 
     @Transactional
     public Train getById(Long id) {
