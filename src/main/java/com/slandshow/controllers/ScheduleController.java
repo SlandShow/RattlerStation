@@ -1,10 +1,12 @@
 package com.slandshow.controllers;
 
 import com.slandshow.DTO.ScheduleDTO;
+import com.slandshow.DTO.TrainDTO;
 import com.slandshow.models.Schedule;
 import com.slandshow.models.Station;
 import com.slandshow.service.ScheduleService;
 import com.slandshow.service.StationService;
+import com.slandshow.service.TrainService;
 import com.slandshow.utils.JspFormNames;
 import com.slandshow.utils.UtilsManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,10 @@ public class ScheduleController {
 
     @Autowired
     private StationService stationService;
+
+    @Autowired
+    private TrainService trainService;
+
 
     @GetMapping("/scheduleList")
     public String getSchedule(Model model) {
@@ -159,5 +165,18 @@ public String createSchedule(Model model) {
 
         return "manager-menu";
     }
+
+/*
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
+    @RequestMapping(name = "/viewSchedules", params = "trainId")
+    public String viewBookingTrains(@RequestParam(value = "trainId") Long trainId, Model model) {
+       List<Schedule> selectedScheduleByTrain = scheduleService.getByTrain(
+            trainService.getById(trainId)
+       );
+
+       model.addAttribute("selectedSchedulesByTrain", selectedScheduleByTrain);
+
+        return "schedule-list";
+    }*/
 
 }

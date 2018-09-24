@@ -3,12 +3,14 @@ package com.slandshow.controllers;
 import com.slandshow.DTO.*;
 import com.slandshow.models.Schedule;
 import com.slandshow.models.Seat;
+import com.slandshow.models.Ticket;
 import com.slandshow.models.Train;
 import com.slandshow.service.*;
 import com.slandshow.utils.JspFormNames;
 import com.slandshow.utils.UtilsManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,6 +34,8 @@ public class TicketController {
     @Autowired
     private ScheduleService scheduleService;
 
+    @Autowired
+    private TrainService trainService;
 
     @GetMapping("/buyTicket")
     public String buyTicket(Model model) {
@@ -112,6 +116,26 @@ public class TicketController {
         //TicketInfoDTO ticketInfoDTO = (TicketInfoDTO) request.getSession().getAttribute("ticketDTO");
         List<List<SeatDTO>> carriages = new ArrayList<List<SeatDTO>>();
 
+        LOGGER.info(
+                "RESERVED SEATS IN CURRENT TRAIN # "
+                + selectedSchedule.getTrain().getName()
+                + " IS..."
+        );
+
+
+        List<Seat> listOfReservedSeats = ticketService.getBookingSeatsBySchedule(selectedSchedule);
+
+        for (Seat currentSeat: listOfReservedSeats) {
+            LOGGER.info(
+                            "SEAT # "
+                            + currentSeat.getSeat()
+                            + " IN CARRIAGE #"
+                            + currentSeat.getCarriage()
+                            + " IS RESERVED"
+            );
+        }
+
+
         // Create matrix of seats per carriage
         // TODO: ADD THIS LEGACY CODE BESIDE CONTROLLER
         int seatsCount = 1;
@@ -120,6 +144,7 @@ public class TicketController {
 
         for (int carriagesIterator = 1; carriagesIterator <= row; carriagesIterator++) {
             ArrayList<SeatDTO> seats = new ArrayList<SeatDTO>();
+            seatsCount = 1;
             for (int seatsIterator = 1; seatsIterator <= col; seatsIterator++) {
                 seats.add(new SeatDTO(carriagesIterator, seatsCount++));
             }
@@ -137,7 +162,7 @@ public class TicketController {
     private UserService userService;
 
     @RequestMapping(value = "/confirmBooking", params = {"seat", "carriage", "scheduleId"})
-    public String confirmBooking(@RequestParam(value = "seat") Integer seat, @RequestParam(value = "carriage") Integer carriage,  @RequestParam(value = "scheduleId") Long scheduleId, HttpServletRequest request) {
+    public String confirmBooking(@RequestParam(value = "seat") Integer seat, @RequestParam(value = "carriage") Integer carriage,  @RequestParam(value = "scheduleId") Long scheduleId, Model model) {
 
         TicketDTO ticketDTO = new TicketDTO();
         ticketDTO.setScheduleId(scheduleId);
@@ -164,39 +189,8 @@ public class TicketController {
             e.printStackTrace();
         }
 
-        /*TicketDTO ticketDTO = new TicketDTO();
-        //String mail = (String) request.getSession().getAttribute("currentMail");
-        ticketDTO.setScheduleId(scheduleId);
-
-        SeatDTO seatDTO = new SeatDTO();
-        seatDTO.setSeat(seat);
-        seatDTO.setCarriage(carriage);
-        ticketDTO.setSeatDTO(seatDTO);
-
-        UserDTO userDTO = userService.findAuthenticatedUserDTO();
-        TicketInfoDTO ticketInfoDTO = new TicketInfoDTO();
-        ticketInfoDTO.setSeatSeat(seat);
-        ticketInfoDTO.setSeatCarriage(carriage);
-        ticketInfoDTO.setUserLogin(userDTO.getLogin());
-
-        LOGGER.info("TICKET DTO: " + ticketDTO);
-        LOGGER.info("CURRENT SCHEDULE IS " + scheduleId
-                + " USER LOGIN IS " + userDTO.getLogin()
-                + " SEAT N IS " + ticketInfoDTO.getSeatSeat()
-                + " CARRIAGE N IS " + ticketInfoDTO.getSeatCarriage());
 
 
-        try {
-            ticketService.add(
-                    ticketDTO,
-                    userService.findUserByEmail(ticketInfoDTO.getUserLogin())
-            );
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-*/
         return JspFormNames.BOOKING_TICKET_FORM_RESULT;
     }
 

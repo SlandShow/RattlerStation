@@ -47,13 +47,11 @@ public class UserController {
 
     @GetMapping("/login")
     public String login(Model model) {
-
         return "login";
     }
 
 
     public String registration() {
-
         return "registration";
     }
 
@@ -142,7 +140,6 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin")
     public String admin() {
-
         return "admin";
     }
 
@@ -208,6 +205,18 @@ public class UserController {
     public String managerMenu() {
         return "manager-menu";
     }
+
+
+
+
+/*
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
+    @PostMapping("/viewBookingTrains")
+    public String viewBookingTrainsConfirm(@ModelAttribute TrainDTO trainDTO, Model model) {
+
+
+        return "booking-users-in-train";
+    }*/
 
 
 /*

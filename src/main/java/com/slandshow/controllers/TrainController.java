@@ -2,7 +2,9 @@ package com.slandshow.controllers;
 
 import com.slandshow.DTO.TrainDTO;
 import com.slandshow.DTO.TrainInfoDTO;
+import com.slandshow.models.Schedule;
 import com.slandshow.models.Train;
+import com.slandshow.service.ScheduleService;
 import com.slandshow.service.SeatService;
 import com.slandshow.service.TrainService;
 import org.apache.log4j.Logger;
@@ -11,6 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/trains")
@@ -55,4 +59,5 @@ public class TrainController {
         LOGGER.info("READY TO DELETE TRAIN" + trainDTO.getName() + " " + trainDTO.getCarriageCount() + " " + trainDTO.getSeatsCount());
         return "manager-menu";
     }
+
 }
