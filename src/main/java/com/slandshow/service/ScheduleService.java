@@ -4,6 +4,7 @@ import com.slandshow.DTO.ScheduleDTO;
 import com.slandshow.DTO.SeatsDTO;
 import com.slandshow.models.Schedule;
 import com.slandshow.models.Station;
+import com.slandshow.models.Train;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.text.ParseException;
@@ -35,6 +36,8 @@ public interface ScheduleService {
     List<Schedule> getByStationsAndDate(Schedule schedule);
 
     List<Schedule> getByDateAndTrainToCheckIntersection(Schedule schedule);
+
+    List<Schedule> getByTrain(Train train);
 
     List<Schedule> getByTrainAndDate(Schedule schedule);
 

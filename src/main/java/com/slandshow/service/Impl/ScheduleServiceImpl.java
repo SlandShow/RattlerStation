@@ -210,6 +210,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Transactional
+    public List<Schedule> getByTrain(Train train) {
+        return scheduleDAO.getByTrain(train);
+    }
+
+    @Transactional
     public List<Schedule> getByTrainAndDate(Schedule schedule) {
         return scheduleDAO.getByTrainAndDate(schedule);
     }
