@@ -65,7 +65,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new CorsFilter(source);
     }
 
-    // TODO: FIX
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .httpBasic()
@@ -74,6 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/registration",
                         "/login",
                         "/",
+                        "/static/**",
                         "/home",
                         "/stations/list",
                         "/schedule/scheduleList",
