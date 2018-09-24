@@ -7,6 +7,7 @@ import com.slandshow.models.*;
 import com.slandshow.service.*;
 import com.slandshow.utils.UtilsManager;
 import org.apache.log4j.Logger;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -171,16 +172,25 @@ public class TicketServiceImpl implements TicketService {
         return ticketDAO.getBySchedule(schedule);
     }
 
-    // TODO: FIX LATER
     @Transactional
     public List<TicketInfoDTO> getByScheduleId(Long id) {
-        return null;
+        ModelMapper modelMapper = new ModelMapper();
+        Schedule schedule = scheduleService.getById(id);
+        List<Ticket> tickets = getBySchedules(schedule);
+        return tickets.stream()
+                .map(x -> modelMapper.map(x, TicketInfoDTO.class))
+                .collect(Collectors.toList());
     }
 
-    // TODO: FIX LATER
     @Transactional
     public List<TicketInfoDTO> getAuthenticatedUserTicket() {
-        return null;
+        ModelMapper modelMapper = new ModelMapper();
+        String userName = secureService.getAuthentication().getName();
+        User user = userService.findUserByEmail(userName);
+        List<Ticket> tickets = ticketDAO.getByUser(user);
+        return tickets.stream()
+                .map(x -> modelMapper.map(x, TicketInfoDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Transactional
