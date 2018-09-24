@@ -3,6 +3,7 @@ package com.slandshow.DAO.Impl;
 import com.slandshow.DAO.ScheduleDAO;
 import com.slandshow.models.Schedule;
 import com.slandshow.models.Station;
+import com.slandshow.models.Train;
 import com.slandshow.utils.UtilsManager;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,6 +107,13 @@ public class ScheduleDAOImpl<E extends Schedule> extends GenericDAOImpl<E> imple
                 .setParameter("dateA", schedule.getDateArrival())
                 .getResultList();
 
+    }
+
+    public List<Schedule> getByTrain(Train train) {
+        return sessionFactory.getCurrentSession()
+                .createQuery("from Schedule where train = :train ")
+                .setParameter("train", train)
+                .getResultList();
     }
 
     public List<Schedule> getByTrainAndDate(Schedule schedule) {
