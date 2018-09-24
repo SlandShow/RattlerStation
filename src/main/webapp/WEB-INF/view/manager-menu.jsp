@@ -35,10 +35,11 @@
 
 <div class="container-fluid top-bar">
     <ul class="nav navbar-nav">
-        <li><a href="/createTrain">Create train</a></li>
+        <li><a href="/trains/createTrain">Create train</a></li>
         <li><a href="/deleteTrain">Delete train</a></li>
         <li><a href="/stations/createStation">Create station</a></li>
         <li><a href="/schedule/createSchedule">Create schedule</a></li>
+        <li><a href="/managerToolsService/viewBookingTrains">Watch all booking users</a></li>
     </ul>
 </div>
 
