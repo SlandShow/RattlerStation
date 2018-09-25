@@ -15,29 +15,33 @@
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <script src="/static/js/bootstrap.min.js"></script>
 </head>
+<style>
+    .container .table tbody tr:hover {
+        background: #eee;
+    }
+</style>
 <body>
 <div class="container">
 
 
-    <h2>Schedules</h2>
+    <h2 class="text-info">Schedules list</h2>
 
-    <legend>Booking ticket</legend>
 
     <!-- Add HTML table -->
     <table class="table table-striped">
 
-        <tr>
-            <th>Station departure</th>
-            <th>Station arrival</th>
+        <tr class="text-info">
+            <th>Stations</th>
             <th>Date departure</th>
+            <th>Date arrival</th>
         </tr>
 
         <!-- Loop over and print stations  -->
         <c:forEach var="tmpSchedule" items="${schedules}">
             <tr>
-                <td>${tmpSchedule.stationDeparture}</td>
-                <td>${tmpSchedule.stationArrival}</td>
-                <td>${tmpSchedule.dateDeparture}/></td>
+                <td>${tmpSchedule.stationDeparture.name} → ${tmpSchedule.stationArrival.name}</td>
+                <td><small>${tmpSchedule.dateDeparture.toGMTString()}</small></td>
+                <td><small>${tmpSchedule.dateArrival.toGMTString()}</small></td>
                 <td><a href="/tickets/viewTicketsTrainInfo?id=${tmpSchedule.id}">Buy</a> </td>
             </tr>
         </c:forEach>

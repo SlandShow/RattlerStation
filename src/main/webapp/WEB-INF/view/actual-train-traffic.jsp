@@ -314,7 +314,7 @@
     });
 
     $('#datetimepicker2').datetimepicker({
-        defaultDate: new Date(),
+        defaultDate: null,
         format: 'YYYY-MM-DD hh:mm:ss',
         sideBySide: true
     });

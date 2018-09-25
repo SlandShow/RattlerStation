@@ -8,17 +8,19 @@
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <script src="/static/js/bootstrap.min.js"></script>
 </head>
+<style>
+    table-striped tr td:hover {
+        background: #eee;
+    }
+</style>
 <body>
     <div class="container">
-        <h2>Info</h2>
-        <br><br>
 
-        <h2>Booking</h2>
+        <h2 class="text-info">Choose seat number:</h2>
 
         <!-- Add HTML table -->
         <table class="table table-striped">
 
-            <tr>
             <!-- Loop over and print carriages and seats  -->
             <c:forEach var="row" items="${carriages}">
                 <tr>
