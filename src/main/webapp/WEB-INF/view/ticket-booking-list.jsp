@@ -34,6 +34,7 @@
             <th>Stations</th>
             <th>Date departure</th>
             <th>Date arrival</th>
+            <th>Train name</th>
         </tr>
 
         <!-- Loop over and print stations  -->
@@ -42,6 +43,7 @@
                 <td>${tmpSchedule.stationDeparture.name} → ${tmpSchedule.stationArrival.name}</td>
                 <td><small>${tmpSchedule.dateDeparture.toGMTString()}</small></td>
                 <td><small>${tmpSchedule.dateArrival.toGMTString()}</small></td>
+                <td>${tmpSchedule.train.name}</td>
                 <td><a href="/tickets/viewTicketsTrainInfo?id=${tmpSchedule.id}">Buy</a> </td>
             </tr>
         </c:forEach>

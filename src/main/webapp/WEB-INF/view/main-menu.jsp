@@ -18,7 +18,7 @@
             <li><a href="/schedule/scheduleList">Schedule</a></li>
            <!-- <li><a href="/schedule/scheduleByStationsAndDate">Actual train traffic</a></li> -->
             <li><a href="/tickets/buyTicket">Buy ticket</a></li>
-            <li><a href="/stations/list">Show all stations</a></li>
+            <li><a href="/trains/selectTrainsByStation">Select traffic info by station</a></li>
             <li><a href="#">Contact us</a></li>
             <li><a href="/login">Log in</a></li>
         </ul>
