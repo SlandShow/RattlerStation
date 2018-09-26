@@ -2,6 +2,8 @@ package com.slandshow.service;
 
 import com.slandshow.DTO.TicketDTO;
 import com.slandshow.DTO.TicketInfoDTO;
+import com.slandshow.exceptions.BookingTicketException;
+import com.slandshow.exceptions.BusinessLogicException;
 import com.slandshow.models.Schedule;
 import com.slandshow.models.Seat;
 import com.slandshow.models.Ticket;
@@ -18,7 +20,7 @@ public interface TicketService {
 
     void add(Ticket ticket);
 
-    Ticket add(TicketDTO ticketDTO, User user) throws IOException, ParseException;
+    Ticket add(TicketDTO ticketDTO, User user) throws BookingTicketException;
 
     void delete(Ticket ticket);
 
@@ -34,7 +36,7 @@ public interface TicketService {
 
     boolean checkSeatUntilBooking(Seat seat, Schedule schedule);
 
-    boolean checkScheduleForAvailability(Schedule schedule) throws ParseException;
+    boolean checkScheduleForAvailability(Schedule schedule) throws BookingTicketException;
 
     List<Ticket> getBySchedules(Schedule schedule);
 

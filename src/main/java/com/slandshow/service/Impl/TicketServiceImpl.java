@@ -3,6 +3,9 @@ package com.slandshow.service.Impl;
 import com.slandshow.DAO.TicketDAO;
 import com.slandshow.DTO.TicketDTO;
 import com.slandshow.DTO.TicketInfoDTO;
+import com.slandshow.exceptions.BookingTicketException;
+import com.slandshow.exceptions.BusinessLogicException;
+import com.slandshow.exceptions.ExceptionsInfo;
 import com.slandshow.models.*;
 import com.slandshow.service.*;
 import com.slandshow.utils.UtilsManager;
@@ -59,25 +62,22 @@ public class TicketServiceImpl implements TicketService {
      */
 
     @Transactional
-    public Ticket add(TicketDTO ticketDTO, User user) throws IOException, ParseException {
+    public Ticket add(TicketDTO ticketDTO, User user) throws BookingTicketException {
         Schedule schedule = scheduleService.getById(ticketDTO.getScheduleId());
 
-        // TODO: ADD NEW EXCEPTION CLASS AND FIX THIS
         if (schedule == null || user == null) {
-            LOGGER.info("USER OR SCHEDULE IS NULL");
-            throw new IOException();
+            LOGGER.info(ExceptionsInfo.USER_OR_SCHEDULE_NOT_EXISTS);
+            throw new BookingTicketException(ExceptionsInfo.USER_OR_SCHEDULE_NOT_EXISTS);
         }
 
-        // TODO: ADD NEW EXCEPTION CLASS AND FIX THIS
         if (!checkUserUntilBooking(user, schedule)) {
-            LOGGER.info("USER ON THIS SEAT, SORRY");
-            throw new IOException();
+            LOGGER.info(ExceptionsInfo.SAME_USER_TRY_TO_BOOK_SEAT);
+            throw new BookingTicketException(ExceptionsInfo.SAME_USER_TRY_TO_BOOK_SEAT);
         }
 
-        // TODO: ADD NEW EXCEPTION CLASS AND FIX THIS
         if (!checkScheduleForAvailability(schedule)) {
-            LOGGER.info("PROBLEM WITH SCHEDULE AVAILIBILITY");
-            throw new IOException();
+            LOGGER.info(ExceptionsInfo.SCHEDULE_NOT_AVAILABLE_NOW);
+            throw new BookingTicketException(ExceptionsInfo.SCHEDULE_NOT_AVAILABLE_NOW);
         }
 
         LOGGER.info("HERE ->" + schedule.getTrain());
@@ -96,9 +96,10 @@ public class TicketServiceImpl implements TicketService {
 
         LOGGER.info("SEAT DETECTED: " + seat);
 
-        // TODO: ADD NEW EXCEPTION CLASS AND FIX THIS
-        if (seat == null || !checkSeatUntilBooking(seat, schedule))
-            throw new IOException();
+        if (seat == null || !checkSeatUntilBooking(seat, schedule)) {
+            LOGGER.info(ExceptionsInfo.USER_ALREADY_ON_THIS_SEAT);
+            throw new BookingTicketException(ExceptionsInfo.USER_ALREADY_ON_THIS_SEAT);
+        }
 
         Ticket ticket = new Ticket();
         ticket.setSchedule(schedule);
@@ -162,7 +163,7 @@ public class TicketServiceImpl implements TicketService {
 
     /* Check if we can buy ticket in time & data case */
     @Transactional
-    public boolean checkScheduleForAvailability(Schedule schedule) throws ParseException {
+    public boolean checkScheduleForAvailability(Schedule schedule) throws BookingTicketException {
         Date date = schedule.getDateDeparture();
         return UtilsManager.checkForCurrentDayForBookingTicket(date);
     }

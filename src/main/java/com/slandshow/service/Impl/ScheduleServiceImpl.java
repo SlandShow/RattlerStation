@@ -5,6 +5,9 @@ import com.slandshow.DAO.StateDAO;
 import com.slandshow.DTO.ScheduleDTO;
 import com.slandshow.DTO.SeatDTO;
 import com.slandshow.DTO.SeatsDTO;
+import com.slandshow.DTO.TrainDTO;
+import com.slandshow.exceptions.ExceptionsInfo;
+import com.slandshow.exceptions.ScheduleCreationException;
 import com.slandshow.models.*;
 import com.slandshow.service.*;
 import com.slandshow.utils.UtilsManager;
@@ -55,13 +58,15 @@ public class ScheduleServiceImpl implements ScheduleService {
      */
 
     @Transactional
-    public void add(ScheduleDTO scheduleDTO) throws ParseException, IOException, TimeoutException {
+    public void add(ScheduleDTO scheduleDTO) throws ScheduleCreationException, ParseException {
         Train train = trainService.getByName(scheduleDTO.getTrainName());
         Station stationArrival = stationService.getByName(scheduleDTO.getStationArrivalName());
         Station stationDeparture = stationService.getByName(scheduleDTO.getStationDepartureName());
 
-        if (stationArrival == null || stationDeparture == null || train == null)
-            throw new RuntimeException();
+        if (stationArrival == null || stationDeparture == null || train == null) {
+            LOGGER.info(ExceptionsInfo.TRAINS_STATIONS_ARE_NULL);
+            throw new ScheduleCreationException(ExceptionsInfo.TRAINS_STATIONS_ARE_NULL);
+        }
 
         Date dateDeparture = UtilsManager.parseToDateTime(scheduleDTO.getDateDeparture());
 
@@ -78,17 +83,25 @@ public class ScheduleServiceImpl implements ScheduleService {
         schedule.setTrain(train);
 
 
-        if (stationArrival.equals(stationDeparture))
-            throw new RuntimeException();
+        if (stationArrival.equals(stationDeparture)) {
+            LOGGER.info(ExceptionsInfo.STATIONS_ARE_THE_SAME);
+            throw new ScheduleCreationException(ExceptionsInfo.STATIONS_ARE_THE_SAME);
+        }
 
-        if (!dateDeparture.before(dateArrival))
-            throw new RuntimeException();
+        if (!dateDeparture.before(dateArrival)) {
+            LOGGER.info(ExceptionsInfo.DATE_DEPARTURE_GREATER_THAN_ARRIVAL);
+            throw new ScheduleCreationException(ExceptionsInfo.DATE_DEPARTURE_GREATER_THAN_ARRIVAL);
+        }
 
-        if (!getByDateAndTrainToCheckIntersection(schedule).isEmpty())
-            throw new RuntimeException();
+        if (!getByDateAndTrainToCheckIntersection(schedule).isEmpty()) {
+            LOGGER.info(ExceptionsInfo.TRAIN_INTERSECTION);
+            throw new ScheduleCreationException(ExceptionsInfo.TRAIN_INTERSECTION);
+        }
 
-        if (UtilsManager.checkCurrentDay(dateDeparture))
-            throw new RuntimeException();
+        if (UtilsManager.checkCurrentDay(dateDeparture)) {
+            LOGGER.info(ExceptionsInfo.SCHEDULE_CURRENT_DAY_CREATION);
+            throw new ScheduleCreationException(ExceptionsInfo.SCHEDULE_CURRENT_DAY_CREATION);
+        }
 
         State state = stateDAO.getByType("VALID");
         schedule.getStationDeparture().setState(state);
@@ -102,13 +115,12 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Transactional
-    public void delete(Long id) throws IOException, TimeoutException {
+    public void delete(Long id) throws ScheduleCreationException, ParseException, TimeoutException {
         Schedule schedule = getById(id);
 
-        // TODO: FIX THIS STUFF
         if (!ticketService.getBySchedules(schedule).isEmpty()) {
-            LOGGER.debug("PROBLEM WITH DELETING SCHEDULE!");
-            throw new IOException();
+            LOGGER.debug(ExceptionsInfo.DELETING_SCHEDULE_PROBLEM);
+            throw new ScheduleCreationException(ExceptionsInfo.DELETING_SCHEDULE_PROBLEM);
         }
 
         scheduleDAO.delete(schedule);
@@ -169,7 +181,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
 
-    @Override
+    @Transactional
     public List<ScheduleDTO> getAllForToday() throws ParseException {
         ModelMapper modelMapper = new ModelMapper();
 
@@ -219,7 +231,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleDAO.getByTrainAndDate(schedule);
     }
 
-    @Override
+    @Transactional
     public List<Schedule> getByStationsAndDates(Schedule schedule) {
         return scheduleDAO.getByStationsAndDates(schedule);
     }
@@ -264,6 +276,11 @@ public class ScheduleServiceImpl implements ScheduleService {
         schedules = scheduleDAO.getByStationsAndDatesAndTrains(schedule);
 
         return mapping(schedules);
+    }
+
+    @Override
+    public List<ScheduleDTO> getInfoByStation(TrainDTO trainDTO) {
+        return null;
     }
 
     /**
@@ -348,7 +365,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @return
      * @throws ParseException
      */
-    @Override
+
     @Transactional
     public List<ScheduleDTO> getDirectSchedulesFromDTOByDates(ScheduleDTO scheduleDTO) throws ParseException {
         Date dateDeparture = UtilsManager.parseToDate(scheduleDTO.getDateDeparture());
@@ -374,13 +391,13 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 
     @Transactional
-    public SeatsDTO getSeats(Long id) {
+    public SeatsDTO getSeats(Long id) throws ScheduleCreationException {
         ModelMapper modelMapper = new ModelMapper();
         Schedule schedule = getById(id);
 
         // TODO: ADD CUSTOM EXCEPTIONS
         if (schedule == null)
-            throw new RuntimeException();
+            throw new ScheduleCreationException(ExceptionsInfo.SCHEDULE_IS_NULL);
 
         Train train = schedule.getTrain();
         Set<Seat> seats = train.getSeats();
@@ -398,7 +415,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleDAO.getByStationArrivalAndDates(station, dateFrom, dateTo);
     }
 
-    @Override
+    @Transactional
     public ScheduleDTO getByIdScheduleDTO(Long id) {
         return null;
     }
@@ -431,19 +448,29 @@ public class ScheduleServiceImpl implements ScheduleService {
                         )
         );
 
+        LOGGER.info("LOAD DATA IN SCHEDULE SERVICE: " + mapped.getStationDeparture());
+
         mapped.setStationArrival(
                         stationService.getStationByName(
                                 scheduleDTO.getStationArrivalName()
                         )
         );
 
+        LOGGER.info("LOAD DATA IN SCHEDULE SERVICE: " + mapped.getStationArrival());
+
         mapped.setDateDeparture(
                 UtilsManager.parseToDateTime(scheduleDTO.getDateDeparture())
         );
 
-        mapped.setDateArrival(
-                UtilsManager.parseToDateTime(scheduleDTO.getDateArrival())
-        );
+        LOGGER.info("LOAD DATA IN SCHEDULE SERVICE: " + mapped.getDateDeparture());
+
+        if (scheduleDTO.getDateArrival() != "") {
+            mapped.setDateArrival(
+                    UtilsManager.parseToDateTime(scheduleDTO.getDateArrival())
+            );
+
+            LOGGER.info("LOAD DATA IN SCHEDULE SERVICE: " + mapped.getDateArrival());
+        } else mapped.setDateArrival(null);
 
         return mapped;
     }
