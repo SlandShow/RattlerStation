@@ -27,6 +27,8 @@ public class ManagerController {
     @Autowired
     private TicketService ticketService;
 
+
+
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping("/viewBookingTrains")
     public String viewBookingTrains(Model model) {
@@ -36,8 +38,6 @@ public class ManagerController {
 
         return "booking-train-users-list";
     }
-
-
 
 
    // @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
@@ -70,6 +70,10 @@ public class ManagerController {
 
         return "booking-users-in-train";
     }
+
+
+
+
 
 
 

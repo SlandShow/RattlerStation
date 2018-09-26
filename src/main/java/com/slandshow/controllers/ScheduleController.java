@@ -2,6 +2,7 @@ package com.slandshow.controllers;
 
 import com.slandshow.DTO.ScheduleDTO;
 import com.slandshow.DTO.TrainDTO;
+import com.slandshow.exceptions.ScheduleCreationException;
 import com.slandshow.models.Schedule;
 import com.slandshow.models.Station;
 import com.slandshow.service.ScheduleService;
@@ -139,7 +140,7 @@ public String createSchedule(Model model) {
      */
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PostMapping("/createSchedule")
-    public String createSchedule(@ModelAttribute ScheduleDTO scheduleDTO) throws ParseException, IOException, TimeoutException {
+    public String createSchedule(@ModelAttribute ScheduleDTO scheduleDTO, Model model) throws ParseException, IOException, TimeoutException {
 
         scheduleDTO.setDateDeparture(
                 UtilsManager.parseInputeTokenToValid(
@@ -160,10 +161,27 @@ public String createSchedule(Model model) {
                 + scheduleDTO.getDateArrival()
         );
 
+        String result = "";
 
-        scheduleService.add(scheduleDTO);
+        try {
+            scheduleService.add(scheduleDTO);
 
-        return "manager-menu";
+            result = "success";
+
+            model.addAttribute("result", result);
+            model.addAttribute("scheduleInfo", scheduleDTO);
+
+        } catch (ScheduleCreationException e) {
+            e.printStackTrace();
+
+            result = "problem";
+
+            model.addAttribute("result", result);
+            model.addAttribute("reason", e.getErrorMessage());
+            model.addAttribute("scheduleInfo", scheduleDTO);
+        }
+
+        return "schedule-creation-result";
     }
 
 /*

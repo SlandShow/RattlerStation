@@ -1,5 +1,7 @@
 package com.slandshow.controllers;
 
+import com.slandshow.DTO.ScheduleDTO;
+import com.slandshow.DTO.StationDTO;
 import com.slandshow.DTO.TrainDTO;
 import com.slandshow.DTO.TrainInfoDTO;
 import com.slandshow.models.Schedule;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -27,6 +30,37 @@ public class TrainController {
 
     @Autowired
     private SeatService seatService;
+
+    @Autowired
+    private ScheduleService scheduleService;
+
+    @GetMapping("selectTrainsByStation")
+    public String selectTrainsByStation(Model model) {
+        model.addAttribute("selectedStation", new StationDTO());
+
+        return "train-selection";
+    }
+
+    @PostMapping("selectTrainsByStation")
+    public String selectTrainsByStationConfirm(@ModelAttribute StationDTO station, Model model) {
+        List<ScheduleDTO> schedules = scheduleService.getAll();
+        List<ScheduleDTO> schedulesTrains = new ArrayList<>();
+
+        for (ScheduleDTO current: schedules) {
+            if (
+                            current.getStationDepartureName().equals(station.getName()) ||
+                            current.getStationArrivalName().equals(station.getName())
+                    ) {
+                schedulesTrains.add(current);
+            }
+        }
+
+        model.addAttribute("selectedInfoSchedules", schedulesTrains);
+
+
+        return "trains-selected-by-station-list";
+    }
+
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping("/createTrain")

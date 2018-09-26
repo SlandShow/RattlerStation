@@ -1,6 +1,7 @@
 package com.slandshow.controllers;
 
 import com.slandshow.DTO.*;
+import com.slandshow.exceptions.BookingTicketException;
 import com.slandshow.models.Schedule;
 import com.slandshow.models.Seat;
 import com.slandshow.models.Ticket;
@@ -48,7 +49,13 @@ public class TicketController {
     public String scheduleByStationsAndDatePersist(@ModelAttribute ScheduleDTO schedule, BindingResult result, Model model) {
         Schedule reloadedSchedule = null;
 
-        LOGGER.info("LOADED DATA: " + schedule.getStationDepartureName() + ", " + schedule.getStationArrivalName());
+        LOGGER.info(
+                "LOADED DATA: " + schedule.getStationDepartureName() + ", "
+                + schedule.getStationArrivalName() + ", "
+                + schedule.getDateDeparture() + ", "
+                + schedule.getDateArrival()
+        );
+
 
         try {
             reloadedSchedule = scheduleService.mapping(schedule);
@@ -66,14 +73,9 @@ public class TicketController {
 
         List<Schedule> schedules = null;
 
-
-        schedules = scheduleService.getByStationsAndDate(reloadedSchedule);
-
-        /*
         if (reloadedSchedule.getDateArrival() == null)
             schedules = scheduleService.getByStationsAndDate(reloadedSchedule);
         else schedules = scheduleService.getByStationsAndDates(reloadedSchedule);
-        */
 
         model.addAttribute("schedules", schedules);
 
@@ -177,18 +179,64 @@ public class TicketController {
         LOGGER.info("LOADED USER TRY TI BUY " + userDTO.getLogin());
         LOGGER.info(ticketDTO.getScheduleId() + " ; " + ticketDTO.getSeatDTO().getCarriage() + " " + ticketDTO.getSeatDTO().getSeat());
 
+        String result = "";
 
         try {
             ticketService.add(
                     ticketDTO,
                     userService.findUserByEmail(userDTO.getLogin())
             );
-        } catch (IOException e) {
+
+            BookingTicketInfoDTO ticketInfoDTO = new BookingTicketInfoDTO();
+            ticketInfoDTO.setSeatNumber(seatDTO.getSeat());
+            ticketInfoDTO.setCarriageNumber(seatDTO.getCarriage());
+
+            ticketInfoDTO.setStationDepartureName(
+                    scheduleService.getById(ticketDTO.getScheduleId()).getStationDeparture().getName()
+            );
+
+            ticketInfoDTO.setStationArrivalName(
+                    scheduleService.getById(ticketDTO.getScheduleId()).getStationArrival().getName()
+            );
+
+            ticketInfoDTO.setDateDeparture(
+                    scheduleService.getById(ticketDTO.getScheduleId()).getDateDeparture()
+            );
+
+            ticketInfoDTO.setDateArrival(
+                    scheduleService.getById(ticketDTO.getScheduleId()).getDateArrival()
+            );
+
+            ticketInfoDTO.setUser(
+                            userDTO.getFirstName() + " "
+                            + userDTO.getLastName() + " ("
+                            + userDTO.getLogin() + ")"
+            );
+
+            model.addAttribute("ticketInfo", ticketInfoDTO);
+
+            result = "success";
+        } catch (BookingTicketException e) {
             e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
+
+            BookingTicketInfoDTO ticketInfoDTO = new BookingTicketInfoDTO();
+            ticketInfoDTO.setSeatNumber(seatDTO.getSeat());
+            ticketInfoDTO.setCarriageNumber(seatDTO.getCarriage());
+
+            ticketInfoDTO.setUser(
+                    userDTO.getFirstName() + " "
+                            + userDTO.getLastName() + " ("
+                            + userDTO.getLogin() + ")"
+            );
+
+
+            model.addAttribute("ticketInfo", ticketInfoDTO);
+            model.addAttribute("reason", e.getErrorMessage());
+
+            result = "problem";
         }
 
+        model.addAttribute("message", result);
 
 
         return JspFormNames.BOOKING_TICKET_FORM_RESULT;
