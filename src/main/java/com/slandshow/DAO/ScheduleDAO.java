@@ -37,4 +37,6 @@ public interface ScheduleDAO<E extends Schedule> extends GenericDAO<E> {
     List<Schedule> getRealTimeSchedules() throws ParseException;
 
     List<Schedule> getForToday() throws ParseException;
+
+    List<Schedule> getInfoByStation(Station station);
 }

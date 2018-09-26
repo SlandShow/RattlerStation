@@ -63,10 +63,12 @@ public class ScheduleDAOImpl<E extends Schedule> extends GenericDAOImpl<E> imple
      * @return all schedule by arrival and departure stations and date
      */
     public List<Schedule> getByStationsAndDate(Schedule schedule) {
-        String QUERY = "from Schedule s where s.stationDeparture = :stationDeparture and s.stationArrival = :stationArrival and date(dateDeparture) >= :date order by dateDeparture desc";
-
         return sessionFactory.getCurrentSession()
-                .createQuery(QUERY)
+                .createQuery("from Schedule where " +
+                        "stationArrival = :stationArrival and " +
+                        "stationDeparture = :stationDeparture and " +
+                        "date(dateDeparture) = :date " +
+                        "order by dateDeparture desc ")
                 .setParameter("stationArrival", schedule.getStationArrival())
                 .setParameter("stationDeparture", schedule.getStationDeparture())
                 .setParameter("date", schedule.getDateDeparture())
@@ -81,18 +83,16 @@ public class ScheduleDAOImpl<E extends Schedule> extends GenericDAOImpl<E> imple
      * @return all schedule by arrival and departure stations and date departure & arrival
      */
     public List<Schedule> getByStationsAndDates(Schedule schedule) {
-        String QUERY = "from Schedule s where s.stationDeparture = :stationDeparture "
-                + "and s.stationArrival = :stationArrival "
-                + "and date(dateDeparture) >= :dateD "
-                + "and date(dateArrival) <= :dateA "
-                + "order by dateDeparture desc";
-
         return sessionFactory.getCurrentSession()
-                .createQuery(QUERY)
+                .createQuery("from Schedule where " +
+                        "stationArrival = :stationArrival and " +
+                        "stationDeparture = :stationDeparture and " +
+                        "dateDeparture between :dateDeparture and :dateArrival " +
+                        "order by dateDeparture desc ")
                 .setParameter("stationArrival", schedule.getStationArrival())
                 .setParameter("stationDeparture", schedule.getStationDeparture())
-                .setParameter("dateD", schedule.getDateDeparture())
-                .setParameter("dateA", schedule.getDateArrival())
+                .setParameter("dateDeparture", schedule.getDateDeparture())
+                .setParameter("dateArrival", schedule.getDateArrival())
                 .getResultList();
     }
 
@@ -106,7 +106,6 @@ public class ScheduleDAOImpl<E extends Schedule> extends GenericDAOImpl<E> imple
                 .setParameter("dateD", schedule.getDateDeparture())
                 .setParameter("dateA", schedule.getDateArrival())
                 .getResultList();
-
     }
 
     public List<Schedule> getByTrain(Train train) {
@@ -191,5 +190,9 @@ public class ScheduleDAOImpl<E extends Schedule> extends GenericDAOImpl<E> imple
                         "order by dateDeparture asc ")
                 .setParameter("date", date)
                 .getResultList();
+    }
+
+    public List<Schedule> getInfoByStation(Station station) {
+        return null;
     }
 }
