@@ -23,13 +23,16 @@ Stack (current):
 10. Create HTML based JSP, witch views all POJO's [`done`]
 11. Add Spring security [`done`]
 12. User registration [`x`]
-13. Fix form data selection in DAO and controller [`x`]
+13. Fix form data selection in DAO and controller [`done`]
 14. Clean up code in Spring Security config & service classes [`x`]
 15. Add `buy ticket` case [`done`]
-16. Develop real schedules [`x`]
+16. Develop real schedules [`done`]
 17. Add many station and develop train map in DB [`x`]
-18. Updgrade all cases: log in, ticket traffic, buy tickets [`x`]
-19. Add manager functionality [`x`]
+18. Updgrade all cases: log in, ticket traffic, buy tickets [`done`]
+19. Add manager functionality [`done`]
+20. Create fraph mapping to graph object [`x`]
+21. Schedule validation via map and graph model [`x`]
+22. Add Google maps API [`x`]
 
 My developer dairy:
 
@@ -50,3 +53,4 @@ My developer dairy:
 15. (12.09.18) Admin can delete users.
 
 16 (13.09.18) Fix bi-directional relation and start working with TrainController for manager case.
+17. (14.09.18 - 27.09.18) Add a lot of things and work with user-deirndly interface. Add manager, add normal booking ticket case, confirm first review.
