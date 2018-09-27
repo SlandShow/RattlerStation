@@ -75,6 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/",
                         "/static/**",
                         "/home",
+                        "/trains/selectTrainsByStation",
                         "/stations/list",
                         "/schedule/scheduleList",
                         "/schedule/scheduleByStationsAndDate")
