@@ -56,6 +56,7 @@ public class TrainController {
         }
 
         model.addAttribute("selectedInfoSchedules", schedulesTrains);
+        model.addAttribute("selectedStation", station.getName());
 
 
         return "trains-selected-by-station-list";
