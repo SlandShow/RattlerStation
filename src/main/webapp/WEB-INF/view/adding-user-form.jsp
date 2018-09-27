@@ -1,39 +1,50 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: slandshow
-  Date: 11.09.18
-  Time: 19:08
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Adding User</title>
+    <!-- Add bootstrap -->
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div>
-    <form:form action="addUser" method="POST" modelAttribute="user">
-        First name:
-        <<form:input type="text" path="firstName" id="firstName"/>
-        <br><br>
-        Last name:
-        <<form:input type="text" path="lastName" id="lastName"/>
-        <br><br>
-        Login:
-        <<form:input type="text" path="login" id="login"/>
-        <br><br>
-        Password:
-        <<form:input type="text" path="password" id="password"/>
-        <br><br>
-        Role:
-        <br><br>
-        <input type="radio" name="role" value="USER_ROLE" checked> User<br>
-        <input type="radio" name="role" value="ADMIN_ROLE"> Admin<br>
-        <input type="radio" name="role" value="MANAGER_ROLE"> Manager<br>
 
-        <input type="submit" value="Add"/>
-    </form:form>
-</div>
+    <div class="container">
+
+        <h2 class="text-info">Admin: Create user</h2>
+
+        <form:form action="addUser" method="POST" modelAttribute="user">
+
+            <div class="form-group col-md-6">
+                <label for="inputUserName">Name</label>
+                <form:input type="text" path="firstName" id="inputUserName" class="form-control"  placeholder="Enter person name"/>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="inputuserLastname">Lastname</label>
+                <form:input type="text" path="lastName" id="inputuserLastname" class="form-control"  placeholder="Carriages"/>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="inputLogin">Login</label>
+                <form:input type="text" path="login" id="inputLogin" class="form-control" placeholder="Seats"/>
+            </div>
+
+
+            <div class="form-group col-md-6">
+                <label for="inputPass">Password</label>
+                <form:input type="password" path="password" id="inputPass" class="form-control" placeholder="Password" min="4"/>
+            </div>
+
+            <input type="radio" name="role" value="USER_ROLE" checked> User<br>
+            <input type="radio" name="role" value="MANAGER_ROLE"> Manager<br>
+
+            <br>
+            <center><input type="submit" class="btn btn-primary" value="Add person"/></center>
+        </form:form>
+
+    </div>
+
 </body>
 </html>

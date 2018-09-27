@@ -3,172 +3,230 @@
 <html>
 <head>
     <title>Select station</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+
+        h1 {
+            display: block;
+            font-size: 2em;
+            margin-top: 0.67em;
+            margin-bottom: 0.67em;
+            margin-left: 0;
+            margin-right: 0;
+            font-weight: bold;
+            color: #5B90B0
+        }
+
+        input[type=text] {
+            width: 250px;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: white;
+            background-image: url('searchicon.png');
+            background-position: 10px 10px;
+            background-repeat: no-repeat;
+            padding: 12px 20px 12px 40px;
+            -webkit-transition: width 0.4s ease-in-out;
+            transition: width 0.4s ease-in-out;
+        }
+
+        input[type=text]:focus {
+            width: 100%;
+        }
+
+
+        input[type=submit] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type=submit]:hover {
+            background-color: #45a049;
+        }
+
+        div focus {
+            width: 100%;
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="text-info">Select station:</h1>
+
+        <h1>🚉 Select station:</h1>
         <br><br>
 
+        <div>
+            <center>
+            <form:form method="POST" action="selectTrainsByStation"  modelAttribute="selectedStation">
 
-<form:form method="POST" action="selectTrainsByStation"  modelAttribute="selectedStation">
+                <form:input type="text" name="search" path="name" placeholder="Station name"  autocomplete='off' list='stations_list'/>
 
-<div class="row">
-                <div class="form-group ">
+                    <datalist id='stations_list'>
 
-    <form:input class="form-control" type="text" path="name" placeholder="Station name"  autocomplete='off' list='stations_list'/>
+                        <option> Finlyandskiy vokzal </option>
 
-    <datalist id='stations_list'>
+                        <option> Piskarevka </option>
 
-    <option> Finlyandskiy vokzal </option>
+                        <option> Ruchiy </option>
 
-    <option> Piskarevka </option>
+                        <option> Murino </option>
 
-    <option> Ruchiy </option>
+                        <option> Deviatkino </option>
 
-    <option> Murino </option>
+                        <option> Lavriki </option>
 
-    <option> Deviatkino </option>
+                        <option> Kapitolovo </option>
 
-    <option> Lavriki </option>
+                        <option> Kuzmolovo </option>
 
-    <option> Kapitolovo </option>
+                        <option> Toksovo </option>
 
-    <option> Kuzmolovo </option>
+                        <option> Kavgolovo </option>
 
-    <option> Toksovo </option>
+                        <option> Oselki </option>
 
-    <option> Kavgolovo </option>
+                        <option> Peri </option>
 
-    <option> Oselki </option>
+                        <option> 39 KM </option>
 
-    <option> Peri </option>
+                        <option> Gruzino </option>
 
-    <option> 39 KM </option>
+                        <option> Udelnaya </option>
 
-    <option> Gruzino </option>
+                        <option> Ozerki </option>
 
-    <option> Udelnaya </option>
+                        <option> Zvezdnaya </option>
 
-    <option> Ozerki </option>
+                        <option> Shuvalovo </option>
 
-    <option> Zvezdnaya </option>
+                        <option> Pargalovo </option>
 
-    <option> Shuvalovo </option>
+                        <option> Levashovo </option>
 
-    <option> Pargalovo </option>
+                        <option> Pesochnaya </option>
 
-    <option> Levashovo </option>
+                        <option> Dibuni </option>
 
-    <option> Pesochnaya </option>
+                        <option> Beloostrov </option>
 
-    <option> Dibuni </option>
+                        <option> Solnechnoe </option>
 
-    <option> Beloostrov </option>
+                        <option> Novaya Derevniya </option>
 
-    <option> Solnechnoe </option>
+                        <option> Staraya Derevnya </option>
 
-    <option> Novaya Derevniya </option>
+                        <option> Yaztennaya </option>
 
-    <option> Staraya Derevnya </option>
+                        <option> Laxta </option>
 
-    <option> Yaztennaya </option>
+                        <option> Olgino </option>
 
-    <option> Laxta </option>
+                        <option> Lisiy Nos </option>
 
-    <option> Olgino </option>
+                        <option> Gorskaya </option>
 
-    <option> Lisiy Nos </option>
+                        <option> Alexandrovskaya </option>
 
-    <option> Gorskaya </option>
+                        <option> Tarxovka </option>
 
-    <option> Alexandrovskaya </option>
+                        <option> Razliv </option>
 
-    <option> Tarxovka </option>
+                        <option> Sestroretsk </option>
 
-    <option> Razliv </option>
+                        <option> Kurort </option>
 
-    <option> Sestroretsk </option>
+                        <option> Repino </option>
 
-    <option> Kurort </option>
+                        <option> Komarovo </option>
 
-    <option> Repino </option>
+                        <option> Zelenogorsk </option>
 
-    <option> Komarovo </option>
+                        <option> Ushkovo </option>
 
-    <option> Zelenogorsk </option>
+                        <option> Roshino </option>
 
-    <option> Ushkovo </option>
+                        <option> 63 KM </option>
 
-    <option> Roshino </option>
+                        <option> Gorkovskoe </option>
 
-    <option> 63 KM </option>
+                        <option> Shevelevo </option>
 
-    <option> Gorkovskoe </option>
+                        <option> Kaneliarvi </option>
 
-    <option> Shevelevo </option>
+                        <option> Zahodskoye </option>
 
-    <option> Kaneliarvi </option>
+                        <option> Kirillovskoe </option>
 
-    <option> Zahodskoye </option>
+                        <option> Leypsya </option>
 
-    <option> Kirillovskoe </option>
+                        <option> Lebedevka </option>
 
-    <option> Leypsya </option>
+                        <option> 117 KM </option>
 
-    <option> Lebedevka </option>
+                        <option> Verxne-Cherkasovo </option>
 
-    <option> 117 KM </option>
+                        <option> Lazoreva </option>
 
-    <option> Verxne-Cherkasovo </option>
+                        <option> Viborg </option>
 
-    <option> Lazoreva </option>
+                        <option> Sadovaya </option>
 
-    <option> Viborg </option>
+                        <option> Molodeshnaya </option>
 
-    <option> Sadovaya </option>
+                        <option> Privetenskoe </option>
 
-    <option> Molodeshnaya </option>
+                        <option> 70 KM </option>
 
-    <option> Privetenskoe </option>
+                        <option> 72 KM </option>
 
-    <option> 70 KM </option>
+                        <option> Masteryarvi </option>
 
-    <option> 72 KM </option>
+                        <option> Yapilia </option>
 
-    <option> Masteryarvi </option>
+                        <option> 86 KM </option>
 
-    <option> Yapilia </option>
+                        <option> Tarasovskoe </option>
 
-    <option> 86 KM </option>
+                        <option> Kyolemoyarvi </option>
 
-    <option> Tarasovskoe </option>
+                        <option> 106 KM </option>
 
-    <option> Kyolemoyarvi </option>
+                        <option> Ermilovo </option>
 
-    <option> 106 KM </option>
+                        <option> Primorsk </option>
 
-    <option> Ermilovo </option>
+                        <option> Bor </option>
 
-    <option> Primorsk </option>
 
-    <option> Bor </option>
+                    </datalist>
 
+                    <br><br>
+                    <center><button class="button" type="submit">Select</button></center>
+            </form:form>
+            </center>
+        </div>
 
-    </datalist>
-                </div>
-            </div>
-
-<center>
-            <div class="row">
-                <button type="submit" class="btn btn-default">Submit</button>
-            </div></center>
-        </form:form>
-
-
-
-    </div>
 </body>
 </html>

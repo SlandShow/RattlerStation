@@ -2,11 +2,10 @@
 <html>
 <head>
     <title>Manager menu</title>
-    <!-- Add bootstrap (NOT LOCAL!) -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+    <!-- Add bootstrap -->
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
 
     <!-- Add CSS for top bar -->
     <style>
@@ -36,14 +35,22 @@
 <div class="container-fluid top-bar">
     <ul class="nav navbar-nav">
         <li><a href="/trains/createTrain">Create train</a></li>
-        <li><a href="/deleteTrain">Delete train</a></li>
         <li><a href="/stations/createStation">Create station</a></li>
         <li><a href="/schedule/createSchedule">Create schedule</a></li>
         <li><a href="/managerToolsService/viewBookingTrains">Watch all booking users</a></li>
+        <li><a href="/home">Home</a></li>
     </ul>
 </div>
 
-<h2>Manager tools</h2>
+<center>
+    <h2>Manager tools ☔</h2>
+</center>
+
+<br><br>
+
+<center>
+    <img src="/static/images/tool.png">
+</center>
 
 </div>
 </body>

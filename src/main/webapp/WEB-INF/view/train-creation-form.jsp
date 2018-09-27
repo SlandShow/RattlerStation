@@ -36,7 +36,7 @@
         </form:form>
 
         <br>
-        <center>Back to <a href="#" target="blank">manager menu</center>
+        <center>Back to <a href="/managerTools" target="blank">Manager menu</a></center>
 
     </div>
 </body>
