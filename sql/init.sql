@@ -134,3 +134,32 @@ CREATE INDEX ticket_schedule_id_fk ON ticket (schedule_id);
 CREATE INDEX ticket_seat_id_fk ON ticket (seat_id);
 
 CREATE INDEX ticket_user_id_fk ON ticket (user_id);
+
+/* ====Graph system model mapping==== */
+
+/* Branch table */
+CREATE TABLE IF NOT EXISTS branch (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NULL
+)
+  ENGINE=InnoDB;
+
+
+/* Edge table */
+CREATE TABLE IF NOT EXISTS edge (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  station_start_id INT NOT NULL,
+  station_end_id INT NOT NULL,
+  range_distance INT NULL,
+  branch_id INT NOT NULL,
+  CONSTRAINT edge_station_start_id FOREIGN KEY (station_start_id) REFERENCES station (id),
+  CONSTRAINT edge_station_end_id FOREIGN KEY (station_end_id) REFERENCES station (id),
+  CONSTRAINT edge_branch_id FOREIGN KEY (branch_id) REFERENCES branch (id)
+)
+  ENGINE=InnoDB;
+
+CREATE INDEX edge_station_start_id ON edge (station_start_id);
+
+CREATE INDEX edge_station_end_id ON edge (station_end_id);
+
+CREATE INDEX edge_branch_id ON edge (branch_id);
