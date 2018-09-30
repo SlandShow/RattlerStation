@@ -135,7 +135,7 @@ CREATE INDEX ticket_seat_id_fk ON ticket (seat_id);
 
 CREATE INDEX ticket_user_id_fk ON ticket (user_id);
 
-/* ====Graph system model mapping==== */
+/* ====Edge system model mapping==== */
 
 /* Branch table */
 CREATE TABLE IF NOT EXISTS branch (
@@ -152,14 +152,14 @@ CREATE TABLE IF NOT EXISTS edge (
   station_end_id INT NOT NULL,
   range_distance INT NULL,
   branch_id INT NOT NULL,
-  CONSTRAINT edge_station_start_id FOREIGN KEY (station_start_id) REFERENCES station (id),
-  CONSTRAINT edge_station_end_id FOREIGN KEY (station_end_id) REFERENCES station (id),
-  CONSTRAINT edge_branch_id FOREIGN KEY (branch_id) REFERENCES branch (id)
+  CONSTRAINT edge_station_start_id_fk FOREIGN KEY (station_start_id) REFERENCES station (id),
+  CONSTRAINT edge_station_end_id_fk FOREIGN KEY (station_end_id) REFERENCES station (id),
+  CONSTRAINT edge_branch_id_fk FOREIGN KEY (branch_id) REFERENCES branch (id)
 )
   ENGINE=InnoDB;
 
-CREATE INDEX edge_station_start_id ON edge (station_start_id);
+CREATE INDEX edge_station_start_id_fk ON edge (station_start_id);
 
-CREATE INDEX edge_station_end_id ON edge (station_end_id);
+CREATE INDEX edge_station_end_id_fk ON edge (station_end_id);
 
-CREATE INDEX edge_branch_id ON edge (branch_id);
+CREATE INDEX edge_branch_id_fk ON edge (branch_id);

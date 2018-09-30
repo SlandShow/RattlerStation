@@ -45,8 +45,8 @@ INSERT INTO state (id, type) VALUES
 
 /* Insert data to Train table */
 INSERT INTO train (id, name, state_id, carriages) VALUES
-  (1, 'Spb trains #1', 3, 2),
-  (2, 'Vsevolgsk trains', 3, 3),
+  (1, 'Spb trains #1', 3, 1),
+  (2, 'Vsevolgsk trains', 3, 1),
   (3, 'Aqua', 3, 2),
   (4, 'Mars', 3, 2),
   (5, 'Venera', 3, 2);
@@ -168,6 +168,51 @@ INSERT INTO station (id, name, latitude, longitude, state_id) VALUES
   (29, 'Toksovo', 	60.15323, 30.51646, 3),
   (30, 'Kavgolovo', 		60.1818, 30.42622, 3),
   (31, 'Oselki', 		60.248543, 30.451685, 3);
+
+/* Insert into Branch table */
+INSERT INTO branch (id, name) VALUES (1, 'Branch #1');
+INSERT INTO branch (id, name) VALUES (2, 'Branch #2');
+INSERT INTO branch (id, name) VALUES (3, 'Branch #3');
+
+/* Insert into Edge table (mapping graph model) */
+INSERT INTO edge (id, station_start_id, station_end_id, branch_id, range_distance) VALUES
+  /* Root */
+  (1, 1, 2, 1, 10),
+  (2, 1, 14, 2, 10.9),
+  (3, 1, 22, 3, 7.5),
+
+  /* Branch #1 */
+  (4, 2, 3, 1, 3.5),
+  (5, 3, 4, 1, 5.4),
+  (6, 4, 5, 1, 4.4),
+  (7, 5, 6, 1, 6.5),
+  (8, 6, 7, 1, 8.7),
+  (9, 7, 8, 1, 8.9),
+  (10, 8, 9, 1, 3.5),
+  (11, 9, 10, 1, 2.7),
+  (12, 10, 11, 1, 2.6),
+  (13, 11, 12, 1, 3.1),
+  (14, 12, 13, 1, 1.4),
+
+  /* Branch #2 */
+  (16, 14, 15, 2, 2.5),
+  (17, 15, 16, 2, 1),
+  (18, 16, 17, 2, 6.5),
+  (19, 17, 18, 2, 7.6),
+  (20, 18, 19, 2, 7),
+  (21, 19, 20, 2, 2.2),
+  (22, 20, 21, 2, 9),
+
+  /* Branch #3 */
+  (25, 22, 23, 3, 3.2),
+  (26, 23, 24, 3, 5.7),
+  (27, 24, 25, 3, 0.6),
+  (28, 25, 26, 3, 5.7),
+  (29, 26, 27, 3, 7.7),
+  (30, 27, 28, 3, 2),
+  (31, 28, 29, 3, 5.1),
+  (32, 29, 30, 3, 9.4),
+  (33, 30, 31, 3, 9.1);
 
 /* Insert into Schedule table */
 INSERT INTO schedule (id, date_departure, date_arrival, station_departure_id, station_arrival_id, train_id) VALUES
