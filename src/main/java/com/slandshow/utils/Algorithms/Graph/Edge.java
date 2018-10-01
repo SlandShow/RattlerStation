@@ -4,9 +4,9 @@ public class Edge<V> {
 
     private V vertex;
 
-    private int weight;
+    private double weight;
 
-    public Edge(V vert, int w) {
+    public Edge(V vert, double w) {
         vertex = vert;
         weight = w;
     }
@@ -19,11 +19,11 @@ public class Edge<V> {
         this.vertex = vertex;
     }
 
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 
