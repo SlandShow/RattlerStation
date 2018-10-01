@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "edge")
-public class Edge {
+public class MappingEdge {
 
     @Id
     @Column(name = "id")
@@ -20,13 +20,13 @@ public class Edge {
     private Station stationEnd;
 
     @Column(name = "range_distance")
-    private Integer rangeDistance;
+    private Double rangeDistance;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "branch_id", referencedColumnName = "id")
     private Branch branch;
 
-    public Edge() {
+    public MappingEdge() {
     }
 
     // Setters
@@ -43,7 +43,7 @@ public class Edge {
         this.stationEnd = stationEnd;
     }
 
-    public void setRangeDistance(Integer rangeDistance) {
+    public void setRangeDistance(Double rangeDistance) {
         this.rangeDistance = rangeDistance;
     }
 
@@ -65,7 +65,7 @@ public class Edge {
         return stationEnd;
     }
 
-    public Integer getRangeDistance() {
+    public Double getRangeDistance() {
         return rangeDistance;
     }
 
