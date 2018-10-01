@@ -21,6 +21,11 @@ public class Graph<V> {
         vertexList = new ArrayList<V>();
     }
 
+    // Default bean creation - undirectional graph
+    public Graph() {
+        directed = false;
+    }
+
     public void add(V vertex, ArrayList<Edge<V>> connectedVertices) {
         // Add the new vertex to the adjacencyList with it's list of connected
         // nodes
@@ -34,7 +39,7 @@ public class Graph<V> {
             ArrayList<Edge<V>> correspondingConnectedList = adjacencyList
                     .get(vertexConnectedToAddedVertex.getVertex());
             // The added vertex's connections might not be represented in
-            // the Graph yet, so we implicitly add them
+            // the MappingEdge yet, so we implicitly add them
             if (correspondingConnectedList == null) {
                 adjacencyList.put(vertexConnectedToAddedVertex.getVertex(),
                         new ArrayList<Edge<V>>());
@@ -46,14 +51,14 @@ public class Graph<V> {
             if (!directed) {
                 // The weight from one vertex back to another in an undirected
                 // graph is equal
-                int weight = vertexConnectedToAddedVertex.getWeight();
+                double weight = vertexConnectedToAddedVertex.getWeight();
                 correspondingConnectedList.add(new Edge<V>(vertex, weight));
             }
         }
 
     }
 
-    public boolean addArc(V source, V end, int weight) {
+    public boolean addArc(V source, V end, double weight) {
         if (!directed) {
             return false;
         }
@@ -75,7 +80,7 @@ public class Graph<V> {
         return true;
     }
 
-    public boolean addEdge(V vertexOne, V vertexTwo, int weight) {
+    public boolean addEdge(V vertexOne, V vertexTwo, double weight) {
         if (directed) {
             return false;
         }
