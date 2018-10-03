@@ -110,7 +110,9 @@ public class ScheduleDAOImpl<E extends Schedule> extends GenericDAOImpl<E> imple
 
     public List<Schedule> getByTrain(Train train) {
         return sessionFactory.getCurrentSession()
-                .createQuery("from Schedule where train = :train ")
+                .createQuery(
+                        "from Schedule where train = :train order by dateDeparture desc "
+                )
                 .setParameter("train", train)
                 .getResultList();
     }
