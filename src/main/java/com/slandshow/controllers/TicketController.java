@@ -38,6 +38,9 @@ public class TicketController {
     @Autowired
     private TrainService trainService;
 
+    @Autowired
+    private GraphService graphService;
+
     @GetMapping("/buyTicket")
     public String buyTicket(Model model) {
         model.addAttribute("schedule", new ScheduleDTO());
@@ -55,6 +58,10 @@ public class TicketController {
                 + schedule.getDateDeparture() + ", "
                 + schedule.getDateArrival()
         );
+
+        graphService.buildGraph();
+        LOGGER.info("PATH IS " + graphService.searchEdges(schedule.getStationDepartureName().intern(),
+                schedule.getStationArrivalName().intern()));
 
 
         try {
