@@ -37,6 +37,10 @@ public interface ScheduleService {
 
     List<Schedule> getByStationsAndDate(Schedule schedule);
 
+    List<Schedule> getByStationsViaDate(Schedule schedule);
+
+    List<Schedule> getByStationsViaDates(Schedule schedule);
+
     List<Schedule> getByDateAndTrainToCheckIntersection(Schedule schedule);
 
     List<Schedule> getByTrain(Train train);

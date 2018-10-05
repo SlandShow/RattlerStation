@@ -83,7 +83,7 @@ public class TrainServiceImpl implements TrainService {
         Train train = getByName(trainDTO.getNewName());
 
         // TODO: ADD CUSTOM EXCEPTIONS
-        if (train != null)
+        if (train == null)
             throw new RuntimeException();
 
 

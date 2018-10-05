@@ -217,6 +217,16 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Transactional
+    public List<Schedule> getByStationsViaDate(Schedule schedule) {
+        return scheduleDAO.getByStationsViaDate(schedule);
+    }
+
+    @Transactional
+    public List<Schedule> getByStationsViaDates(Schedule schedule) {
+        return scheduleDAO.getByStationsAndDates(schedule);
+    }
+
+    @Transactional
     public List<Schedule> getByDateAndTrainToCheckIntersection(Schedule schedule) {
         return scheduleDAO.getByDateAndTrainToCheckIntersection(schedule);
     }
