@@ -60,8 +60,21 @@ public class TicketController {
         );
 
         graphService.buildGraph();
-        LOGGER.info("PATH IS " + graphService.searchEdges(schedule.getStationDepartureName().intern(),
-                schedule.getStationArrivalName().intern()));
+
+
+        try {
+            LOGGER.info("SEARCHED INFO VIA GRAPH: "
+                    + graphService.puzzleSchedules(
+                        graphService.parsePath(
+                                graphService.searchEdges(schedule.getStationDepartureName().intern(), schedule.getStationArrivalName().intern())
+                        ),
+                        schedule.getDateDeparture().intern(),
+                        schedule.getDateArrival().intern()
+                    )
+            );
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
 
         try {

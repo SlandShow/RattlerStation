@@ -5,9 +5,11 @@ import com.slandshow.DTO.TrainDTO;
 import com.slandshow.exceptions.ScheduleCreationException;
 import com.slandshow.models.Schedule;
 import com.slandshow.models.Station;
+import com.slandshow.service.GraphService;
 import com.slandshow.service.ScheduleService;
 import com.slandshow.service.StationService;
 import com.slandshow.service.TrainService;
+import com.slandshow.utils.Algorithms.Graph.Graph;
 import com.slandshow.utils.JspFormNames;
 import com.slandshow.utils.UtilsManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +42,6 @@ public class ScheduleController {
 
     @Autowired
     private TrainService trainService;
-
 
     @GetMapping("/scheduleList")
     public String getSchedule(Model model) {
