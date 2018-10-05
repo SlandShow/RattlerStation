@@ -107,4 +107,21 @@ public class Schedule {
                 stationArrival.getName() + ", train: " +
                 train.getName() + " )";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+
+        if (!(obj instanceof Schedule))
+            return false;
+
+        Schedule another = (Schedule) obj;
+
+            if (train.equals(another.train))
+                return true;
+
+
+        return false;
+    }
 }
