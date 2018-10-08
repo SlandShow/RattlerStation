@@ -7,7 +7,7 @@ Stack (current):
   3. JSP
   4. MySQL
   5. Maven
-  
+  6. RabbitMQ broker
 
 `TODO List:`
 
@@ -55,4 +55,5 @@ My developer dairy:
 16 (13.09.18) Fix bi-directional relation and start working with TrainController for manager case.
 17. (14.09.18 - 27.09.18) Add a lot of things and work with user-deirndly interface. Add manager, add normal booking ticket case, confirm first review.
 18. (08.10.18) Set-up WildFly server, create second application, download and setiup RabbitMQ broker. Create service to send messages from RattlerStation app to second app.
+
 19. (08.10.18) Create graph model (tables and Graph service).
