@@ -130,6 +130,20 @@
             <version>1.2.17</version>
         </dependency>
 
+        <!-- Fix dependencies -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.21</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.4</version>
+        </dependency>
+
         <!-- Joda time -->
         <dependency>
             <groupId>joda-time</groupId>
@@ -168,6 +182,24 @@
             <artifactId>modelmapper</artifactId>
             <version>2.0.0</version>
         </dependency>
+
+        <!---JMS + RABBIT MQ broker-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+            <version>4.1.5.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-rabbit</artifactId>
+            <version>1.7.5.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-amqp</artifactId>
+            <version>1.7.5.RELEASE</version>
+        </dependency>
+
 
     </dependencies>
 
