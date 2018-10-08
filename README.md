@@ -17,7 +17,7 @@ Stack (current):
 4. Make correct relations between all tables [`done`]
 5. Create Menu JSP [`done`]
 6. make sense with REST [`x`]
-7. Add a model (graph) of the train map in order to check in the future the validity of creating new schedules [`x`]
+7. Add a model (graph) of the train map in order to check in the future the validity of creating new schedules [`done`]
 8. Create DTO and mapping [`done?`]
 9. Create Controller [`done`]
 10. Create HTML based JSP, witch views all POJO's [`done`]
@@ -30,7 +30,7 @@ Stack (current):
 17. Add many station and develop train map in DB [`x`]
 18. Updgrade all cases: log in, ticket traffic, buy tickets [`done`]
 19. Add manager functionality [`done`]
-20. Create fraph mapping to graph object [`x`]
+20. Create graph mapping to graph object [`done`]
 21. Schedule validation via map and graph model [`x`]
 22. Add Google maps API [`x`]
 
@@ -54,3 +54,5 @@ My developer dairy:
 
 16 (13.09.18) Fix bi-directional relation and start working with TrainController for manager case.
 17. (14.09.18 - 27.09.18) Add a lot of things and work with user-deirndly interface. Add manager, add normal booking ticket case, confirm first review.
+18. (08.10.18) Set-up WildFly server, create second application, download and setiup RabbitMQ broker. Create service to send messages from RattlerStation app to second app.
+19. (08.10.18) Create graph model (tables and Graph service).
