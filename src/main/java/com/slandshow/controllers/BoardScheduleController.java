@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
@@ -46,8 +47,17 @@ public class BoardScheduleController {
     @GetMapping("/api/board/stations")
     public ResponseEntity<?> getStationList() {
         List<StationDTO> stations = stationService.getAll();
+
         LOGGER.info("RETRIEVED " + stations.size() + " RECORDS");
         return ResponseEntity.ok(stations);
+    }
+
+    @GetMapping("/api/board/schedule/{id}")
+    public ResponseEntity<?> getScheduleById(@PathVariable Long id) {
+        ScheduleDTO schedule = scheduleService.getByIdScheduleDTO(id);
+
+        LOGGER.info("RETRIEVED " + schedule + " SCHEDULER");
+        return ResponseEntity.ok(schedule);
     }
 
 }
