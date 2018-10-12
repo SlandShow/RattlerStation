@@ -49,6 +49,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Autowired
     private DistanceAndPriceUtilsService distanceService;
 
+    @Autowired
+    private MessageQueueService messageQueueService;
+
 
     /**
      *
@@ -98,10 +101,12 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new ScheduleCreationException(ExceptionsInfo.TRAIN_INTERSECTION);
         }
 
+        /*
         if (UtilsManager.checkCurrentDay(dateDeparture)) {
             LOGGER.info(ExceptionsInfo.SCHEDULE_CURRENT_DAY_CREATION);
             throw new ScheduleCreationException(ExceptionsInfo.SCHEDULE_CURRENT_DAY_CREATION);
         }
+        */
 
         State state = stateDAO.getByType("VALID");
         schedule.getStationDeparture().setState(state);
@@ -110,7 +115,15 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         scheduleDAO.add(schedule);
         //auditService.createScheduleAuditInfo(schedule);
-        //messageQueueService.produceMsg("create id=" + schedule.getId());
+        try {
+            messageQueueService.produceMsg("create id=" + schedule.getId());
+        } catch (IOException e) {
+            LOGGER.error("CANNOT PRODUCE MESSAGE TO RATTLER STATION BOARD APP [ADDING NEW SCHEDULE]");
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            LOGGER.error("TIME OF SENDING MESSAGE GONE...");
+            e.printStackTrace();
+        }
         LOGGER.info("SCHEDULE WAS CREATED!");
     }
 
@@ -124,6 +137,12 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
 
         scheduleDAO.delete(schedule);
+        try {
+            messageQueueService.produceMsg("delete id=" + schedule.getId());
+        } catch (IOException e) {
+            LOGGER.error("CANNOT PRODUCE MESSAGE TO RATTLER STATION BOARD APP [DELETE SCHEDULE]");
+            e.printStackTrace();
+        }
     }
 
     @Transactional
@@ -167,7 +186,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         scheduleDAO.update(schedule);
         //auditService.updateScheduleAuditInfo(scheduleOld, schedule);
-        //messageQueueService.produceMsg("update id=" + schedule.getId());
+        messageQueueService.produceMsg("update id=" + schedule.getId());
     }
 
     @Transactional
@@ -427,7 +446,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Transactional
     public ScheduleDTO getByIdScheduleDTO(Long id) {
-        return null;
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(getById(id), ScheduleDTO.class);
     }
 
     public List<ScheduleDTO> mapping(List<Schedule> schedules) {
