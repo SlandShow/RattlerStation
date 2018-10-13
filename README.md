@@ -1,7 +1,7 @@
 # RattlerStation
 Web-service application
 
-Stack (current): 
+### Stack (current): 
   1. Spring 5
   2. Hibernate
   3. JSP
@@ -12,7 +12,7 @@ Stack (current):
 ## Info ☕
 🚉 [RattlerStation Board](https://github.com/SlandShow/RattlerStationBoard "RattlerStation Board") → show schedulers for today, dynamic update schedulers via `AJAX`.
 
-## Delepoment 🛠️
+## Dev 🛠️
 ### ☑ TODO List:
 
 1. Create use case Diagram [`done`]
