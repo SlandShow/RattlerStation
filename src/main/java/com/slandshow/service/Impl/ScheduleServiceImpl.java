@@ -212,7 +212,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Transactional
     public Schedule getById(Long id) {
-        return (Schedule) scheduleDAO.getById(id);
+        Schedule schedule = (Schedule) scheduleDAO.getById(id);
+        LOGGER.info("SELECTED BY ID = " + id + " SCHEDULE IS " + schedule);
+        return schedule;
     }
 
     @Transactional
@@ -447,7 +449,12 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     public ScheduleDTO getByIdScheduleDTO(Long id) {
         ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(getById(id), ScheduleDTO.class);
+        ScheduleDTO schedule = modelMapper.map(getById(id), ScheduleDTO.class);
+
+        // TODO: ADD PRICE CALCULATIONS
+        schedule.setPrice(0);
+
+        return schedule;
     }
 
     public List<ScheduleDTO> mapping(List<Schedule> schedules) {
