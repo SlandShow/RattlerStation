@@ -9,32 +9,37 @@ Stack (current):
   5. Maven
   6. RabbitMQ broker
 
-`TODO List:`
+## Info ☕
+🚉 [RattlerStation Board](https://github.com/SlandShow/RattlerStationBoard "RattlerStation Board") → show schedulers for today, dynamic update schedulers via `AJAX`.
+
+## Delepoment 🛠️
+### ☑ TODO List:
 
 1. Create use case Diagram [`done`]
 2. Create SIMPLE databases: Station, Train, Passenger, Ticket [`done`]
 3. Create POJO Entity [`done`]
 4. Make correct relations between all tables [`done`]
 5. Create Menu JSP [`done`]
-6. make sense with REST [`x`]
+6. Make sense with REST [`done`]
 7. Add a model (graph) of the train map in order to check in the future the validity of creating new schedules [`done`]
-8. Create DTO and mapping [`done?`]
+8. Create DTO and mapping [`done`]
 9. Create Controller [`done`]
 10. Create HTML based JSP, witch views all POJO's [`done`]
 11. Add Spring security [`done`]
 12. User registration [`x`]
 13. Fix form data selection in DAO and controller [`done`]
-14. Clean up code in Spring Security config & service classes [`x`]
+14. Clean up code in Spring Security config & service classes [`done`]
 15. Add `buy ticket` case [`done`]
 16. Develop real schedules [`done`]
-17. Add many station and develop train map in DB [`x`]
+17. Add many station and develop train map in DB [`in procces`]
 18. Updgrade all cases: log in, ticket traffic, buy tickets [`done`]
 19. Add manager functionality [`done`]
 20. Create graph mapping to graph object [`done`]
 21. Schedule validation via map and graph model [`x`]
 22. Add Google maps API [`x`]
+23. Add price calculation [`x`].
 
-My developer dairy:
+### 📘 My developer dairy:
 
 1. (26.08.18) Set up project, add all dependencies, config `web.xml`, app context (`dispatcherServlet`), create simple controller and write HTML bassed JSP.
 2. (27.08.18) Update project name, fix some things.   
@@ -57,3 +62,4 @@ My developer dairy:
 18. (08.10.18) Set-up WildFly server, create second application, download and setiup RabbitMQ broker. Create service to send messages from RattlerStation app to second app.
 
 19. (08.10.18) Create graph model (tables and Graph service).
+20. (13.10.18) Add REST-controller, create second app, make sense with AJAX. Get today schedule from first app to second.
