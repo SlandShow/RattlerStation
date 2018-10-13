@@ -1,4 +1,4 @@
-# RattlerStation
+# 🚄 RattlerStation 🚄
 Web-service application
 
 ### Stack (current): 
@@ -38,6 +38,7 @@ Web-service application
 21. Schedule validation via map and graph model [`x`]
 22. Add Google maps API [`x`]
 23. Add price calculation [`x`].
+24. Ann Unit-test's and Sonar [`x`].
 
 ### 📘 My developer dairy:
 
