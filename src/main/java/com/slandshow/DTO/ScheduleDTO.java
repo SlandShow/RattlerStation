@@ -81,4 +81,19 @@ public class ScheduleDTO implements Serializable {
     public String getTrainName() {
         return trainName;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ScheduleDTO that = (ScheduleDTO) o;
+
+        return ((ScheduleDTO) o).trainName.equals(this.getTrainName());
+    }
+
+    @Override
+    public int hashCode() {
+        return trainName.hashCode();
+    }
 }
