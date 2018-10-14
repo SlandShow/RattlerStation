@@ -12,10 +12,12 @@ import com.slandshow.utils.Algorithms.GraphExecuter;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
 
 import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -24,8 +26,8 @@ import java.util.stream.Collectors;
 @Service
 public class GraphServiceImpl implements GraphService {
 
+    public static boolean GRAPH_IS_BUILDED = false;
     private static final Graph<String> GRAPH_MODEL = new Graph<String>(false);
-
     private static final Logger LOGGER = Logger.getLogger(GraphServiceImpl.class);
 
     @Autowired
@@ -53,6 +55,10 @@ public class GraphServiceImpl implements GraphService {
 
     @Transactional
     public void buildGraph() {
+
+        if (GRAPH_IS_BUILDED)
+            return;
+
         List<MappingEdge> allEdges = mappingGraphDAO.getAllEdges();
 
         for (MappingEdge currentEdge: allEdges) {
@@ -70,6 +76,8 @@ public class GraphServiceImpl implements GraphService {
         }
 
         LOGGER.info("BUILD GRAPH: \n" + GRAPH_MODEL.toString());
+
+        GRAPH_IS_BUILDED = true;
     }
 
     public void deleteEdge(EdgeDTO edgeDTO) {
@@ -103,6 +111,57 @@ public class GraphServiceImpl implements GraphService {
         return validPath;
     }
 
+    private List<Schedule> deleteUnique(List<Schedule> list) {
+        List<Schedule> validList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            Schedule iterated = list.get(i);
+            for (int j = 0; j < list.size(); j++) {
+                if (i != j) {
+                    if (iterated.getTrain().getName().intern().equals(list.get(j).getTrain().getName().intern()))
+                        validList.add(iterated);
+                }
+            }
+        }
+
+        return validList;
+    }
+
+    public Map<ScheduleDTO, List<Schedule>> filter(List<Schedule> list) {
+        Map<ScheduleDTO, List<Schedule>> filtered = new HashMap<>();
+
+        for (int i = 0; i < list.size(); i++) {
+            ScheduleDTO scheduleDTO = new ScheduleDTO();
+            scheduleDTO.setTrainName(
+                    list.get(i).getTrain().getName()
+            );
+
+            scheduleDTO.setStationDepartureName(
+                    list.get(i).getStationDeparture().getName()
+            );
+
+            scheduleDTO.setStationArrivalName(
+                    list.get(i).getStationArrival().getName()
+            );
+
+            scheduleDTO.setDateDeparture(
+                    list.get(i).getDateDeparture().toGMTString()
+            );
+
+            scheduleDTO.setDateArrival(
+                    list.get(i).getDateArrival().toGMTString()
+            );
+
+            if (!filtered.containsKey(scheduleDTO))
+                filtered.put(scheduleDTO, new ArrayList<>());
+
+            if (filtered.containsKey(scheduleDTO))
+                filtered.get(scheduleDTO).add(list.get(i));
+        }
+
+        return filtered;
+    }
+
+
     public List<Schedule> puzzleSchedules(String[] path, String dateDeparture, String dateArrival) throws ParseException {
         List<Schedule> puzzled = new ArrayList<>();
 
@@ -126,9 +185,7 @@ public class GraphServiceImpl implements GraphService {
             }
         }
 
-        //filterPuzzledSchedule(puzzled);
-
-        return puzzled;
+        return deleteUnique(puzzled);
     }
 
     public List<List<Schedule>> getValidPazzledSchedulers(List<Schedule> schedules) {

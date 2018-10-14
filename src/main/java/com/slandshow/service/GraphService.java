@@ -1,12 +1,14 @@
 package com.slandshow.service;
 
 import com.slandshow.DTO.EdgeDTO;
+import com.slandshow.DTO.ScheduleDTO;
 import com.slandshow.models.MappingEdge;
 import com.slandshow.models.Schedule;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public interface GraphService {
@@ -26,4 +28,6 @@ public interface GraphService {
     List<Schedule> puzzleSchedules(String[] path, String dateDeparture, String dateArrival) throws ParseException;
 
     List<List<Schedule>> getValidPazzledSchedulers(List<Schedule> schedules);
+
+    Map<ScheduleDTO, List<Schedule>> filter(List<Schedule> list);
 }
