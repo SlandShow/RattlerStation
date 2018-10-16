@@ -101,10 +101,10 @@ public class User {
 
     @Override
     public String toString() {
-        return "User ( id = " + id
+        return "User(id = " + id
                 + " first name = " + firstName
                 + " last name = " + lastName
                 + " login = " + login
-                + " )";
+                + ")";
     }
 }

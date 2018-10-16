@@ -100,10 +100,10 @@ public class Schedule {
 
     @Override
     public String toString() {
-        return "Schedule ( id: " + id + ", dateDeparture: " +
-                dateDeparture.toString() + ", dateArrival: " +
-                dateArrival.toString() + ", stationDeparture: " +
-                stationDeparture.getName() + ", stationArrival: " +
+        return "Schedule ( id: " + id + " " +
+                dateDeparture.toString() + " → " +
+                dateArrival.toString() + " " +
+                stationDeparture.getName() + " → " +
                 stationArrival.getName() + ", train: " +
                 train.getName() + " )";
     }

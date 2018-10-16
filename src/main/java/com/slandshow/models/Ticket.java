@@ -83,12 +83,13 @@ public class Ticket {
 
     @Override
     public String toString() {
-        return "Ticket ( id: "
+        return "Ticket(id: "
                 + id
-                + " schedule: < "
-                + schedule + " > user: < "
-                + user + " > seat : < "
-                + seat + " > price: " + price
-                + " )";
+                + " schedule: <"
+                + schedule.getId() + "> user: < "
+                + user.getFirstName()
+                + user.getLastName()
+                + " > price: " + price
+                + ")";
     }
 }

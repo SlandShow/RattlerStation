@@ -96,6 +96,6 @@ public class Station {
 
     @Override
     public String toString() {
-        return "Station ( id: " + id + ", name: " + name +  " latitude: " + latitude + " longitude: " + longitude + " )";
+        return "Station(id: " + id + ", name: " + name +  " latitude: " + latitude + " longitude: " + longitude + ")";
     }
 }
