@@ -144,11 +144,11 @@ public class GraphServiceImpl implements GraphService {
             );
 
             scheduleDTO.setDateDeparture(
-                    list.get(i).getDateDeparture().toGMTString()
+                    list.get(i).getDateDeparture().toString()
             );
 
             scheduleDTO.setDateArrival(
-                    list.get(i).getDateArrival().toGMTString()
+                    list.get(i).getDateArrival().toString()
             );
 
             if (!filtered.containsKey(scheduleDTO))
@@ -159,6 +159,39 @@ public class GraphServiceImpl implements GraphService {
         }
 
         return filtered;
+    }
+
+    public List<ScheduleDTO> parsedListFromMap(Map<ScheduleDTO, List<Schedule>> filtered) {
+        List<ScheduleDTO> parsed = new ArrayList<>();
+
+        for (Map.Entry<ScheduleDTO, List<Schedule>> entry : filtered.entrySet()) {
+            ScheduleDTO iterated = new ScheduleDTO();
+            iterated.setStationDepartureName(
+                    filtered.get(entry.getKey()).get(0).getStationDeparture().getName()
+            );
+
+            iterated.setStationArrivalName(
+                    filtered.get(entry.getKey())
+                            .get(filtered.get(entry.getKey()).size() - 1)
+                            .getStationArrival().getName()
+            );
+
+            iterated.setDateDeparture(
+              filtered.get(entry.getKey()).get(0).getDateDeparture().toString()
+            );
+
+            iterated.setDateArrival(
+                    filtered.get(entry.getKey())
+                            .get(filtered.get(entry.getKey()).size() - 1)
+                            .getDateArrival().toString()
+            );
+
+            iterated.setTrainName(entry.getKey().getTrainName());
+
+            parsed.add(iterated);
+        }
+
+        return parsed;
     }
 
 
@@ -188,14 +221,6 @@ public class GraphServiceImpl implements GraphService {
         return deleteUnique(puzzled);
     }
 
-    public List<List<Schedule>> getValidPazzledSchedulers(List<Schedule> schedules) {
-        List<List<Schedule>> puzzled = new ArrayList<>();
-
-        for (Schedule iterator: schedules) {
-
-        }
-        return null;
-    }
 
     public void filterPuzzledSchedule(List<Schedule> schedules) {
         schedules = schedules.stream()
