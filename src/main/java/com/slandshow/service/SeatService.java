@@ -1,5 +1,6 @@
 package com.slandshow.service;
 
+import com.slandshow.DTO.SeatDTO;
 import com.slandshow.models.Seat;
 import com.slandshow.models.Train;
 import org.springframework.stereotype.Service;
@@ -19,4 +20,6 @@ public interface SeatService {
     Seat getById(Long id);
 
     Seat getByTrainAndCarriageAndSeat(Train train, Integer carriage, Integer seat);
+
+    List<List<SeatDTO>> createSeatsMatrix(int row, int col);
 }
