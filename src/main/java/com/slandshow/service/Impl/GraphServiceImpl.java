@@ -218,6 +218,10 @@ public class GraphServiceImpl implements GraphService {
             }
         }
 
+        // For special situation
+        if (puzzled.size() == 1)
+            return puzzled;
+
         return deleteUnique(puzzled);
     }
 
