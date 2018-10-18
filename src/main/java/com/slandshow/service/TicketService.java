@@ -1,7 +1,6 @@
 package com.slandshow.service;
 
-import com.slandshow.DTO.TicketDTO;
-import com.slandshow.DTO.TicketInfoDTO;
+import com.slandshow.DTO.*;
 import com.slandshow.exceptions.BookingTicketException;
 import com.slandshow.exceptions.BusinessLogicException;
 import com.slandshow.models.Schedule;
@@ -47,4 +46,13 @@ public interface TicketService {
     List<Ticket> getByDate(Date date);
 
     List<Ticket> getByDates(Date dateFrom, Date dateTo);
+
+    List<List<SeatDTO>> getSeatsMatrix(int row, int col);
+
+    List<TicketDTO> getPuzzledTickets(List<Schedule> puzzledSchedulers, int seat, int carriage);
+
+    BookingTicketInfoDTO getBookingStatusInfo(int seat, int carriage, UserDTO userDTO);
+
+    BookingTicketInfoDTO getBookingStatusInfo(List<TicketDTO> ticketDTOS, UserDTO userDTO);
+
 }

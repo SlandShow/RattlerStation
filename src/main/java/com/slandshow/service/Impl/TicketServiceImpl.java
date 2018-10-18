@@ -1,8 +1,7 @@
 package com.slandshow.service.Impl;
 
 import com.slandshow.DAO.TicketDAO;
-import com.slandshow.DTO.TicketDTO;
-import com.slandshow.DTO.TicketInfoDTO;
+import com.slandshow.DTO.*;
 import com.slandshow.exceptions.BookingTicketException;
 import com.slandshow.exceptions.BusinessLogicException;
 import com.slandshow.exceptions.ExceptionsInfo;
@@ -202,5 +201,90 @@ public class TicketServiceImpl implements TicketService {
     @Transactional
     public List<Ticket> getByDates(Date dateFrom, Date dateTo) {
         return ticketDAO.getByDates(dateFrom, dateTo);
+    }
+
+    public List<List<SeatDTO>> getSeatsMatrix(int row, int col) {
+        return seatService.createSeatsMatrix(row, col);
+    }
+
+    public List<TicketDTO> getPuzzledTickets(List<Schedule> puzzledSchedulers, int seat, int carriage) {
+
+        // Create puzzled tickets for puzzled schedulers
+        List<TicketDTO> ticketDTOS = new ArrayList<>();
+
+        for (int i = 0; i < puzzledSchedulers.size(); i++) {
+            TicketDTO ticketDTO = new TicketDTO();
+            ticketDTO.setScheduleId(puzzledSchedulers.get(i).getId());
+
+            SeatDTO seatDTO = new SeatDTO();
+            seatDTO.setSeat(seat);
+            seatDTO.setCarriage(carriage);
+            ticketDTO.setSeatDTO(seatDTO);
+
+            ticketDTOS.add(ticketDTO);
+        }
+
+        return ticketDTOS;
+    }
+
+    public BookingTicketInfoDTO getBookingStatusInfo(int seat, int carriage, UserDTO userDTO) {
+
+        // Booking result information DTO creation
+        BookingTicketInfoDTO ticketInfoDTO = new BookingTicketInfoDTO();
+        ticketInfoDTO.setSeatNumber(seat);
+        ticketInfoDTO.setCarriageNumber(carriage);
+
+        ticketInfoDTO.setUser(
+                userDTO.getFirstName() + " "
+                        + userDTO.getLastName() + " ("
+                        + userDTO.getLogin() + ")"
+        );
+
+        return ticketInfoDTO;
+    }
+
+    public BookingTicketInfoDTO getBookingStatusInfo(List<TicketDTO> ticketDTOS, UserDTO userDTO) {
+
+        BookingTicketInfoDTO ticketInfoDTO = new BookingTicketInfoDTO();
+        ticketInfoDTO.setSeatNumber(
+                ticketDTOS.get(0).getSeatDTO().getSeat()
+        );
+
+        ticketInfoDTO.setCarriageNumber(
+                ticketDTOS.get(0).getSeatDTO().getCarriage()
+        );
+
+        ticketInfoDTO.setStationDepartureName(
+                scheduleService.getById(
+                        ticketDTOS.get(0).getScheduleId()
+                ).getStationDeparture().getName()
+        );
+
+        ticketInfoDTO.setStationArrivalName(
+                scheduleService.getById(
+                        ticketDTOS.get(ticketDTOS.size() - 1).getScheduleId()
+                ).getStationArrival().getName()
+        );
+
+        ticketInfoDTO.setDateDeparture(
+                scheduleService.getById(
+                        ticketDTOS.get(0).getScheduleId()
+                ).getDateDeparture()
+        );
+
+        ticketInfoDTO.setDateArrival(
+                scheduleService.getById(
+                       ticketDTOS.get(ticketDTOS.size() - 1).getScheduleId()
+                ).getDateArrival()
+        );
+
+        ticketInfoDTO.setUser(
+                userDTO.getFirstName() + " "
+                        + userDTO.getLastName() + " ("
+                        + userDTO.getLogin() + ")"
+        );
+
+
+        return ticketInfoDTO;
     }
 }
