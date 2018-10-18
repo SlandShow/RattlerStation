@@ -26,7 +26,7 @@
                 <tr>
                     <c:forEach var="cell" items="${row}">
                         <td>
-                            <a href="/tickets/confirmBooking?seat=${cell.seat}&carriage=${cell.carriage}&scheduleId=${selectedSchedule.id}">
+                            <a href="/tickets/confirmBooking?seat=${cell.seat}&carriage=${cell.carriage}">
                                 <c:out value="${cell.seat}"/>
                             </a>
                         </td>

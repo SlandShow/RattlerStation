@@ -38,13 +38,13 @@
         </tr>
 
         <!-- Loop over and print stations  -->
-        <c:forEach var="tmpSchedule" items="${schedules}">
+        <c:forEach var="iterated" items="${schedules}">
             <tr>
-                <td>${tmpSchedule.stationDeparture.name} → ${tmpSchedule.stationArrival.name}</td>
-                <td><small>${tmpSchedule.dateDeparture.toGMTString()}</small></td>
-                <td><small>${tmpSchedule.dateArrival.toGMTString()}</small></td>
-                <td>${tmpSchedule.train.name}</td>
-                <td><a href="/tickets/viewTicketsTrainInfo?id=${tmpSchedule.id}">Buy</a> </td>
+                <td>${iterated.stationDepartureName} → ${iterated.stationArrivalName}</td>
+                <td><small>${iterated.dateDeparture.substring(0, 19)}</small></td>
+                <td><small>${iterated.dateArrival.substring(0, 19)}</small></td>
+                <td>${iterated.trainName}</td>
+                <td><a href="/tickets/viewTicketsTrainInfo?train=${iterated.trainName}&start=${iterated.stationDepartureName}&end=${iterated.stationArrivalName}">Buy</a> </td>
             </tr>
         </c:forEach>
 
