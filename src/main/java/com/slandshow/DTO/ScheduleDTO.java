@@ -22,6 +22,10 @@ public class ScheduleDTO implements Serializable {
     public ScheduleDTO() {
     }
 
+    public ScheduleDTO(String trainName) {
+        this.trainName = trainName;
+    }
+
     // Setters
 
     public void setId(Long id) {
