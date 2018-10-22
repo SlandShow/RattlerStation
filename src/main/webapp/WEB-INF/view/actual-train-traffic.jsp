@@ -83,7 +83,7 @@
 <!-- Page -->
 <div class="container-fluid">
 
-    <legend>RattlerStation</legend>
+    <legend><h1>RattlerStation 🌐</h1></legend>
 
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
@@ -96,7 +96,6 @@
             </ul>
         </div>
     </nav>
-    <br><br>
 
     <div class="row">
         <div class="col-md-6">
@@ -287,10 +286,23 @@
             </script>
             <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDlLcHvt_VzI-31mvgHNtD_nyyTE9Qa5E&callback=initMap"></script>
 
-
         </div>
         </div>
     </div>
+
+    <br><br><br><br>
+
+<!-- Footer -->
+<footer class="page-footer font-small black">
+
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3">© 2018 Copyright:
+        <a href="/home"> JavaSchool 27 RattlerStation</a>
+    </div>
+    <!-- Copyright -->
+
+</footer>
+<!-- Footer -->
 </div>
 
 </body>
