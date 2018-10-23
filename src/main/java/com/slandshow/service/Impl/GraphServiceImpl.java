@@ -203,19 +203,31 @@ public class GraphServiceImpl implements GraphService {
             schedule.setStationDepartureName(path[i].split(" ")[0]);
             schedule.setStationArrivalName(path[i].split(" ")[1]);
             schedule.setDateDeparture(dateDeparture);
-            schedule.setDateArrival(dateArrival);
 
+            if (!dateArrival.equals("") && i == path.length - 1)
+                schedule.setDateArrival(dateArrival);
+            else schedule.setDateArrival("");
 
 
             Schedule realSchedule = scheduleService.mapping(schedule);
 
             if (realSchedule.getDateArrival() != null) {
-                List<Schedule> tmp = scheduleService.getByStationsViaDates(realSchedule);
+                List<Schedule> tmp = scheduleService.getByStationsAndDates(realSchedule);
                 puzzled.addAll(tmp);
             } else {
-                List<Schedule> tmp = scheduleService.getByStationsViaDate(realSchedule);
+                List<Schedule> tmp = scheduleService.getByStationsAndDate(realSchedule);
                 puzzled.addAll(tmp);
             }
+        }
+
+        for (int i = 0; i < puzzled.size(); i++) {
+            LOGGER.info(
+                    "BEFORE PUZZLED ---->" +
+                    puzzled.get(i).getStationDeparture().getName()
+                    + " - > " + puzzled.get(i).getStationArrival().getName()
+                    + " -- " + puzzled.get(i).getDateDeparture()
+                    + " - > " + puzzled.get(i).getDateArrival()
+            );
         }
 
         // For special situation
