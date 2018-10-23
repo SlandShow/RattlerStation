@@ -67,14 +67,13 @@ public class ScheduleDAOImpl<E extends Schedule> extends GenericDAOImpl<E> imple
                 .createQuery("from Schedule where " +
                         "stationArrival = :stationArrival and " +
                         "stationDeparture = :stationDeparture and " +
-                        "date(dateDeparture) = :date " +
+                        "time(dateDeparture) >= time(:date) and date(dateDeparture) = date(:date) " +
                         "order by dateDeparture desc ")
                 .setParameter("stationArrival", schedule.getStationArrival())
                 .setParameter("stationDeparture", schedule.getStationDeparture())
                 .setParameter("date", schedule.getDateDeparture())
                 .getResultList();
     }
-
 
     /*
      * Return list of schedule according on stations and date (departure & arrival)
@@ -87,35 +86,9 @@ public class ScheduleDAOImpl<E extends Schedule> extends GenericDAOImpl<E> imple
                 .createQuery("from Schedule where " +
                         "stationArrival = :stationArrival and " +
                         "stationDeparture = :stationDeparture and " +
-                        "dateDeparture between :dateDeparture and :dateArrival " +
-                        "order by dateDeparture desc ")
-                .setParameter("stationArrival", schedule.getStationArrival())
-                .setParameter("stationDeparture", schedule.getStationDeparture())
-                .setParameter("dateDeparture", schedule.getDateDeparture())
-                .setParameter("dateArrival", schedule.getDateArrival())
-                .getResultList();
-    }
-
-    public List<Schedule> getByStationsViaDate(Schedule schedule) {
-        return sessionFactory.getCurrentSession()
-                .createQuery("from Schedule where " +
-                        "stationArrival = :stationArrival and " +
-                        "stationDeparture = :stationDeparture and " +
-                        "dateDeparture > :dateDeparture " +
-                        "order by dateDeparture desc ")
-                .setParameter("stationArrival", schedule.getStationArrival())
-                .setParameter("stationDeparture", schedule.getStationDeparture())
-                .setParameter("dateDeparture", schedule.getDateDeparture())
-                .getResultList();
-    }
-
-    public List<Schedule> getByStationsViaDates(Schedule schedule) {
-        return sessionFactory.getCurrentSession()
-                .createQuery("from Schedule where " +
-                        "stationArrival = :stationArrival and " +
-                        "stationDeparture = :stationDeparture and " +
-                        "dateDeparture > :dateDeparture and " +
-                        "dateArrival < :dateArrival " +
+                        "date(dateDeparture) = date(:dateDeparture) and " +
+                        "date(dateArrival) = date(:dateArrival) and " +
+                        "time(dateDeparture) between time(:dateDeparture) and time(:dateArrival) " +
                         "order by dateDeparture desc ")
                 .setParameter("stationArrival", schedule.getStationArrival())
                 .setParameter("stationDeparture", schedule.getStationDeparture())

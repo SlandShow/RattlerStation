@@ -20,10 +20,6 @@ public interface ScheduleDAO<E extends Schedule> extends GenericDAO<E> {
 
     List<Schedule> getByStationsAndDates(Schedule schedule);
 
-    List<Schedule> getByStationsViaDate(Schedule schedule);
-
-    List<Schedule> getByStationsViaDates(Schedule schedule);
-
     List<Schedule> getByDateAndTrainToCheckIntersection(Schedule schedule);
 
     List<Schedule> getByTrain(Train train);
