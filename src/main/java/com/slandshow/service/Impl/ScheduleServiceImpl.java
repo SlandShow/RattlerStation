@@ -101,6 +101,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new ScheduleCreationException(ExceptionsInfo.TRAIN_INTERSECTION);
         }
 
+        // TODO: THIS FUNCTIONAL IS NOT AVAILABLE FOR SECOND PROJECT MEET-UP
         /*
         if (UtilsManager.checkCurrentDay(dateDeparture)) {
             LOGGER.info(ExceptionsInfo.SCHEDULE_CURRENT_DAY_CREATION);
@@ -235,16 +236,6 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     public List<Schedule> getByStationsAndDate(Schedule schedule) {
         return scheduleDAO.getByStationsAndDate(schedule);
-    }
-
-    @Transactional
-    public List<Schedule> getByStationsViaDate(Schedule schedule) {
-        return scheduleDAO.getByStationsViaDate(schedule);
-    }
-
-    @Transactional
-    public List<Schedule> getByStationsViaDates(Schedule schedule) {
-        return scheduleDAO.getByStationsAndDates(schedule);
     }
 
     @Transactional
@@ -485,29 +476,29 @@ public class ScheduleServiceImpl implements ScheduleService {
                         )
         );
 
-        LOGGER.info("LOAD DATA IN SCHEDULE SERVICE: " + mapped.getStationDeparture());
-
         mapped.setStationArrival(
                         stationService.getStationByName(
                                 scheduleDTO.getStationArrivalName()
                         )
         );
 
-        LOGGER.info("LOAD DATA IN SCHEDULE SERVICE: " + mapped.getStationArrival());
-
         mapped.setDateDeparture(
                 UtilsManager.parseToDateTime(scheduleDTO.getDateDeparture())
         );
 
-        LOGGER.info("LOAD DATA IN SCHEDULE SERVICE: " + mapped.getDateDeparture());
-
-        if (scheduleDTO.getDateArrival() != "") {
+        if (!(scheduleDTO.getDateArrival().equals(""))) {
             mapped.setDateArrival(
                     UtilsManager.parseToDateTime(scheduleDTO.getDateArrival())
             );
-
-            LOGGER.info("LOAD DATA IN SCHEDULE SERVICE: " + mapped.getDateArrival());
         } else mapped.setDateArrival(null);
+
+        LOGGER.info(
+                "LOAD MAPPED DTO DATA IN SCHEDULE SERVICE:\n Stations: "
+                        + mapped.getStationDeparture().getName()
+                        + " -> " + mapped.getStationArrival().getName()
+                        + " in time range " + mapped.getDateDeparture()
+                        + " -> " + mapped.getDateArrival()
+        );
 
         return mapped;
     }
