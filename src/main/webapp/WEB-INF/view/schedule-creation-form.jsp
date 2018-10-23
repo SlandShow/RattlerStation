@@ -123,15 +123,16 @@
 </div>
 
                                             <script>
+                                                // Bootstrap date-time-picker config
                                                 $('#datetimepicker1').datetimepicker({
                                                     defaultDate: new Date(),
-                                                    format: 'DD/MM/YYYY hh:mm:ss A',
+                                                    format: 'YYYY-MM-DD HH:mm:ss',
                                                     sideBySide: true
                                                 });
 
                                                 $('#datetimepicker2').datetimepicker({
-                                                    defaultDate: new Date(),
-                                                    format: 'DD/MM/YYYY hh:mm:ss A',
+                                                    defaultDate: null,
+                                                    format: 'YYYY-MM-DD HH:mm:ss',
                                                     sideBySide: true
                                                 });
                                             </script>
