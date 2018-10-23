@@ -129,7 +129,7 @@
                     </span>
                         </div>
 
-                        <input type="submit" value="Submit">
+                        <input type="submit" value="Search">
                     </form:form>
                 </div>
             </div>
@@ -142,13 +142,13 @@
                 // Bootstrap date-time-picker config
                 $('#datetimepicker1').datetimepicker({
                     defaultDate: new Date(),
-                    format: 'YYYY-MM-DD hh:mm:ss',
+                    format: 'YYYY-MM-DD HH:mm:ss',
                     sideBySide: true
                 });
 
                 $('#datetimepicker2').datetimepicker({
                 defaultDate: null,
-                    format: 'YYYY-MM-DD hh:mm:ss',
+                    format: 'YYYY-MM-DD HH:mm:ss',
                     sideBySide: true
                 });
 
