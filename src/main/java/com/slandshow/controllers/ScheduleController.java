@@ -50,78 +50,13 @@ public class ScheduleController {
 
         return JspFormNames.SCHEDULE_INPUT_FOR_STATIONS_AND_DATE_RESULT;
     }
-/*
-    @GetMapping("/scheduleByStationsAndDate")
-    public String getScheduleByStationsAndDate(Model model) {
-
-        model.addAttribute("schedule", new ScheduleDTO());
-
-        return JspFormNames.SCHEDULE_INPUT_FOR_STATIONS_AND_DATE;
-    }
-
-    // TODO: ADD JOTA TIME LATER, MAYBE DTO FOR CURRENT MAPPING
-    @RequestMapping(value = "/scheduleByStationsAndDate", method = RequestMethod.POST)
-    public String scheduleByStationsAndDatePersist(@ModelAttribute ScheduleDTO schedule, BindingResult result, Model model) {
-        Schedule reloadedSchedule = new Schedule();
-
-        LOGGER.info("LOADED DATA: " + schedule.getStationDepartureName() + " ," + schedule.getStationArrivalName());
-
-        try {
-            // Set <date time> and convert it to Data object
-            reloadedSchedule.setDateDeparture(
-                    UtilsManager.parseToDateTime(
-                          schedule.getDateDeparture()
-                    )
-            );
-
-            reloadedSchedule.setDateArrival(
-                    UtilsManager.parseToDateTime(
-                            schedule.getDateArrival()
-                    )
-            );
-
-            LOGGER.info("PARSED: " + reloadedSchedule.getDateDeparture() + ", " + reloadedSchedule.getDateArrival());
-
-        } catch (ParseException e) {
-            LOGGER.debug("Problem with parsing");
-        }
-
-        /* Set stations object relation */
-/*
-        reloadedSchedule.setStationDeparture(
-                stationService.getStationByName(schedule.getStationDepartureName())
-        );
-
-        reloadedSchedule.setStationArrival(
-                stationService.getStationByName(schedule.getStationArrivalName())
-        );
-
-
-        LOGGER.info("STATIONS: " + reloadedSchedule.getStationDeparture() + " " + reloadedSchedule.getStationArrival());
-
-        List<Schedule> schedules = scheduleService.getByStationsAndDate(reloadedSchedule);
-
-        model.addAttribute("schedules", schedules);
-
-        return JspFormNames.SCHEDULE_INPUT_FOR_STATIONS_AND_DATE_RESULT;
-    }
-
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping("/createSchedule")
     public String createSchedule(Model model) {
-        model.addAttribute("schedule", new ScheduleDTO());
+        model.addAttribute("scheduleCreation", new ScheduleDTO());
         return "schedule-creation-form";
     }
-
-
-     */
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
-@GetMapping("/createSchedule")
-public String createSchedule(Model model) {
-    model.addAttribute("scheduleCreation", new ScheduleDTO());
-    return "schedule-creation-form";
-}
 
 
 
@@ -142,18 +77,6 @@ public String createSchedule(Model model) {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PostMapping("/createSchedule")
     public String createSchedule(@ModelAttribute ScheduleDTO scheduleDTO, Model model) throws ParseException, IOException, TimeoutException {
-
-        scheduleDTO.setDateDeparture(
-                UtilsManager.parseInputeTokenToValid(
-                        scheduleDTO.getDateDeparture()
-                )
-        );
-
-        scheduleDTO.setDateArrival(
-                UtilsManager.parseInputeTokenToValid(
-                        scheduleDTO.getDateArrival()
-                )
-        );
 
         LOGGER.info("READY TO CREATE SCHEDULE: "
                 + scheduleDTO.getStationDepartureName() + " -> "
