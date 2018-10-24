@@ -135,7 +135,7 @@ CREATE INDEX ticket_seat_id_fk ON ticket (seat_id);
 
 CREATE INDEX ticket_user_id_fk ON ticket (user_id);
 
-/* ====Edge system model mapping==== */
+/* ====MappingEdge system model mapping==== */
 
 /* Branch table */
 CREATE TABLE IF NOT EXISTS branch (
@@ -145,7 +145,7 @@ CREATE TABLE IF NOT EXISTS branch (
   ENGINE=InnoDB;
 
 
-/* Edge table */
+/* MappingEdge table */
 CREATE TABLE IF NOT EXISTS edge (
   id INT AUTO_INCREMENT PRIMARY KEY,
   station_start_id INT NOT NULL,

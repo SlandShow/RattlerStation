@@ -174,7 +174,7 @@ INSERT INTO branch (id, name) VALUES (1, 'Branch #1');
 INSERT INTO branch (id, name) VALUES (2, 'Branch #2');
 INSERT INTO branch (id, name) VALUES (3, 'Branch #3');
 
-/* Insert into Edge table (mapping graph model) */
+/* Insert into MappingEdge table (mapping graph model) */
 INSERT INTO edge (id, station_start_id, station_end_id, branch_id, range_distance) VALUES
   /* Root */
   (1, 1, 2, 1, 10),
