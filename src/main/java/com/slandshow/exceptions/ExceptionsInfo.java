@@ -17,4 +17,18 @@ public class ExceptionsInfo {
     public static final String SCHEDULE_CURRENT_DAY_CREATION = "CANNOT CREATE, BECAUSE DATE IS CURRENT DAY";
     public static final String DELETING_SCHEDULE_PROBLEM = "CURRENT SCHEDULE IS ALREADY DELETED";
 
+    /* Stations exceptions messages */
+    public static final String STATION_IS_NOT_UNIQUE = "STATION IS NOT UNIQUE FOR ADDING";
+    public static final String STATION_IS_NULL = "STATION IS NULL";
+    public static final String STATION_IS_UNUSED = "STATION ALREADY UNUSED";
+
+    /* Trains exceptions messages */
+    public static final String TRAIN_NEW_OR_OLD_NAME_IS_NULL = "TRAIN NEW OR OLD NAME IS NOT DEFINED";
+    public static final String TRAIN_NEW_NAME_ARE_THE_SAME = "TRAIN NEW NAME ARE THE SAME";
+    public static final String TRAIN_IS_ALREADY_USED = "TRAIN IS ALREADY USED";
+    public static final String TRAIN_IS_NULL = "TRAIN IS NULL";
+    public static final String INVALID_CARRIAGE_COUNT = "CARRIAGE IN TRAIN IS INVALID";
+    public static final String CANNOT_DELETE_INVALID_TRAIN = "CANNOT DELETE INVALID TRAIN - IT'S ALREADY DELETED";
+    public static final String TRAIN_IS_NOT_UNIQUE = "TRAIN IS NOT UNIQUE";
+
 }
