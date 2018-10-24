@@ -4,6 +4,7 @@ import com.slandshow.DTO.ScheduleDTO;
 import com.slandshow.DTO.StationDTO;
 import com.slandshow.DTO.TrainDTO;
 import com.slandshow.DTO.TrainInfoDTO;
+import com.slandshow.exceptions.InvalidTrainException;
 import com.slandshow.models.Schedule;
 import com.slandshow.models.Train;
 import com.slandshow.service.ScheduleService;
@@ -75,7 +76,11 @@ public class TrainController {
     @PostMapping("/createTrain")
     public String createTrain(@ModelAttribute TrainDTO trainDTO) {
         LOGGER.info("TRAIN DATA " + trainDTO.getName() + " " + trainDTO.getCarriageCount() + " " + trainDTO.getSeatsCount());
-        trainService.add(trainDTO);
+        try {
+            trainService.add(trainDTO);
+        } catch (InvalidTrainException e) {
+            e.printStackTrace();
+        }
         return "manager-menu";
     }
 
@@ -90,7 +95,11 @@ public class TrainController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @RequestMapping(value = "/deleteTrain", params = "name")
     public String deleteTrain(@ModelAttribute TrainDTO trainDTO,  @RequestParam(value = "name") String name) {
-        trainService.delete(name);
+        try {
+            trainService.delete(name);
+        } catch (InvalidTrainException e) {
+            e.printStackTrace();
+        }
         LOGGER.info("READY TO DELETE TRAIN" + trainDTO.getName() + " " + trainDTO.getCarriageCount() + " " + trainDTO.getSeatsCount());
         return "manager-menu";
     }

@@ -2,6 +2,7 @@ package com.slandshow.controllers;
 
 import com.slandshow.DTO.StationDTO;
 import com.slandshow.DTO.TrainDTO;
+import com.slandshow.exceptions.InvalidStationException;
 import com.slandshow.models.Station;
 import com.slandshow.service.StationService;
 import com.slandshow.utils.JspFormNames;
@@ -48,7 +49,11 @@ public class StationController {
     @PostMapping("/createStation")
     public String createTrain(@ModelAttribute StationDTO stationDTO) {
         LOGGER.info("STATION DATA " + stationDTO.getName() + " " + stationDTO.getLatitude() + " " + stationDTO.getLongitude());
-        stationService.add(stationDTO);
+        try {
+            stationService.add(stationDTO);
+        } catch (InvalidStationException e) {
+            e.printStackTrace();
+        }
         return "manager-menu";
     }
 
