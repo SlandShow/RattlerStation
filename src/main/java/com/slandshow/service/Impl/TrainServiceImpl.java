@@ -4,6 +4,8 @@ import com.slandshow.DAO.StateDAO;
 import com.slandshow.DAO.TrainDAO;
 import com.slandshow.DTO.TrainDTO;
 import com.slandshow.DTO.TrainInfoDTO;
+import com.slandshow.exceptions.ExceptionsInfo;
+import com.slandshow.exceptions.InvalidTrainException;
 import com.slandshow.models.Schedule;
 import com.slandshow.models.Seat;
 import com.slandshow.models.State;
@@ -33,18 +35,18 @@ public class TrainServiceImpl implements TrainService {
     }
 
     @Transactional
-    public void add(TrainDTO trainDTO) {
+    public void add(TrainDTO trainDTO) throws InvalidTrainException {
         Train trainCreating = getByName(trainDTO.getName());
 
-        // TODO: ADD CUSTOM EXCEPTIONS
         if (trainCreating != null) {
-            throw new RuntimeException();
-
+            LOGGER.info(ExceptionsInfo.TRAIN_IS_ALREADY_USED);
+            throw new InvalidTrainException(ExceptionsInfo.TRAIN_IS_ALREADY_USED);
         }
 
-        // TODO: ADD CUSTOM EXCEPTIONS
-        if (trainDTO.getCarriageCount() < 0 || trainDTO.getCarriageCount() > 30 && trainDTO.getCarriageCount() < 0)
-            throw new RuntimeException();
+        if (trainDTO.getCarriageCount() < 0 || trainDTO.getCarriageCount() > 30 && trainDTO.getCarriageCount() < 0) {
+            LOGGER.info(ExceptionsInfo.INVALID_CARRIAGE_COUNT);
+            throw new InvalidTrainException(ExceptionsInfo.INVALID_CARRIAGE_COUNT);
+        }
 
         Train train = new Train();
         State state = stateDAO.getByType("UNUSED");
@@ -60,32 +62,45 @@ public class TrainServiceImpl implements TrainService {
     }
 
     @Transactional
-    public void delete(String name) {
+    public void delete(String name) throws InvalidTrainException {
         Train train = getByName(name);
 
-        // TODO: ADD CUSTOM EXCEPTIONS
-        if (train == null)
-            throw new RuntimeException();
+        if (train == null) {
+            LOGGER.info(ExceptionsInfo.TRAIN_IS_NULL);
+            throw new InvalidTrainException(ExceptionsInfo.TRAIN_IS_NULL);
+        }
 
-        // TODO: ADD CUSTOM EXCEPTIONS
-        if (!train.getState().getType().equals("UNUSED"))
-            throw new RuntimeException();
+        if (train.getState().getType().equals("INVALID")) {
+            LOGGER.info(ExceptionsInfo.CANNOT_DELETE_INVALID_TRAIN);
+            throw new InvalidTrainException(ExceptionsInfo.CANNOT_DELETE_INVALID_TRAIN);
+        }
 
         State state = stateDAO.getByType("INVALID");
         train.setState(state);
         trainDAO.update(train);
-        LOGGER.info("TRAIN WAS REMOVED");
+        LOGGER.info("TRAIN WAS REMOVED (INVALID NOW)");
         //auditService.deleteTrainAuditInfo(train);
     }
 
     @Transactional
-    public void update(TrainDTO trainDTO) {
+    public void update(TrainDTO trainDTO) throws InvalidTrainException {
         Train train = getByName(trainDTO.getNewName());
 
-        // TODO: ADD CUSTOM EXCEPTIONS
-        if (train == null)
-            throw new RuntimeException();
 
+        if (trainDTO.getName() == null || trainDTO.getNewName() == null) {
+            LOGGER.info(ExceptionsInfo.TRAIN_NEW_OR_OLD_NAME_IS_NULL);
+            throw  new InvalidTrainException(ExceptionsInfo.TRAIN_NEW_OR_OLD_NAME_IS_NULL);
+        }
+
+        if (trainDTO.getName().equals(trainDTO.getNewName())) {
+            LOGGER.info(ExceptionsInfo.TRAIN_NEW_NAME_ARE_THE_SAME);
+            throw new InvalidTrainException(ExceptionsInfo.TRAIN_NEW_NAME_ARE_THE_SAME);
+        }
+
+        if (train != null) {
+            LOGGER.info(ExceptionsInfo.TRAIN_IS_NOT_UNIQUE);
+            throw new InvalidTrainException(ExceptionsInfo.TRAIN_IS_NOT_UNIQUE);
+        }
 
         train = getByName(trainDTO.getName());
         train.setName(trainDTO.getNewName());

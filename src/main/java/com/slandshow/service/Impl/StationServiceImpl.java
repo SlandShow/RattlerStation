@@ -3,9 +3,12 @@ package com.slandshow.service.Impl;
 import com.slandshow.DAO.StateDAO;
 import com.slandshow.DAO.StationDAO;
 import com.slandshow.DTO.StationDTO;
+import com.slandshow.exceptions.ExceptionsInfo;
+import com.slandshow.exceptions.InvalidStationException;
 import com.slandshow.models.State;
 import com.slandshow.models.Station;
 import com.slandshow.service.StationService;
+import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class StationServiceImpl implements StationService {
+
+    private static final Logger LOGGER = Logger.getLogger(Thread.State.class);
 
     @Autowired
     public StationDAO stationDAO;
@@ -64,12 +69,13 @@ public class StationServiceImpl implements StationService {
     }
 
     @Transactional
-    public void add(StationDTO stationDTO) {
+    public void add(StationDTO stationDTO) throws InvalidStationException {
         Station stationCreating = getByName(stationDTO.getName());
 
-        // TODO: ADD CUSTOM EXCEPTIONS
-        if (stationCreating != null)
-            throw new RuntimeException();
+        if (stationCreating != null) {
+            LOGGER.info(ExceptionsInfo.STATION_IS_NOT_UNIQUE);
+            throw new InvalidStationException(ExceptionsInfo.STATION_IS_NOT_UNIQUE);
+        }
 
         Station station = new Station();
         station.setName(stationDTO.getName());
@@ -78,41 +84,46 @@ public class StationServiceImpl implements StationService {
         State state = stateDAO.getByType("UNUSED");
         station.setState(state);
         stationDAO.add(station);
+        LOGGER.info("STATION " + station.getName() + " WAS ADDED (BUT UNUSED NOW)");
         //auditService.createStationAuditInfo(station);
     }
 
     @Transactional
-    public void delete(String name) {
+    public void delete(String name) throws InvalidStationException {
         Station station = getByName(name);
 
-        // TODO: ADD CUSTOM EXCEPTIONS
-        if (station == null)
-            throw new RuntimeException();
+        if (station == null) {
+            LOGGER.info(ExceptionsInfo.STATION_IS_NULL);
+            throw new InvalidStationException(ExceptionsInfo.STATION_IS_NULL);
+        }
 
-        // TODO: ADD CUSTOM EXCEPTIONS
-        if (!station.getState().getType().equals("UNUSED"))
-            throw new RuntimeException();
-
+        if (!station.getState().getType().equals("UNUSED")) {
+            LOGGER.info(ExceptionsInfo.STATION_IS_UNUSED);
+            throw new InvalidStationException(ExceptionsInfo.STATION_IS_UNUSED);
+        }
 
         State state = stateDAO.getByType("INVALID");
         station.setState(state);
         stationDAO.update(station);
+        LOGGER.info("STATION " + station.getName() + " WAS DELETED (INVALID)");
        //auditService.deleteStationAuditInfo(station);
     }
 
     @Transactional
-    public void update(StationDTO stationDTO) {
+    public void update(StationDTO stationDTO) throws InvalidStationException {
         Station station = getByName(stationDTO.getNewName());
 
-        // TODO: ADD CUSTOM EXCEPTIONS
-        if (station != null)
-            throw new RuntimeException();
+        if (station != null) {
+            LOGGER.info(ExceptionsInfo.STATION_IS_NULL);
+            throw new InvalidStationException(ExceptionsInfo.STATION_IS_NULL);
+        }
 
         station = getByName(stationDTO.getName());
         station.setName(stationDTO.getNewName());
         State state = stateDAO.getByType("UNUSED");
         station.setState(state);
         stationDAO.update(station);
+        LOGGER.info("STATION WAS UPDATED " + stationDTO.getName() + " -> " + stationDTO.getNewName());
         //auditService.updateStationAuditInfo(stationDTO.getName(), stationDTO.getNewName());
     }
 
