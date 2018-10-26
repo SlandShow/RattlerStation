@@ -124,4 +124,16 @@ public class UtilsManager {
         //return new String(Files.readAllBytes(file.toPath()));
         return null;
     }
+
+    public static String convertDateToString(Date date) {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+    }
+
+    public static Date addNMinutes(Date date, Integer n) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        long t = calendar.getTimeInMillis();
+
+        return new Date(t + (n * DistanceManager.ONE_MINUTE_IN_MILLIS));
+    }
 }

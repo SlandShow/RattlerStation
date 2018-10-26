@@ -3,6 +3,7 @@ package com.slandshow.service;
 import com.slandshow.DTO.ScheduleDTO;
 import com.slandshow.models.Schedule;
 import com.slandshow.models.Station;
+import com.slandshow.utils.DistanceManager;
 import com.slandshow.utils.UtilsManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,16 +14,6 @@ import java.util.Date;
 
 @Component
 public class DistanceAndPriceUtilsService {
-
-    /* ====Constants==== */
-
-    private final static Integer SPEED_TRAIN = 60;
-    private final static Integer EARTH_RADIUS = 6371;
-    private final static Integer DATE = 1000 * 60 * 60 * 24;
-    private final static Integer HOURS = 1000 * 60 * 60;
-    private final static Double RADIANS = Math.PI / 180;
-    private final static Double K_PRICE = 5.0;
-    private final static Double K_DAY = 62.35;
 
     @Autowired
     private StationService stationService;
@@ -45,8 +36,8 @@ public class DistanceAndPriceUtilsService {
         /*
         count dates between
          */
-            Long deltaDates = (dateDeparture.getTime() - date.getTime()) / DATE;
-            return (int) (distance * K_PRICE - deltaDates * K_DAY);
+            Long deltaDates = (dateDeparture.getTime() - date.getTime()) / DistanceManager.DATE;
+            return (int) (distance * DistanceManager.K_PRICE - deltaDates * DistanceManager.K_DAY);
         } else return 0;
     }
 
@@ -61,8 +52,8 @@ public class DistanceAndPriceUtilsService {
         /*
         count dates between
          */
-            Long deltaDates = (schedule.getDateDeparture().getTime() - date.getTime()) / DATE;
-            return (int) (distance * K_PRICE - deltaDates * K_DAY);
+            Long deltaDates = (schedule.getDateDeparture().getTime() - date.getTime()) / DistanceManager.DATE;
+            return (int) (distance * DistanceManager.K_PRICE - deltaDates * DistanceManager.K_DAY);
         } else return 0;
     }
 
@@ -81,8 +72,8 @@ public class DistanceAndPriceUtilsService {
         /*
         count dates between
          */
-            Long deltaDates = (dateDeparture.getTime() - date.getTime()) / DATE;
-            return (int) ((distanceA + distanceB) * K_PRICE - deltaDates * K_DAY);
+            Long deltaDates = (dateDeparture.getTime() - date.getTime()) / DistanceManager.DATE;
+            return (int) ((distanceA + distanceB) * DistanceManager.K_PRICE - deltaDates * DistanceManager.K_DAY);
         } else return 0;
     }
 
@@ -102,7 +93,7 @@ public class DistanceAndPriceUtilsService {
         /*
         time in milliseconds
          */
-        Long time = Double.valueOf(distance * HOURS / SPEED_TRAIN).longValue();
+        Long time = Double.valueOf(distance * DistanceManager.HOURS / DistanceManager.SPEED_TRAIN).longValue();
         newDate.setTime(dateDeparture.getTime() + time);
         return newDate;
     }
@@ -115,17 +106,17 @@ public class DistanceAndPriceUtilsService {
      * @return distance in kilometers
      */
     private Double distance(Point2D pointA, Point2D pointB) {
-        Double latitudeA = RADIANS * pointA.getX();
-        Double latitudeB = RADIANS * pointB.getX();
-        Double longitudeA = RADIANS * pointA.getY();
-        Double longitudeB = RADIANS * pointB.getY();
+        Double latitudeA = DistanceManager.RADIANS * pointA.getX();
+        Double latitudeB = DistanceManager.RADIANS * pointB.getX();
+        Double longitudeA = DistanceManager.RADIANS * pointA.getY();
+        Double longitudeB = DistanceManager.RADIANS * pointB.getY();
 
         // calculating length of big round
         Double y = Math.sqrt(Math.pow(Math.cos(latitudeB) * Math.sin(longitudeB - longitudeA), 2)
                 + Math.pow(Math.cos(latitudeA) * Math.sin(latitudeB) - Math.sin(latitudeA) * Math.cos(latitudeB) * Math.cos(longitudeB - longitudeA), 2));
         Double x = Math.sin(latitudeA) * Math.sin(latitudeB) + Math.cos(latitudeA) * Math.cos(latitudeB) * Math.cos(longitudeB - longitudeA);
 
-        return Math.atan2(y, x) * EARTH_RADIUS;
+        return Math.atan2(y, x) * DistanceManager.EARTH_RADIUS;
     }
 
     /**
