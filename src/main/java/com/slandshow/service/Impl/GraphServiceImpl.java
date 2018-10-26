@@ -5,6 +5,7 @@ import com.slandshow.DTO.EdgeDTO;
 import com.slandshow.DTO.ScheduleDTO;
 import com.slandshow.models.MappingEdge;
 import com.slandshow.models.Schedule;
+import com.slandshow.service.DistanceAndPriceUtilsService;
 import com.slandshow.service.GraphService;
 import com.slandshow.service.ScheduleService;
 import com.slandshow.utils.Algorithms.Graph.Graph;
@@ -35,6 +36,9 @@ public class GraphServiceImpl implements GraphService {
 
     @Autowired
     private ScheduleService scheduleService;
+
+    @Autowired
+    private DistanceAndPriceUtilsService distanceService;
 
     @Transactional
     public void addEdge(MappingEdge edge) {
@@ -237,20 +241,4 @@ public class GraphServiceImpl implements GraphService {
         return deleteUnique(puzzled);
     }
 
-
-    public void filterPuzzledSchedule(List<Schedule> schedules) {
-        schedules = schedules.stream()
-                .collect(Collectors.groupingBy(
-                        Function.identity(),
-                        Collectors.counting()))
-                .entrySet()
-                .stream()
-                .filter(e -> e.getValue() > 1)
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
-    }
-
-    private EdgeDTO mapping() {
-        return null;
-    }
 }
