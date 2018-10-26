@@ -19,6 +19,8 @@ public interface ScheduleService {
 
     void add(ScheduleDTO scheduleDTO) throws ScheduleCreationException, ParseException;
 
+    List<ScheduleDTO> creatingSchedulers(String start, String end, String dateDeparture, String dateArrival, String train) throws ParseException, ScheduleCreationException;
+
     void delete(Long id) throws ScheduleCreationException, ParseException, TimeoutException;
 
     void update(ScheduleDTO scheduleDTO) throws ParseException, IOException, TimeoutException;

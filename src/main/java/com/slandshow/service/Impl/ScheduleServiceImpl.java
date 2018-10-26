@@ -10,6 +10,7 @@ import com.slandshow.exceptions.ExceptionsInfo;
 import com.slandshow.exceptions.ScheduleCreationException;
 import com.slandshow.models.*;
 import com.slandshow.service.*;
+import com.slandshow.utils.DistanceManager;
 import com.slandshow.utils.UtilsManager;
 import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
@@ -19,10 +20,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
@@ -51,6 +49,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Autowired
     private MessageQueueService messageQueueService;
+
+    @Autowired
+    private GraphService graphService;
 
 
     /**
@@ -127,6 +128,94 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
         LOGGER.info("SCHEDULE WAS CREATED!");
     }
+
+    @Transactional
+    public List<ScheduleDTO> creatingSchedulers(String start, String end, String dateDeparture, String dateArrival, String train) throws ParseException, ScheduleCreationException {
+        List<ScheduleDTO> createdSchedulers = new ArrayList<>();
+        String tmpDate = null;
+
+        // If graph not built yet
+        graphService.buildGraph();
+
+        // Get path of stations (A -> ... -> ... -> B)
+        String[] path = graphService.parsePath(
+                graphService.searchEdges(start.intern(), end.intern())
+        );
+
+        // If there is no way from A to B
+        if (path.length == 0) {
+            // TODO: ADD NEW CUSTOM EXCEPTION
+        }
+
+        for (int i = 0; i < path.length; i++) {
+            ScheduleDTO schedule = new ScheduleDTO();
+            schedule.setStationDepartureName(path[i].split(" ")[0]);
+            schedule.setStationArrivalName(path[i].split(" ")[1]);
+            schedule.setTrainName(train);
+
+            // Check, if station A or station B is UNUSED
+            if (stationService.getByName(schedule.getStationDepartureName()) == null) {
+
+            }
+
+
+            if (dateArrival == null || dateArrival.equals("")) {
+
+                if (i == 0) {
+                    schedule.setDateDeparture(dateDeparture);
+
+                    Date calculatedDate = distanceService.calculateDateArrival(
+                            UtilsManager.parseToDateTime(dateDeparture),
+                            stationService.getByName(schedule.getStationDepartureName()),
+                            stationService.getByName(schedule.getStationArrivalName())
+                    );
+
+                    tmpDate = UtilsManager.convertDateToString(calculatedDate);
+                    schedule.setDateArrival(tmpDate);
+                } else {
+
+                    String newDateDeparture = UtilsManager.convertDateToString(
+                            UtilsManager.addNMinutes(
+                                    UtilsManager.parseToDateTime(tmpDate),
+                                    DistanceManager.STATION_STOP_TIMING
+                            )
+                    );
+
+                    schedule.setDateDeparture(newDateDeparture);
+
+                    schedule.setDateArrival(
+                            UtilsManager.convertDateToString(
+                                    distanceService.calculateDateArrival(
+                                            UtilsManager.parseToDateTime(schedule.getDateDeparture()),
+                                            stationService.getByName(schedule.getStationDepartureName()),
+                                            stationService.getByName(schedule.getStationArrivalName())
+                                    )
+                            )
+                    );
+
+                    tmpDate = schedule.getDateArrival();
+                }
+
+                schedule.setPrice(Math.abs(distanceService.calculateDirectTripPrice(schedule)));
+
+                createdSchedulers.add(schedule);
+            }
+        }
+
+        for (int i = 0; i < createdSchedulers.size(); i++) {
+            LOGGER.info(
+                             "SCHEDULE N " + i
+                            + " IS " + createdSchedulers.get(i).getStationDepartureName() + " - > "
+                            + createdSchedulers.get(i).getStationArrivalName()
+                            + " " + createdSchedulers.get(i).getDateDeparture() + " -> "
+                            + " " + createdSchedulers.get(i).getDateArrival()
+            );
+            add(createdSchedulers.get(i));
+        }
+
+        return createdSchedulers;
+    }
+
 
     @Transactional
     public void delete(Long id) throws ScheduleCreationException, ParseException, TimeoutException {
