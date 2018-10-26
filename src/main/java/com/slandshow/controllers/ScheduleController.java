@@ -37,12 +37,6 @@ public class ScheduleController {
     @Autowired
     private ScheduleService scheduleService;
 
-    @Autowired
-    private StationService stationService;
-
-    @Autowired
-    private TrainService trainService;
-
     @GetMapping("/scheduleList")
     public String getSchedule(Model model) {
         List<Schedule> schedules = scheduleService.getAllSchedules();
@@ -57,8 +51,6 @@ public class ScheduleController {
         model.addAttribute("scheduleCreation", new ScheduleDTO());
         return "schedule-creation-form";
     }
-
-
 
     /**
      * add schedule
@@ -79,16 +71,26 @@ public class ScheduleController {
     public String createSchedule(@ModelAttribute ScheduleDTO scheduleDTO, Model model) throws ParseException, IOException, TimeoutException {
 
         LOGGER.info("READY TO CREATE SCHEDULE: "
-                + scheduleDTO.getStationDepartureName() + " -> "
-                + scheduleDTO.getStationArrivalName() + " in time range "
-                + scheduleDTO.getDateDeparture() + " to "
+                + scheduleDTO.getStationDepartureName().intern() + " -> "
+                + scheduleDTO.getStationArrivalName().intern() + " in time range "
+                + scheduleDTO.getDateDeparture().intern() + " to "
                 + scheduleDTO.getDateArrival()
         );
 
         String result = "";
 
         try {
-            scheduleService.add(scheduleDTO);
+            List<ScheduleDTO> schedulers =  scheduleService.creatingSchedulers(
+                    scheduleDTO.getStationDepartureName(),
+                    scheduleDTO.getStationArrivalName(),
+                    scheduleDTO.getDateDeparture(),
+                    null,
+                    scheduleDTO.getTrainName()
+            );
+
+            scheduleDTO.setDateArrival(
+                   schedulers.get(schedulers.size() - 1).getDateArrival()
+            );
 
             result = "success";
 
@@ -107,18 +109,4 @@ public class ScheduleController {
 
         return "schedule-creation-result";
     }
-
-/*
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
-    @RequestMapping(name = "/viewSchedules", params = "trainId")
-    public String viewBookingTrains(@RequestParam(value = "trainId") Long trainId, Model model) {
-       List<Schedule> selectedScheduleByTrain = scheduleService.getByTrain(
-            trainService.getById(trainId)
-       );
-
-       model.addAttribute("selectedSchedulesByTrain", selectedScheduleByTrain);
-
-        return "schedule-list";
-    }*/
-
 }
