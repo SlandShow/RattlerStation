@@ -64,8 +64,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     public void add(ScheduleDTO scheduleDTO) throws ScheduleCreationException, ParseException {
         Train train = trainService.getByName(scheduleDTO.getTrainName());
-        Station stationArrival = stationService.getByName(scheduleDTO.getStationArrivalName());
-        Station stationDeparture = stationService.getByName(scheduleDTO.getStationDepartureName());
+        Station stationArrival = stationService.getByName(scheduleDTO.getStationArrivalName().intern());
+        Station stationDeparture = stationService.getByName(scheduleDTO.getStationDepartureName().intern());
 
         if (stationArrival == null || stationDeparture == null || train == null) {
             LOGGER.info(ExceptionsInfo.TRAINS_STATIONS_ARE_NULL);
@@ -147,10 +147,18 @@ public class ScheduleServiceImpl implements ScheduleService {
             // TODO: ADD NEW CUSTOM EXCEPTION
         }
 
+        if (stationService.getStationByName(start) == null) {
+
+        }
+
+        if (stationService.getStationByName(end) == null) {
+
+        }
+
         for (int i = 0; i < path.length; i++) {
             ScheduleDTO schedule = new ScheduleDTO();
-            schedule.setStationDepartureName(path[i].split(" ")[0]);
-            schedule.setStationArrivalName(path[i].split(" ")[1]);
+            schedule.setStationDepartureName(path[i].split("->")[0]);
+            schedule.setStationArrivalName(path[i].split("->")[1]);
             schedule.setTrainName(train);
 
             // Check, if station A or station B is UNUSED
