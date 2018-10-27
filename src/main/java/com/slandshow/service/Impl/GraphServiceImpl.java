@@ -17,10 +17,7 @@ import org.springframework.ui.ModelMap;
 
 import javax.transaction.Transactional;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -108,58 +105,47 @@ public class GraphServiceImpl implements GraphService {
         String[] validPath = new String[path.size() - 1];
 
         for (int i = 0; i < path.size() - 1; i++) {
-            validPath[i] = path.get(i) + " " + path.get(i + 1);
+            validPath[i] = path.get(i) + "->" + path.get(i + 1);
             LOGGER.info("PARSED PATH IS " + validPath[i]);
         }
 
         return validPath;
     }
 
-    private List<Schedule> deleteUnique(List<Schedule> list) {
-        List<Schedule> validList = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            Schedule iterated = list.get(i);
-            for (int j = 0; j < list.size(); j++) {
-                if (i != j) {
-                    if (iterated.getTrain().getName().intern().equals(list.get(j).getTrain().getName().intern()))
-                        validList.add(iterated);
-                }
-            }
-        }
-
-        return validList;
+    private void deleteUnique(Map<ScheduleDTO, List<Schedule>> map, int path) {
+        map.entrySet().removeIf(entry -> entry.getValue().size() != path);
     }
 
     public Map<ScheduleDTO, List<Schedule>> filter(List<Schedule> list) {
         Map<ScheduleDTO, List<Schedule>> filtered = new HashMap<>();
 
-        for (int i = 0; i < list.size(); i++) {
+        for (Schedule aList : list) {
             ScheduleDTO scheduleDTO = new ScheduleDTO();
             scheduleDTO.setTrainName(
-                    list.get(i).getTrain().getName()
+                    aList.getTrain().getName()
             );
 
             scheduleDTO.setStationDepartureName(
-                    list.get(i).getStationDeparture().getName()
+                    aList.getStationDeparture().getName()
             );
 
             scheduleDTO.setStationArrivalName(
-                    list.get(i).getStationArrival().getName()
+                    aList.getStationArrival().getName()
             );
 
             scheduleDTO.setDateDeparture(
-                    list.get(i).getDateDeparture().toString()
+                    aList.getDateDeparture().toString()
             );
 
             scheduleDTO.setDateArrival(
-                    list.get(i).getDateArrival().toString()
+                    aList.getDateArrival().toString()
             );
 
             if (!filtered.containsKey(scheduleDTO))
                 filtered.put(scheduleDTO, new ArrayList<>());
 
             if (filtered.containsKey(scheduleDTO))
-                filtered.get(scheduleDTO).add(list.get(i));
+                filtered.get(scheduleDTO).add(aList);
         }
 
         return filtered;
@@ -198,14 +184,13 @@ public class GraphServiceImpl implements GraphService {
         return parsed;
     }
 
-
-    public List<Schedule> puzzleSchedules(String[] path, String dateDeparture, String dateArrival) throws ParseException {
+    public Map<ScheduleDTO, List<Schedule>> puzzleSchedules(String[] path, String dateDeparture, String dateArrival) throws ParseException {
         List<Schedule> puzzled = new ArrayList<>();
 
         for (int i = 0; i < path.length; i++) {
             ScheduleDTO schedule = new ScheduleDTO();
-            schedule.setStationDepartureName(path[i].split(" ")[0]);
-            schedule.setStationArrivalName(path[i].split(" ")[1]);
+            schedule.setStationDepartureName(path[i].split("->")[0]);
+            schedule.setStationArrivalName(path[i].split("->")[1]);
             schedule.setDateDeparture(dateDeparture);
 
             if (!dateArrival.equals("") && i == path.length - 1)
@@ -224,21 +209,25 @@ public class GraphServiceImpl implements GraphService {
             }
         }
 
-        for (int i = 0; i < puzzled.size(); i++) {
+        // LOGOUT ALL STUFF
+        for (Schedule aPuzzled : puzzled) {
             LOGGER.info(
                     "BEFORE PUZZLED ---->" +
-                    puzzled.get(i).getStationDeparture().getName()
-                    + " - > " + puzzled.get(i).getStationArrival().getName()
-                    + " -- " + puzzled.get(i).getDateDeparture()
-                    + " - > " + puzzled.get(i).getDateArrival()
+                            aPuzzled.getStationDeparture().getName()
+                            + " - > " + aPuzzled.getStationArrival().getName()
+                            + " -- " + aPuzzled.getDateDeparture()
+                            + " - > " + aPuzzled.getDateArrival()
+                            + " TRAIN " + aPuzzled.getTrain().getName()
             );
         }
 
-        // For special situation
-        if (puzzled.size() == 1)
-            return puzzled;
+        // Create map of schedulers (key <DTO>, value <List>
+        Map<ScheduleDTO, List<Schedule>> schedulersMap = filter(puzzled);
 
-        return deleteUnique(puzzled);
+        // Filter map - delete invalid schedulers
+        deleteUnique(schedulersMap, path.length);
+
+        return schedulersMap;
     }
 
 }
