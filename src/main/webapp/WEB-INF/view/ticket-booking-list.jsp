@@ -39,7 +39,7 @@
                 <a class="navbar-brand fas fa-calendar-alt" href="#"></a>
             </div>
             <ul class="nav navbar-nav">
-                <li><a href="/tickets/buyTicket"><i class="fas fa-search fa-1x"> Search</i></a></li>
+                <li><a href="/tickets/buyTicket"><i class="fas fa-search fa-1x"></i> Search</a></li>
                 <li><a href="/home"><i class="fas fa-home fa-1x"></i> Home</a></li>
                 <li><a href="/trains/selectTrainsByStation"><i class="fas fa-clock"></i> Traffic</a></li>
             </ul>
