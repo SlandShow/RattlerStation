@@ -7,6 +7,7 @@ import com.slandshow.models.Seat;
 import com.slandshow.models.Ticket;
 import com.slandshow.models.Train;
 import com.slandshow.service.*;
+import com.slandshow.service.Impl.GraphServiceImpl;
 import com.slandshow.utils.JspFormNames;
 import com.slandshow.utils.UtilsManager;
 import org.apache.log4j.Logger;
@@ -68,7 +69,7 @@ public class TicketController {
 
         try {
 
-            List<Schedule> list =  graphService.puzzleSchedules(
+            Map<ScheduleDTO, List<Schedule>> map =  graphService.puzzleSchedules(
                     graphService.parsePath(
                             graphService.searchEdges(schedule.getStationDepartureName().intern(), schedule.getStationArrivalName().intern())
                     ),
@@ -76,13 +77,12 @@ public class TicketController {
                     schedule.getDateArrival().intern()
             );
 
-            LOGGER.info("SEARCHED INFO VIA GRAPH: " + list);
-
-
-            Map<ScheduleDTO, List<Schedule>> map = graphService.filter(list);
-            for (Map.Entry<ScheduleDTO, List<Schedule>> entry : map.entrySet()) {
-                LOGGER.info("SELECTED PUZZLED SCHEDULER:" + entry.getKey().getTrainName() + ":" + entry.getValue().toString());
+            if (map.isEmpty()) {
+                LOGGER.info("NOT FOUND SCHEDULERS");
             }
+
+            for (Map.Entry<ScheduleDTO, List<Schedule>> entry : map.entrySet())
+                LOGGER.info("SELECTED PUZZLED SCHEDULER:" + entry.getKey().getTrainName() + ":" + entry.getValue().toString());
 
             // Add map to session
             session.setAttribute("map", map);
@@ -90,6 +90,8 @@ public class TicketController {
             schedulers = graphService.parsedListFromMap(map);
         } catch (ParseException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            // View alternative not found page
         }
 
         if (schedulers != null)
@@ -170,7 +172,6 @@ public class TicketController {
                         ticketDTOS.get(i),
                         userService.findUserByEmail(userDTO.getLogin())
                 );
-
 
             model.addAttribute(
                       "ticketInfo",
