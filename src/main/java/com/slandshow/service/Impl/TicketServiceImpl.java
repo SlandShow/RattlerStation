@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,6 +45,10 @@ public class TicketServiceImpl implements TicketService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private GraphService graphService;
+
+    @Override
     @Transactional
     public void add(Ticket ticket) {
         ticketDAO.add(ticket);
@@ -60,8 +65,9 @@ public class TicketServiceImpl implements TicketService {
      *
      */
 
+    @Override
     @Transactional
-    public Ticket add(TicketDTO ticketDTO, User user) throws BookingTicketException {
+    public Ticket add(TicketDTO ticketDTO, User user) throws BookingTicketException, ParseException {
         Schedule schedule = scheduleService.getById(ticketDTO.getScheduleId());
 
         if (schedule == null || user == null) {
@@ -105,8 +111,8 @@ public class TicketServiceImpl implements TicketService {
         ticket.setSeat(seat);
         ticket.setUser(user);
 
-        // TODO: ADD LATER CALCULATION OF PRICE
-        //ticket.setPrice();
+        // Calsulate trip price
+        ticket.setPrice(ticketDTO.getPrice());
 
         // Add ticket in DB
         add(ticket);
@@ -116,21 +122,25 @@ public class TicketServiceImpl implements TicketService {
         return ticket;
     }
 
+    @Override
     @Transactional
     public void delete(Ticket ticket) {
         ticketDAO.delete(ticket);
     }
 
+    @Override
     @Transactional
     public void update(Ticket ticket) {
         ticketDAO.update(ticket);
     }
 
+    @Override
     @Transactional
     public List<Ticket> getAll() {
         return ticketDAO.getAll();
     }
 
+    @Override
     @Transactional
     public Ticket getById(Long id) {
         return (Ticket) ticketDAO.getById(id);
@@ -138,6 +148,7 @@ public class TicketServiceImpl implements TicketService {
 
     /* Return reserved seats */
     @Transactional
+    @Override
     public List<Seat> getBookingSeatsBySchedule(Schedule schedule) {
         List<Ticket> tickets = ticketDAO.getBySchedule(schedule);
         List<Seat> bookingSeats = new ArrayList<>();
@@ -149,29 +160,34 @@ public class TicketServiceImpl implements TicketService {
     }
 
     /* Check if user already have ticket */
+    @Override
     @Transactional
     public boolean checkUserUntilBooking(User user, Schedule schedule) {
         return ticketDAO.findSameUserOnTrain(user, schedule).isEmpty();
     }
 
     /* Check if we have correct schedule */
+    @Override
     @Transactional
     public boolean checkSeatUntilBooking(Seat seat, Schedule schedule) {
         return ticketDAO.findTicketByScheduleAndSeat(schedule, seat) == null;
     }
 
     /* Check if we can buy ticket in time & data case */
+    @Override
     @Transactional
     public boolean checkScheduleForAvailability(Schedule schedule) throws BookingTicketException {
         Date date = schedule.getDateDeparture();
         return UtilsManager.checkForCurrentDayForBookingTicket(date);
     }
 
+    @Override
     @Transactional
     public List<Ticket> getBySchedules(Schedule schedule) {
         return ticketDAO.getBySchedule(schedule);
     }
 
+    @Override
     @Transactional
     public List<TicketInfoDTO> getByScheduleId(Long id) {
         ModelMapper modelMapper = new ModelMapper();
@@ -182,6 +198,7 @@ public class TicketServiceImpl implements TicketService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     @Transactional
     public List<TicketInfoDTO> getAuthenticatedUserTicket() {
         ModelMapper modelMapper = new ModelMapper();
@@ -193,21 +210,25 @@ public class TicketServiceImpl implements TicketService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     @Transactional
     public List<Ticket> getByDate(Date date) {
         return ticketDAO.getByDate(date);
     }
 
+    @Override
     @Transactional
     public List<Ticket> getByDates(Date dateFrom, Date dateTo) {
         return ticketDAO.getByDates(dateFrom, dateTo);
     }
 
+    @Override
     public List<List<SeatDTO>> getSeatsMatrix(int row, int col) {
         return seatService.createSeatsMatrix(row, col);
     }
 
-    public List<TicketDTO> getPuzzledTickets(List<Schedule> puzzledSchedulers, int seat, int carriage) {
+    @Override
+    public List<TicketDTO> getPuzzledTickets(List<Schedule> puzzledSchedulers, int seat, int carriage) throws ParseException {
 
         // Create puzzled tickets for puzzled schedulers
         List<TicketDTO> ticketDTOS = new ArrayList<>();
@@ -220,6 +241,15 @@ public class TicketServiceImpl implements TicketService {
             seatDTO.setSeat(seat);
             seatDTO.setCarriage(carriage);
             ticketDTO.setSeatDTO(seatDTO);
+            ticketDTO.setPrice(
+                    Math.abs(
+                        distanceService.calculateDirectTripPrice(
+                                scheduleService.getById(
+                                        puzzledSchedulers.get(i).getId()
+                                )
+                        )
+                    )
+            );
 
             ticketDTOS.add(ticketDTO);
         }
@@ -227,6 +257,7 @@ public class TicketServiceImpl implements TicketService {
         return ticketDTOS;
     }
 
+    @Override
     public BookingTicketInfoDTO getBookingStatusInfo(int seat, int carriage, UserDTO userDTO) {
 
         // Booking result information DTO creation
@@ -243,6 +274,7 @@ public class TicketServiceImpl implements TicketService {
         return ticketInfoDTO;
     }
 
+    @Override
     public BookingTicketInfoDTO getBookingStatusInfo(List<TicketDTO> ticketDTOS, UserDTO userDTO) {
 
         BookingTicketInfoDTO ticketInfoDTO = new BookingTicketInfoDTO();
@@ -284,7 +316,25 @@ public class TicketServiceImpl implements TicketService {
                         + userDTO.getLogin() + ")"
         );
 
+        Integer globalPrice = 0;
+
+        for (TicketDTO priceIterator: ticketDTOS) {
+            globalPrice += priceIterator.getPrice();
+        }
+
+        ticketInfoDTO.setPrice(globalPrice);
 
         return ticketInfoDTO;
+    }
+
+    @Override
+    public Map<ScheduleDTO, List<Schedule>> createPuzzledTickets(String start, String end, String dateDeparture, String dateArrival) throws ParseException {
+        graphService.buildGraph();
+        return graphService.puzzleSchedules(start, end, dateDeparture, dateArrival);
+    }
+
+    @Override
+    public List<ScheduleDTO> parsedListFromMap(Map<ScheduleDTO, List<Schedule>> filtered) {
+        return graphService.parsedListFromMap(filtered);
     }
 }

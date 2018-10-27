@@ -22,6 +22,8 @@ public class BookingTicketInfoDTO {
 
     private Date dateArrival;
 
+    private Integer price;
+
 
     public BookingTicketInfoDTO() {
     }
@@ -107,5 +109,13 @@ public class BookingTicketInfoDTO {
 
     public Date getDateDeparture() {
         return dateDeparture;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
     }
 }

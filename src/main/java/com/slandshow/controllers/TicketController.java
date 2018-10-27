@@ -37,13 +37,7 @@ public class TicketController {
     private TicketService ticketService;
 
     @Autowired
-    private ScheduleService scheduleService;
-
-    @Autowired
-    private TrainService trainService;
-
-    @Autowired
-    private GraphService graphService;
+    private UserService userService;
 
     @GetMapping("/buyTicket")
     public String buyTicket(Model model) {
@@ -51,11 +45,10 @@ public class TicketController {
         return JspFormNames.SCHEDULE_INPUT_FOR_STATIONS_AND_DATE;
     }
 
+    private static Map<ScheduleDTO, List<Schedule>> map = null;
 
     @PostMapping("/buyTicket")
     public String scheduleByStationsAndDatePersist(@ModelAttribute ScheduleDTO schedule, HttpSession session, Model model) {
-        Schedule reloadedSchedule = null;
-
         LOGGER.info(
                 "LOADED DATA: " + schedule.getStationDepartureName() + ", "
                 + schedule.getStationArrivalName() + ", "
@@ -63,16 +56,10 @@ public class TicketController {
                 + schedule.getDateArrival()
         );
 
-        graphService.buildGraph();
-
-        List<ScheduleDTO> schedulers = null;
-
         try {
-
-            Map<ScheduleDTO, List<Schedule>> map =  graphService.puzzleSchedules(
-                    graphService.parsePath(
-                            graphService.searchEdges(schedule.getStationDepartureName().intern(), schedule.getStationArrivalName().intern())
-                    ),
+             map =  ticketService.createPuzzledTickets(
+                    schedule.getStationDepartureName().intern(),
+                    schedule.getStationArrivalName().intern(),
                     schedule.getDateDeparture().intern(),
                     schedule.getDateArrival().intern()
             );
@@ -85,18 +72,17 @@ public class TicketController {
                 LOGGER.info("SELECTED PUZZLED SCHEDULER:" + entry.getKey().getTrainName() + ":" + entry.getValue().toString());
 
             // Add map to session
-            session.setAttribute("map", map);
-
-            schedulers = graphService.parsedListFromMap(map);
+           // session.setAttribute("map", map);
         } catch (ParseException e) {
             e.printStackTrace();
         } catch (Exception e) {
             // View alternative not found page
         }
 
-        if (schedulers != null)
-            model.addAttribute("schedules", schedulers);
-
+        model.addAttribute(
+                "schedules",
+                ticketService.parsedListFromMap(map)
+        );
 
         return JspFormNames.BOOKING_TICKET_LIST;
     }
@@ -105,7 +91,7 @@ public class TicketController {
     public String confirmBooking(Model model, HttpSession session, @RequestParam(value = "train") String train, @RequestParam(value = "start") String start,  @RequestParam(value = "end") String end) {
 
         // Get map with all puzzled schedulers from session
-        Map<ScheduleDTO, List<Schedule>> map = (Map<ScheduleDTO, List<Schedule>>) session.getAttribute("map");
+       // Map<ScheduleDTO, List<Schedule>> map = (Map<ScheduleDTO, List<Schedule>>) session.getAttribute("map");
 
         // Select value from map - list of picked schedulers (using params in URL)
         List<Schedule> puzzledSchedulers = map.get(
@@ -146,9 +132,6 @@ public class TicketController {
         return "train-seats-booking-info";
     }
 
-    @Autowired
-    private UserService userService;
-
     @RequestMapping(value = "/confirmBooking", params = {"seat", "carriage"})
     public String confirmBooking(HttpSession session, @RequestParam(value = "seat") Integer seat, @RequestParam(value = "carriage") Integer carriage, Model model) {
 
@@ -156,16 +139,19 @@ public class TicketController {
         String status = "";
 
         // Create puzzled tickets
-        List<TicketDTO> ticketDTOS = ticketService.getPuzzledTickets(
-                (List<Schedule>) session.getAttribute("puzzledSchedulers"),
-                seat,
-                carriage
-        );
+        List<TicketDTO> ticketDTOS = null;
 
         // Authenticated user object
         UserDTO userDTO = userService.findAuthenticatedUserDTO();
 
         try {
+            // Get list of tickets
+            ticketDTOS = ticketService.getPuzzledTickets(
+                    (List<Schedule>) session.getAttribute("puzzledSchedulers"),
+                    seat,
+                    carriage
+            );
+
             // Iterate each element of puzzled ticketDTO's and reserve it to user
             for (int i = 0; i < ticketDTOS.size(); i++)
                 ticketService.add(
@@ -179,9 +165,7 @@ public class TicketController {
             );
 
             status = "success";
-
         } catch (BookingTicketException e) {
-
             // Create model attribute info status for booking problems
             model.addAttribute(
                     "ticketInfo",
@@ -193,6 +177,16 @@ public class TicketController {
 
             // Change status
             status = "problem";
+        } catch (ParseException e) {
+            // Create model attribute info status for booking problems
+            model.addAttribute(
+                    "ticketInfo",
+                    ticketService.getBookingStatusInfo(seat, carriage, userDTO)
+            );
+
+            // Create model attribute - String (reason of booking problem)
+            model.addAttribute("reason", "Problem with ticket booking");
+
         }
 
         model.addAttribute("message", status);

@@ -37,6 +37,7 @@ public class GraphServiceImpl implements GraphService {
     @Autowired
     private DistanceAndPriceUtilsService distanceService;
 
+    @Override
     @Transactional
     public void addEdge(MappingEdge edge) {
         mappingGraphDAO.add(edge);
@@ -54,6 +55,7 @@ public class GraphServiceImpl implements GraphService {
         );
     }
 
+    @Override
     @Transactional
     public void buildGraph() {
 
@@ -81,10 +83,12 @@ public class GraphServiceImpl implements GraphService {
         GRAPH_IS_BUILDED = true;
     }
 
+    @Override
     public void deleteEdge(EdgeDTO edgeDTO) {
 
     }
 
+    @Override
     public List<String> searchEdges(String start, String end) {
         return GraphExecuter.shortestUnweightedPath(
                 GRAPH_MODEL,
@@ -93,11 +97,13 @@ public class GraphServiceImpl implements GraphService {
         );
     }
 
+    @Override
     @Transactional
     public List<EdgeDTO> getAllEdges() {
         return mappingGraphDAO.getAllEdges();
     }
 
+    @Override
     public String[] parsePath(List<String> path) {
         if (path.size() < 2)
             return null;
@@ -116,6 +122,7 @@ public class GraphServiceImpl implements GraphService {
         map.entrySet().removeIf(entry -> entry.getValue().size() != path);
     }
 
+    @Override
     public Map<ScheduleDTO, List<Schedule>> filter(List<Schedule> list) {
         Map<ScheduleDTO, List<Schedule>> filtered = new HashMap<>();
 
@@ -151,6 +158,7 @@ public class GraphServiceImpl implements GraphService {
         return filtered;
     }
 
+    @Override
     public List<ScheduleDTO> parsedListFromMap(Map<ScheduleDTO, List<Schedule>> filtered) {
         List<ScheduleDTO> parsed = new ArrayList<>();
 
@@ -184,7 +192,14 @@ public class GraphServiceImpl implements GraphService {
         return parsed;
     }
 
-    public Map<ScheduleDTO, List<Schedule>> puzzleSchedules(String[] path, String dateDeparture, String dateArrival) throws ParseException {
+    @Override
+    public Map<ScheduleDTO, List<Schedule>> puzzleSchedules(String start, String end, String dateDeparture, String dateArrival) throws ParseException {
+
+        // Find path
+        String[] path = parsePath(
+                searchEdges(start, end)
+        );
+
         List<Schedule> puzzled = new ArrayList<>();
 
         for (int i = 0; i < path.length; i++) {

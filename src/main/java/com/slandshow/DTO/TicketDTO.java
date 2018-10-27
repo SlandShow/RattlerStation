@@ -8,6 +8,8 @@ public class TicketDTO implements Serializable {
 
     private SeatDTO seatDTO;
 
+    private Integer price;
+
     public TicketDTO() {
     }
 
@@ -26,6 +28,10 @@ public class TicketDTO implements Serializable {
         this.seatDTO = seatDTO;
     }
 
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
     // Getters
 
 
@@ -36,4 +42,9 @@ public class TicketDTO implements Serializable {
     public SeatDTO getSeatDTO() {
         return seatDTO;
     }
+
+    public Integer getPrice() {
+        return price;
+    }
+
 }

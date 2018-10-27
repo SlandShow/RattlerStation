@@ -13,13 +13,14 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public interface TicketService {
 
     void add(Ticket ticket);
 
-    Ticket add(TicketDTO ticketDTO, User user) throws BookingTicketException;
+    Ticket add(TicketDTO ticketDTO, User user) throws BookingTicketException, ParseException;
 
     void delete(Ticket ticket);
 
@@ -49,10 +50,14 @@ public interface TicketService {
 
     List<List<SeatDTO>> getSeatsMatrix(int row, int col);
 
-    List<TicketDTO> getPuzzledTickets(List<Schedule> puzzledSchedulers, int seat, int carriage);
+    List<TicketDTO> getPuzzledTickets(List<Schedule> puzzledSchedulers, int seat, int carriage) throws ParseException;
 
     BookingTicketInfoDTO getBookingStatusInfo(int seat, int carriage, UserDTO userDTO);
 
     BookingTicketInfoDTO getBookingStatusInfo(List<TicketDTO> ticketDTOS, UserDTO userDTO);
+
+    Map<ScheduleDTO, List<Schedule>> createPuzzledTickets(String start, String end, String dateDeparture, String dateArrival) throws ParseException;
+
+    List<ScheduleDTO> parsedListFromMap(Map<ScheduleDTO, List<Schedule>> filtered);
 
 }

@@ -25,7 +25,7 @@ public interface GraphService {
 
     String[] parsePath(List<String> path);
 
-    Map<ScheduleDTO, List<Schedule>> puzzleSchedules(String[] path, String dateDeparture, String dateArrival) throws ParseException;
+    Map<ScheduleDTO, List<Schedule>> puzzleSchedules(String start, String end, String dateDeparture, String dateArrival) throws ParseException;
 
     Map<ScheduleDTO, List<Schedule>> filter(List<Schedule> list);
 
