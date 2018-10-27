@@ -99,7 +99,6 @@
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="/home">Home</a></li>
-                <li><a href="#">Stations</a></li>
             </ul>
         </div>
     </nav>

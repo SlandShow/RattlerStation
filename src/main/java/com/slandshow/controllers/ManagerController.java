@@ -39,10 +39,9 @@ public class ManagerController {
         return "booking-train-users-list";
     }
 
-
-   // @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
-   @RequestMapping("/viewSelectedSchedules/{trainId}")
-   public  String viewBookingTrains(@PathVariable(value="trainId") Long trainId, Model model) {
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
+    @RequestMapping("/viewSelectedSchedules/{trainId}")
+    public  String viewBookingTrains(@PathVariable(value="trainId") Long trainId, Model model) {
        List<Schedule> selectedScheduleByTrain = scheduleService.getByTrain(
                trainService.getById(trainId)
        );
@@ -52,15 +51,11 @@ public class ManagerController {
        model.addAttribute("selectedSchedulesByTrain", selectedScheduleByTrain);
 
        return "schedule-list";
-   }
+    }
 
-    //@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @RequestMapping("/viewBookingUsersInfo/{scheduleId}")
     public String viewBookingUsersInfo(@PathVariable(value = "scheduleId") Long scheduleId, Model model) {
-        // List<Seat> bookingSeats = ticketService.getBookingSeatsBySchedule(
-        //  scheduleService.getById(scheduleId)
-        // );
-
         List<Ticket> tickets = ticketService.getBySchedules(
                 scheduleService.getById(scheduleId)
         );
