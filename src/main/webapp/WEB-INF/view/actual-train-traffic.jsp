@@ -6,9 +6,7 @@
     <script src="/static/js/ajaxRequest.js"></script>
 
     <!-- Add bootstrap and datepicker -->
-    <!--<link rel="stylesheet" href="/static/css/bootstrap.min.css">
-    <script src="/static/js/bootstrap.min.js"></script>
-    <script src="/static/js/moment.min.js"></script>-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -77,6 +75,11 @@
             height: 365px;
         }
 
+        .navbar {
+            background: #000000;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #434343, #000000);  /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, #434343, #000000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+*/
+        }
     </style>
 </head>
 <body>
@@ -88,11 +91,11 @@
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#"><i class="fas fa-search"></i></a>
+                <a class="navbar-brand fas fa-search" href="#"></a>
             </div>
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/home">Home</a></li>
-                <li><a href="/trains/selectTrainsByStation">Traffic information</a></li>
+                <li><a href="/home"><i class="fas fa-home fa-1x"></i> Home</a></li>
+                <li><a href="/trains/selectTrainsByStation"><i class="fas fa-clock"></i> Traffic</a></li>
             </ul>
         </div>
     </nav>
