@@ -88,6 +88,8 @@ public class ScheduleController {
                     scheduleDTO.getTrainName()
             );
 
+            scheduleService.produceMessagesToServer("[ADDING NEW SCHEDULE]");
+
             scheduleDTO.setDateArrival(
                    schedulers.get(schedulers.size() - 1).getDateArrival()
             );

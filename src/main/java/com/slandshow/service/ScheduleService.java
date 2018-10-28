@@ -70,4 +70,6 @@ public interface ScheduleService {
     ScheduleDTO getByIdScheduleDTO(Long id);
 
     Schedule mapping(ScheduleDTO scheduleDTO) throws ParseException;
+
+    void produceMessagesToServer(String message);
 }

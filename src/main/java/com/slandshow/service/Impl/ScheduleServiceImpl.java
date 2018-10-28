@@ -116,16 +116,8 @@ public class ScheduleServiceImpl implements ScheduleService {
         schedule.getTrain().setState(state);
 
         scheduleDAO.add(schedule);
-        //auditService.createScheduleAuditInfo(schedule);
-        try {
-            messageQueueService.produceMsg("create id=" + schedule.getId());
-        } catch (IOException e) {
-            LOGGER.error("CANNOT PRODUCE MESSAGE TO RATTLER STATION BOARD APP [ADDING NEW SCHEDULE]");
-            e.printStackTrace();
-        } catch (TimeoutException e) {
-            LOGGER.error("TIME OF SENDING MESSAGE GONE...");
-            e.printStackTrace();
-        }
+        messageQueueService.getMessagesInstance().add("create id=" + schedule.getId());
+
         LOGGER.info("SCHEDULE WAS CREATED!");
     }
 
@@ -235,12 +227,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
 
         scheduleDAO.delete(schedule);
-        try {
-            messageQueueService.produceMsg("delete id=" + schedule.getId());
-        } catch (IOException e) {
-            LOGGER.error("CANNOT PRODUCE MESSAGE TO RATTLER STATION BOARD APP [DELETE SCHEDULE]");
-            e.printStackTrace();
-        }
+        messageQueueService.getMessagesInstance().add("delete id=" + schedule.getId());
     }
 
     @Transactional
@@ -283,8 +270,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new RuntimeException();
 
         scheduleDAO.update(schedule);
-        //auditService.updateScheduleAuditInfo(scheduleOld, schedule);
-        messageQueueService.produceMsg("update id=" + schedule.getId());
+        messageQueueService.getMessagesInstance().add("update id=" + schedule.getId());
     }
 
     @Transactional
@@ -301,8 +287,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     public List<ScheduleDTO> getAllForToday() throws ParseException {
         ModelMapper modelMapper = new ModelMapper();
-
         List<Schedule> schedules = scheduleDAO.getForToday();
+
         return schedules.stream()
                 .map(x -> modelMapper.map(x, ScheduleDTO.class))
                 .collect(Collectors.toList());
@@ -539,8 +525,16 @@ public class ScheduleServiceImpl implements ScheduleService {
         ModelMapper modelMapper = new ModelMapper();
         ScheduleDTO schedule = modelMapper.map(getById(id), ScheduleDTO.class);
 
-        // TODO: ADD PRICE CALCULATIONS
-        schedule.setPrice(0);
+        try {
+            schedule.setPrice(
+                    Math.abs(
+                            distanceService.calculateDirectTripPrice(schedule)
+                    )
+            );
+        } catch (ParseException e) {
+            e.printStackTrace();
+            schedule.setPrice(0);
+        }
 
         return schedule;
     }
@@ -598,5 +592,18 @@ public class ScheduleServiceImpl implements ScheduleService {
         );
 
         return mapped;
+    }
+
+    @Override
+    public void produceMessagesToServer(String message) {
+        try {
+            messageQueueService.produceMessagesInOneTransaction();
+        } catch (IOException e) {
+         LOGGER.error("CANNOT PRODUCE MESSAGE TO RATTLER STATION BOARD APP [" + message + "]");
+         e.printStackTrace();
+        } catch (TimeoutException e) {
+         LOGGER.error("TIME OF SENDING MESSAGE GONE...");
+         e.printStackTrace();
+        }
     }
 }
