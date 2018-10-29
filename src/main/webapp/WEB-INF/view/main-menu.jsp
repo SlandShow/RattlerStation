@@ -65,7 +65,14 @@
             <a href="/trains/selectTrainsByStation">Traffic info</a>
             <a href="/tickets/buyTicket">Book ticket</a>
             <a href="#">Contact us</a>
-            <a href="/login">Log in</a>
+
+            <sec:authorize access="!hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_USER')">
+            <a href="/login">Login</a>
+            </sec:authorize>
+
+            <sec:authorize access="hasRole('ROLE_ADMIN') || hasRole('ROLE_MANAGER') || hasRole('ROLE_USER')">
+                <a href="/logout">Loout</a>
+            </sec:authorize>
 
             <!-- Manager tools -->
             <sec:authorize access="hasRole('ROLE_MANAGER')">
