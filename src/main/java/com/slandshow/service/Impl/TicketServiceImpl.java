@@ -228,12 +228,17 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public List<TicketDTO> getPuzzledTickets(List<Schedule> puzzledSchedulers, int seat, int carriage) throws ParseException {
+    public List<TicketDTO> getPuzzledTickets(List<Schedule> puzzledSchedulers, int seat, int carriage) throws ParseException, BookingTicketException {
 
         // Create puzzled tickets for puzzled schedulers
         List<TicketDTO> ticketDTOS = new ArrayList<>();
 
         for (int i = 0; i < puzzledSchedulers.size(); i++) {
+            if (i == 0 && !timeIsUnder10Minutes(UtilsManager.getTodayDateTime(), puzzledSchedulers.get(i).getDateDeparture())) {
+                LOGGER.info(ExceptionsInfo.TIME_IS_MORE_THAT_10_MINUTES);
+                throw new BookingTicketException(ExceptionsInfo.TIME_IS_MORE_THAT_10_MINUTES);
+            }
+
             TicketDTO ticketDTO = new TicketDTO();
             ticketDTO.setScheduleId(puzzledSchedulers.get(i).getId());
 
@@ -336,5 +341,24 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public List<ScheduleDTO> parsedListFromMap(Map<ScheduleDTO, List<Schedule>> filtered) {
         return graphService.parsedListFromMap(filtered);
+    }
+
+    @Override
+    public boolean timeIsUnder10Minutes(Date selected, Date departure) {
+        Date foresee = null;
+        try {
+            foresee = UtilsManager.addNMinutes(
+                    UtilsManager.parseToDateTime(
+                            UtilsManager.convertDateToString(selected)
+                    ),
+                    10
+            );
+
+            System.out.println(UtilsManager.convertDateToString(foresee));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return foresee.compareTo(departure) == 0 || foresee.compareTo(departure) < 0;
     }
 }

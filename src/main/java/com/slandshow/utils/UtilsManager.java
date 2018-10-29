@@ -106,7 +106,7 @@ public class UtilsManager {
 
     public static boolean checkForCurrentDayForBookingTicket(Date date) {
         Date currentDay = new Date();
-        return (!checkCurrentDay(date) && (date.getTime() - currentDay.getTime()) / (1000 * 60) > 10);
+        return (!checkCurrentDay(date) && (date.getTime() - currentDay.getTime()) / (1000 * 60) >= 10);
     }
 
     /* ====For password encrypt==== */

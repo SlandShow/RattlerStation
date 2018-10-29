@@ -50,7 +50,7 @@ public interface TicketService {
 
     List<List<SeatDTO>> getSeatsMatrix(int row, int col);
 
-    List<TicketDTO> getPuzzledTickets(List<Schedule> puzzledSchedulers, int seat, int carriage) throws ParseException;
+    List<TicketDTO> getPuzzledTickets(List<Schedule> puzzledSchedulers, int seat, int carriage) throws ParseException, BookingTicketException;
 
     BookingTicketInfoDTO getBookingStatusInfo(int seat, int carriage, UserDTO userDTO);
 
@@ -59,5 +59,7 @@ public interface TicketService {
     Map<ScheduleDTO, List<Schedule>> createPuzzledTickets(String start, String end, String dateDeparture, String dateArrival) throws ParseException;
 
     List<ScheduleDTO> parsedListFromMap(Map<ScheduleDTO, List<Schedule>> filtered);
+
+    boolean timeIsUnder10Minutes(Date selected, Date departure);
 
 }

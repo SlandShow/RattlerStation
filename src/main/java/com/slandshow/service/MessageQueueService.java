@@ -33,7 +33,7 @@ public class MessageQueueService {
     }
 
     public List<String> getMessagesInstance() {
-        if (INSTANCE_IS_CREATED == false) {
+        if (!INSTANCE_IS_CREATED) {
             INSTANCE_IS_CREATED = true;
             messages = new ArrayList<>();
         }

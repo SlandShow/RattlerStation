@@ -81,7 +81,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/schedule/scheduleByStationsAndDate",
                         "/api/board/schedule/today",
                         "/api/board/stations",
-                        "/api/board/schedule/{id}")
+                        "/api/board/schedule/{id}",
+                        "/registration-result")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()

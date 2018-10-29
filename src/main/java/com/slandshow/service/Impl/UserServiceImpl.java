@@ -2,14 +2,15 @@ package com.slandshow.service.Impl;
 
 import com.slandshow.DAO.UserDAO;
 import com.slandshow.DTO.UserDTO;
+import com.slandshow.exceptions.ExceptionsInfo;
+import com.slandshow.exceptions.InvalidUserRegistrationException;
 import com.slandshow.models.Role;
 import com.slandshow.models.User;
 import com.slandshow.service.RoleService;
 import com.slandshow.service.SecureService;
 import com.slandshow.service.UserService;
-import com.slandshow.utils.MessageManager;
 import com.slandshow.utils.UtilsManager;
-import org.apache.log4j.spi.ErrorCode;
+import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private SecureService secureService;
 
+    private static final Logger LOGGER = Logger.getLogger(UserServiceImpl.class);
 
     @Transactional
     public void add(User user) {
@@ -52,7 +53,6 @@ public class UserServiceImpl implements UserService {
         return userDAO.getAll();
     }
 
-    // TODO: FIX
     @Transactional
     public UserDTO findAuthenticatedUserDTO() {
         ModelMapper modelMapper = new ModelMapper();
@@ -97,25 +97,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional
-    public void registration(UserDTO userDTO) throws IOException {
-        // TODO: ADD OWN EXCEPTIONS LATER
-        //if (userDTO == null)
-        //    throw new ...;
+    public void registration(UserDTO userDTO) throws IOException, InvalidUserRegistrationException {
+        if (userDTO == null) {
+            LOGGER.info(ExceptionsInfo.REGISTERED_USER_IS_NULL);
+            throw new InvalidUserRegistrationException(ExceptionsInfo.REGISTERED_USER_IS_NULL);
+        }
 
-       // if (findUserByEmail(userDTO.getLogin()) != null)
-        //    throw new BusinessLogicException(ErrorCode.USER_ALREADY_EXIST.getMessage());
+       if (findUserByEmail(userDTO.getLogin()) != null) {
+            LOGGER.info(ExceptionsInfo.USER_ALREADY_EXIST);
+            throw new InvalidUserRegistrationException(ExceptionsInfo.USER_ALREADY_EXIST);
+        }
 
         Role role = roleService.getRole();
         Set<Role> roleSet = new HashSet<Role>();
-        roleSet.add(role);
+        roleSet.add(role); // User role
         User user = new User();
         user.setLogin(userDTO.getLogin());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setPassword(UtilsManager.encodePassword(userDTO.getPassword()));
         user.setRoles(roleSet);
-       // MessageManager message = MessageManager.createWelcomeMessage(userDTO.getLogin());
-        //mailService.sendMimeMessage(message);
         add(user);
     }
 

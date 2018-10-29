@@ -3,6 +3,8 @@ package com.slandshow.service.Impl;
 import com.slandshow.DAO.MappingGraphDAO;
 import com.slandshow.DTO.EdgeDTO;
 import com.slandshow.DTO.ScheduleDTO;
+import com.slandshow.exceptions.BookingTicketException;
+import com.slandshow.exceptions.ExceptionsInfo;
 import com.slandshow.models.MappingEdge;
 import com.slandshow.models.Schedule;
 import com.slandshow.service.DistanceAndPriceUtilsService;
@@ -10,6 +12,7 @@ import com.slandshow.service.GraphService;
 import com.slandshow.service.ScheduleService;
 import com.slandshow.utils.Algorithms.Graph.Graph;
 import com.slandshow.utils.Algorithms.GraphExecuter;
+import com.slandshow.utils.UtilsManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -214,6 +217,7 @@ public class GraphServiceImpl implements GraphService {
 
 
             Schedule realSchedule = scheduleService.mapping(schedule);
+
 
             if (realSchedule.getDateArrival() != null) {
                 List<Schedule> tmp = scheduleService.getByStationsAndDates(realSchedule);

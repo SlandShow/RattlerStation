@@ -7,6 +7,7 @@ public class ExceptionsInfo {
     public static final String USER_OR_SCHEDULE_NOT_EXISTS = "USER OR SCHEDULE IS NULL";
     public static final String SCHEDULE_NOT_AVAILABLE_NOW = "PROBLEM WITH SCHEDULE AVAILABILITY";
     public static final String SAME_USER_TRY_TO_BOOK_SEAT = "THIS USER ALREADY BOOKED SEAT";
+    public static final String TIME_IS_MORE_THAT_10_MINUTES = "CANNOT BOOK TICKET, BECAUSE TIME IS UNDER 10 MINUTES";
 
     /* Create schedule exceptions messages */
     public static final String SCHEDULE_IS_NULL = "SCHEDULE IS NULL";
@@ -30,5 +31,9 @@ public class ExceptionsInfo {
     public static final String INVALID_CARRIAGE_COUNT = "CARRIAGE IN TRAIN IS INVALID";
     public static final String CANNOT_DELETE_INVALID_TRAIN = "CANNOT DELETE INVALID TRAIN - IT'S ALREADY DELETED";
     public static final String TRAIN_IS_NOT_UNIQUE = "TRAIN IS NOT UNIQUE";
+
+    /* User registration & login messages */
+    public static final String REGISTERED_USER_IS_NULL = "REGISTERED USER IS NULL";
+    public static final String USER_ALREADY_EXIST = "CURRENT USER ALREADY EXIST";
 
 }

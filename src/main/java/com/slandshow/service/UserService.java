@@ -1,6 +1,7 @@
 package com.slandshow.service;
 
 import com.slandshow.DTO.UserDTO;
+import com.slandshow.exceptions.InvalidUserRegistrationException;
 import com.slandshow.models.User;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,7 @@ public interface UserService {
 
     void updateProfile(UserDTO userDTO) throws ParseException;
 
-    void registration(UserDTO userDTO) throws IOException;
+    void registration(UserDTO userDTO) throws IOException, InvalidUserRegistrationException;
 
     void addUserRole(Long userId, Long roleId);
 
