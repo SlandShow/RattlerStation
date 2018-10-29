@@ -44,8 +44,8 @@ Web-service application
 20. Create graph mapping to graph object [`done`]
 21. Schedule validation via map and graph model [`x`]
 22. Add Google maps API [`done`]
-23. Add price calculation [`x`].
-24. Ann Unit-test's and Sonar [`x`].
+23. Add price calculation [`done`].
+24. Ann Unit-test's and Sonar [`done`].
 
 ### 📘 My developer dairy:
 
@@ -72,3 +72,4 @@ Web-service application
 19. (08.10.18) Create graph model (tables and Graph service).
 20. (13.10.18) Add REST-controller, create second app, make sense with AJAX. Get today schedule from first app to second.
 21. (23.10.18) Add Sonar, fix searching via graph system (actual train traffic case), add google maps, update booking tickets search page.
+22 (28.10.18) Clean all code, chech all use-cases, fix schedule puzzling and ticket booking, create unit-test, add more navigation on front.
