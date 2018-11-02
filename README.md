@@ -12,13 +12,24 @@ Web-service application
 ## Info ☕
 🚉 [RattlerStation Board](https://github.com/SlandShow/RattlerStationBoard "RattlerStation Board") → show schedulers for today, dynamic update schedulers via `AJAX`.
 
+🚩[Full-module zip](https://www.dropbox.com/s/a4k8smrqxzjiewx/Multimodule.zip?dl=0 "RattlerStation multimodule").
+
 ## Dev 🛠️
 
 ### Configuration:
+1. [Install Maven](https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html "Maven") 🍭
+2. [Install & Config Tomcat](https://www.baeldung.com/tomcat "Tomcat") 🌵
+3. [Install & Config MySQL server](https://www.javacodegeeks.com/2018/05/mysql-server-tutorial.html "MySQL") 🍦
+4. [Install RabbitMQ broker on Linux (or another OS) guide](https://www.vultr.com/docs/how-to-install-rabbitmq-on-ubuntu-16-04-47 "RabbitMQ") 💬
+5. [Sonar install & config guide (+ info)](https://www.baeldung.com/sonar-qube "SonarQube") 📈
+6. [Google Maps API documentation (+ info)](https://developers.google.com/maps/documentation/ "Google maps API") 🗺
 
-1. [Install RabbitMQ broker on Ubuntu guide](https://www.vultr.com/docs/how-to-install-rabbitmq-on-ubuntu-16-04-47 "RabbitMQ") 💬
-2. [Sonar install & config guide](https://www.baeldung.com/sonar-qube "SonarQube") 📈
-3. [Google Maps API documentation](https://developers.google.com/maps/documentation/ "Google maps API") 🗺
+### Run:
+1. Run Tomcat (`.../bin/startup.sh`)
+2. Run Wildfly 
+3. Run `init.sql`
+4. Run 'insert.sql`
+5. Run cargo-plugin `mvn clean package org.codehaus.cargo:cargo-maven2-plugin:redeploy`
 
 ### ☑ TODO List:
 
@@ -33,16 +44,16 @@ Web-service application
 9. Create Controller [`done`]
 10. Create HTML based JSP, witch views all POJO's [`done`]
 11. Add Spring security [`done`]
-12. User registration [`x`]
+12. User registration [`done`]
 13. Fix form data selection in DAO and controller [`done`]
 14. Clean up code in Spring Security config & service classes [`done`]
 15. Add `buy ticket` case [`done`]
 16. Develop real schedules [`done`]
-17. Add many station and develop train map in DB [`in procces`]
+17. Add many station and develop train map in DB [`done`]
 18. Updgrade all cases: log in, ticket traffic, buy tickets [`done`]
 19. Add manager functionality [`done`]
 20. Create graph mapping to graph object [`done`]
-21. Schedule validation via map and graph model [`x`]
+21. Schedule validation via map and graph model [`done`]
 22. Add Google maps API [`done`]
 23. Add price calculation [`done`].
 24. Ann Unit-test's and Sonar [`done`].
@@ -72,4 +83,5 @@ Web-service application
 19. (08.10.18) Create graph model (tables and Graph service).
 20. (13.10.18) Add REST-controller, create second app, make sense with AJAX. Get today schedule from first app to second.
 21. (23.10.18) Add Sonar, fix searching via graph system (actual train traffic case), add google maps, update booking tickets search page.
+
 22 (28.10.18) Clean all code, chech all use-cases, fix schedule puzzling and ticket booking, create unit-test, add more navigation on front.
