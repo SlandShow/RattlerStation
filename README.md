@@ -14,6 +14,8 @@ Web-service application
 
 🚩[Full-module zip](https://www.dropbox.com/s/a4k8smrqxzjiewx/Multimodule.zip?dl=0 "RattlerStation multimodule").
 
+📜 [Technical solution description](https://docs.google.com/document/d/1JD0oye7d4DWrSed6wTocsLR2nnt64H480gjqtjamkug/ "TSD").
+
 ## Dev 🛠️
 
 ### Configuration:
